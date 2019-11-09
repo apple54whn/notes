@@ -1,5 +1,7 @@
 # 12 Reflect—java.lang.reflect
 
+[[toc]]
+
 ## 12.1 反射简介
 
 *   Reflection(反射)是被视为动态语言的关键，反射机制允许程序在**执行期**借助于Reflection API取得任何类的内部信息，并能直接操作任意对象的内部属性及方法。

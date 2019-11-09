@@ -1,5 +1,7 @@
 # 9 NIO（暂时未完成）
 
+[[toc]]
+
 *   Java NIO (New IO，Non-Blocking IO) 是从Java 1.4版本开始引入的一套新的IO API，可以替代标准的Java IO API。NIO与原来的IO有同样的作用和目的，但是使用的方式完全不同，NIO支持**面向缓冲区**的(IO是面向流的)、**基于通道**的IO操作。NIO将以更加高效的方式进行文件的读写操作。
 *   Java API中提供了两套NIO，一套是针对**标准输入输出**NIO，另一套就是**网络编程**NIO。
 *   `java.nio.channels.Channel`

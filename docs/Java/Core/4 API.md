@@ -1,5 +1,7 @@
 # 4 API
 
+[[toc]]
+
 - API（Application Programming Interface），应用程序编程接口
 
 ## 字符串相关类
