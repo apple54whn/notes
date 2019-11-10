@@ -11,7 +11,7 @@ module.exports = {
   title: 'Conanan\'s Notes',
   description: 'Good Good Study, Day Day Up!',
   themeConfig: {
-    base:'/notes-vuepress/',
+    base:'notes-vuepress',
     smoothScroll: true,
     
     // logo: './logo.png', // 导航栏 logo
