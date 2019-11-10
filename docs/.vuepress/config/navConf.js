@@ -4,7 +4,7 @@ module.exports = [
     text: 'Java',
     ariaLabel: 'Java Study',
     items: [
-      { text: 'Core', link: '/Java/Core/1 Basic Syntax' },
+      { text: 'Core', link: '/Java/Core/0 Basic' },
       { text: 'Framwork', link: '/Java/Framwork/1 Spring' }
     ]
   },

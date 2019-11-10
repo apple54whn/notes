@@ -7,7 +7,7 @@ module.exports = {
     {
       title: 'Core',
       collapsable: true, // 控制 组 的 colse
-      sidebarDepth: 1,
+      sidebarDepth: 2,
       children: [
         '0 Basic',
         '1 Basic Syntax',
@@ -33,7 +33,7 @@ module.exports = {
     {
       title: 'Code',
       collapsable: true, // 控制 组 的 colse
-      sidebarDepth: 1,
+      sidebarDepth: 2,
       children: [
 
       ]

@@ -3,9 +3,8 @@ const sidebarConf = require('./config/sidebarConf');
 const markdownConf = require('./config/markdownConf');
 
 // plugins
-const containerPluginConf = require('./config/pluginConf/containerPluginConf');
-const copyrightPluginConf = require('./config/pluginConf/copyrightPluginConf');
-const mediumZoomPluginConf = require('./config/pluginConf/mediumZoomPluginConf');
+const pluginConf = require('./config/pluginConf');
+
 
 
 module.exports = {
@@ -31,49 +30,5 @@ module.exports = {
 
   markdown: markdownConf,
 
-  plugins: [
-    [
-      'vuepress-plugin-zooming',
-      {
-        selector: 'img',
-        delay: 10,
-        options: {
-          bgColor: 'black',
-          zIndex: 10000,
-        },
-      },
-    ],
-    '@vuepress/back-to-top',
-    '@vuepress/nprogress',
-    [
-      'vuepress-plugin-container',
-      {
-        type: 'right',
-        defaultTitle: '',
-      },
-    ],
-    [
-      'vuepress-plugin-container',
-      {
-        type: 'theorem',
-        before: info => `<div class="theorem"><p class="title">${info}</p>`,
-        after: '</div>',
-      },
-    ],
-  
-    // 这是 VuePress 默认主题使用这个插件的方式
-    [
-      'vuepress-plugin-container',
-      {
-        type: 'tip',
-        defaultTitle: {
-          '/': 'TIP',
-          '/zh/': '提示',
-        },
-      },
-    ], 
-
-    copyrightPluginConf,
-    
-  ]
+  plugins: pluginConf
 }

@@ -135,49 +135,54 @@
 - **方法重写（override）**：**父子类**中，**方法名**、**参数列表必须相同**（不同则是特有方法）。满足以下条件为重写：
 
     - **访问权限**必须大于等于父类权限
+    
     - **返回值类型**，对象类型必须小于等于父类（如Object、String）；基本类型必须一致！若为void，则都必须为void；
+
     - **抛出的异常类型**小于等于父类方法的异常类型
 
-    ```java
-class Father {
-    
-        int show(int a, int b) throws IOException { //重写中，子类方法抛出异常类型必须小于等于父类方法
-            return 0;
+        ```java
+        class Father {
+        
+            int show(int a, int b) throws IOException { //重写中，子类方法抛出异常类型必须小于等于父类方法
+                return 0;
+            }
         }
-    }
-    //下面哪些方法可以出现在Father的子类中？
-    public/private/... short show(int a, long b){return 0;}//参数列表都不同了，是子类特有方法
-    public int show(int a,int b){return 0;}//可以，方法重写
-    private int show(int a,int b){return 0;}//不可以，权限小
-    public short show(int a, int b){return 0;}//不可以，返回类型为基本类型必须一致！
-    static int show(int a, int b){return 0;}//不可以，条件都满足，但是静态方法只能覆盖静态方法！！！
-    ```
-    
-    若父类中有**私有方法、静态方法**，因为和**类相关**，子类也可以存在完全一样的方法，**不是重写**！
+        //下面哪些方法可以出现在Father的子类中？
+        public/private/... short show(int a, long b){return 0;}//参数列表都不同了，是子类特有方法
+        public int show(int a,int b){return 0;}//可以，方法重写
+        private int show(int a,int b){return 0;}//不可以，权限小
+        public short show(int a, int b){return 0;}//不可以，返回类型为基本类型必须一致！
+        static int show(int a, int b){return 0;}//不可以，条件都满足，但是静态方法只能覆盖静态方法！！！
+        ```
 
+    *   若父类中有**私有方法、静态方法**，因为和**类相关**，子类也可以存在完全一样的方法，**不是重写**！
+    
     > 从编译和运行的角度看：
->
+    >
     > * 重载，是指允许存在多个同名方法，而这些方法的参数不同。编译器根据方法不 同的参数表，对同名方法的名称做修饰。对于编译器而言，这些同名方法就成了 不同的方法。它们的调用地址在编译期就绑定了。Java的重载是可以包括父类 和子类的，即子类可以重载父类的同名不同参数的方法。所以:对于重载而言，在方法调用之前，编译器就已经确定了所要调用的方法， 这称为“早绑定”或“静态绑定”;
+    >
     > * 而对于多态（重写），只有等到方法调用的那一刻，解释运行器才会确定所要调用的具体方法，这称为“晚绑定”或“动态绑定”。
     >
-    > 即方法重载（@overload）实现编译时多态性；方法重写（@override）实现运行时多态性。
-    
+    >     即方法重载（@overload）实现编译时多态性；方法重写（@override）实现运行时多态性。
 - **可变参数**：JavaSE 5.0 中提供了Varargs(variable number of arguments)机制，允许直接定 义能和多个实参相匹配的形参。从而，可以用一种更简单的方式，来传递个数可变的实参。（同js中arguments类似）
 
     * 可变个数形参的方法与同名的方法之间，彼此构成重载
+
     * 可变参数方法（**底层为数组**）的使用与方法参数部分使用数组是一致的，所以不能与之重载
+
     * 方法的参数部分有可变形参，需要放在形参声明的最后
+
     * 在一个方法的形参位置，最多只能声明一个可变个数形参
 
-    ```java
-    public static void sum(int ... arr) {
-    	int sum = 0;
-    	for(int a:arr) {
-    		sum+=a;
-    	}
-    	System.out.println(sum);
-    }
-    ```
+        ```java
+        public static void sum(int ... arr) {
+        	int sum = 0;
+        	for(int a:arr) {
+        		sum+=a;
+        	}
+        	System.out.println(sum);
+        }
+        ```
 
 - **方法参数的值传递机制**
 
@@ -186,7 +191,7 @@ class Father {
     * 形参是基本数据类型：将实参基本数据类型变量的“数据值”传递给形参
     * 形参是引用数据类型：将实参引用数据类型变量的“地址值”传递给形参
 
-- **递归（recursion）**方法：一个方法体内调用它自身
+- **递归**（**recursion**）方法：一个方法体内调用它自身
 
     **注意：**
 
@@ -407,69 +412,69 @@ class Father {
 
 * 开发中局部内部类的使用  见《InnerClassTest1.java》
 
-
-
-```java
-class Animal{
-
-    String name = "小明";
-    int age;
-
-    public void eat(){
-        System.out.println("动物：吃饭");
-    }
-
-
-    //静态成员内部类
-    static class Dog{
-        String name;
+    ```java
+    class Animal{
+    
+        String name = "小明";
         int age;
-
-        public void show(){
-            System.out.println("卡拉是条狗");
-            //eat(); //静态不能调用非静态
+    
+        public void eat(){
+            System.out.println("动物：吃饭");
+        }
+    
+    
+        //静态成员内部类
+        static class Dog{
+            String name;
+            int age;
+    
+            public void show(){
+                System.out.println("卡拉是条狗");
+                //eat(); //静态不能调用非静态
+            }
+        }
+        //非静态成员内部类
+        class Bird{
+            String name = "杜鹃";
+    
+            public Bird(){
+            }
+    
+            public void sing(){
+                System.out.println("我是一只小小鸟");
+                Animal.this.eat();//调用外部类的非静态属性
+                eat();
+                System.out.println(age);
+            }
+    
+            public void display(String name){
+                System.out.println(name);//方法的形参
+                System.out.println(this.name);//内部类的属性
+                System.out.println(Animal.this.name);//外部类的属性
+            }
+        }
+    
+        public void method(){
+            //局部内部类
+            class AA{
+            }
+        }
+    
+        {
+            //局部内部类
+            class BB{
+            }
+        }
+    
+        public Animal(){
+            //局部内部类
+            class CC{
+            }
         }
     }
-    //非静态成员内部类
-    class Bird{
-        String name = "杜鹃";
+    ```
 
-        public Bird(){
-        }
-
-        public void sing(){
-            System.out.println("我是一只小小鸟");
-            Animal.this.eat();//调用外部类的非静态属性
-            eat();
-            System.out.println(age);
-        }
-
-        public void display(String name){
-            System.out.println(name);//方法的形参
-            System.out.println(this.name);//内部类的属性
-            System.out.println(Animal.this.name);//外部类的属性
-        }
-    }
-
-    public void method(){
-        //局部内部类
-        class AA{
-        }
-    }
-
-    {
-        //局部内部类
-        class BB{
-        }
-    }
-
-    public Animal(){
-        //局部内部类
-        class CC{
-        }
-    }
-}
-```
+    
 
 
 

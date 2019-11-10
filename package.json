@@ -11,6 +11,8 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
-    "vuepress-plugin-copyright": "^1.0.2"
+    "vuepress-plugin-copyright": "^1.0.2",
+    "vuepress-plugin-smooth-scroll": "0.0.7",
+    "vuepress-plugin-zooming": "^1.1.5"
   }
 }
