@@ -26,5 +26,4 @@ module.exports = [
     ]
   },
   { text: 'Guide', link: '/guide/' },
-  { text: 'External', link: 'https://google.com' },
 ]
