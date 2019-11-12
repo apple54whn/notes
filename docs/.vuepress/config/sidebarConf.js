@@ -26,8 +26,9 @@ module.exports = {
         '13 Lambda',
         '14 Stream API',
         '15 Optional',
-        '16 Test',
-        '17 设计原则&设计模式',
+        '16 9,10,11新特性',
+        '17 Test',
+        '18 设计原则&设计模式',
       ]
     },
     {

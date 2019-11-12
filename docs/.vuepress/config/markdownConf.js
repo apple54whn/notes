@@ -1,5 +1,5 @@
 module.exports = {
-  // markdown-it-anchor 的选项，滚动页面是侧边栏激活
+  // markdown-it-anchor 的选项，滚动页面时侧边栏激活
   anchor: { permalink: true },
   // markdown-it-toc 的选项
   toc: { 

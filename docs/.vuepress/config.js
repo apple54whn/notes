@@ -7,7 +7,7 @@ const pluginConf = require('./config/pluginConf');
 
 module.exports = {
   // base:'/notes/',
-  title: 'Conanan\'s Notes',
+  title: 'Conanan',
   description: 'Good Good Study, Day Day Up!',
   themeConfig: {
     smoothScroll: true,
@@ -46,5 +46,11 @@ module.exports = {
 
   markdown: markdownConf,
 
-  plugins: pluginConf
+  plugins: pluginConf,
+
+  head: [
+    ['link', { rel: 'manifest', href: '/manifest.json' }],
+    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+  ]
 }

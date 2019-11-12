@@ -15,7 +15,7 @@ module.exports = [
       after: '</div>',
     },
   ],
-  
+
   // 这是 VuePress 默认主题使用这个插件的方式
   [
     'vuepress-plugin-container',
@@ -53,6 +53,12 @@ module.exports = [
         zIndex: 10000,
       },
     },
+  ],
+  [
+    '@vuepress/pwa', {
+      serviceWorker: true,
+      updatePopup: true
+    }
   ]
 
 ]
