@@ -426,13 +426,15 @@ list.stream()
     int SummaryStatisticsiss= list.stream().collect(Collectors.summarizingInt(Employee::getSalary));
     ```
 
-*   `String joining `
+* `String joining([CharSequence delimiter]) `
 
-    连接流中每个字符串
+  连接流中每个字符串
 
-    ```java
-    String str= list.stream().map(Employee::getName).collect(Collectors.joining());
-    ```
+  注意，使用`delimiter`时要确定`map`中数据类型
+
+  ```java
+  String str= list.stream().map(Employee::getName).collect(Collectors.joining());
+  ```
 
 *   `Optional<T> maxBy `
 
