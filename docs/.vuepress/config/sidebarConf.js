@@ -3,10 +3,10 @@ module.exports = {
   // 多个侧边栏，暂不使用，侧边栏分组也可以实现
 
   // 侧边栏分组，只显示一组内容
-  '/Java/Core/': [
+  '/Java/0 Core/': [
     {
       title: 'Core',
-      collapsable: true, // 控制 组 的 colse
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '0 Basic',
@@ -33,7 +33,7 @@ module.exports = {
     },
     {
       title: 'Code',
-      collapsable: true, // 控制 组 的 colse
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
 
