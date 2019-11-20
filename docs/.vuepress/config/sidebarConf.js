@@ -42,6 +42,26 @@ module.exports = {
 
 
 
+  ],
+
+  '/Devops/0 Linux/': [
+    {
+      title: 'Core',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Basic',
+      ]
+    },
+    {
+      title: 'Code',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+
+      ]
+    },
+
 
 
   ],

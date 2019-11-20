@@ -6,20 +6,29 @@ module.exports = [
     items: [
       { text: 'Core', link: '/Java/0 Core/0 Basic' },
       {
-        text: 'Persistence Layer Framework', items: [
+        text: 'Persistence', items: [
           { text: 'Mybatis', link: '/language/chinese/' },
           { text: 'JPA', link: '/language/japanese/' }
         ]
       },
-      {
-        text: 'Microservices', items: [
-          { text: 'Basic', link: '/language/chinese/' },
-          { text: 'Dubbo & ZooKeeper', link: '/language/chinese/' },
-          { text: 'SpringCloud Netflix', link: '/language/chinese/' },
-          { text: 'SpringCLoud Alibaba', link: '/language/japanese/' }
-        ]
-      },
-      { text: 'Framwork', link: '/Java/Framwork/1 Spring' }
+    ]
+  },
+  {
+    text: 'Microservices',
+    items: [
+      { text: 'Basic', link: '/Microservices/1 微服务的引入' },
+      { text: 'Dubbo & ZooKeeper', link: '/language/chinese/' },
+      { text: 'SpringCloud Netflix', link: '/language/chinese/' },
+      { text: 'SpringCLoud Alibaba', link: '/language/japanese/' }
+    ]
+  },
+  {
+    text: 'Devops',
+    items: [
+      { text: 'Linux', link: '/Devops/0 Linux/0 Basic' },
+      { text: 'Dubbo & ZooKeeper', link: '/language/chinese/' },
+      { text: 'SpringCloud Netflix', link: '/language/chinese/' },
+      { text: 'SpringCLoud Alibaba', link: '/language/japanese/' }
     ]
   },
   {
