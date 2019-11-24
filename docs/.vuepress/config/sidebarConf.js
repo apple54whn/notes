@@ -3,7 +3,67 @@ module.exports = {
   // 多个侧边栏，暂不使用，侧边栏分组也可以实现
 
   // 侧边栏分组，只显示一组内容
-  '/Java/0 Core/': [
+  '/Basic/OS/Linux/': [
+    {
+      title: 'Linux',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+        '1 Intro1',
+
+      ]
+    }
+  ],
+
+  '/Basic/Network/': [
+    {
+      title: 'Network',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    },
+    {
+      title: 'HTTP',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    }
+  ],
+
+  '/Basic/DataBase/': [
+    {
+      title: 'MySQL',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    },
+    {
+      title: 'Redis',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    },
+    {
+      title: 'Mongo',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    }
+  ],
+
+
+  '/Java/Core/': [
     {
       title: 'Core',
       collapsable: true, // 控制 组 的 close
@@ -44,25 +104,17 @@ module.exports = {
 
   ],
 
-  '/Devops/0 Linux/': [
+
+  '/Devops/Vim/': [
     {
-      title: 'Core',
-      collapsable: true, // 控制 组 的 close
+      collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        '0 Basic',
-      ]
-    },
-    {
-      title: 'Code',
-      collapsable: true, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: [
+        'Vim',
 
       ]
-    },
-
-
-
+    }
   ],
+
+  
 }
