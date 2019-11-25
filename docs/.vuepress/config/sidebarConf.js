@@ -105,16 +105,58 @@ module.exports = {
   ],
 
 
+
+  // ---------------------Devops start---------------------------
+
   '/Devops/Vim/': [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         'Vim',
-
       ]
     }
   ],
+  '/Devops/Git/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'Git',
+      ]
+    }
+  ],
+  '/Devops/Maven/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'Maven',
+      ]
+    }
+  ],
+
+  '/Devops/Docker/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'Docker',
+      ]
+    }
+  ],
+  '/Devops/K8/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'K8',
+      ]
+    }
+  ],
+
+  // ---------------------Devops end---------------------------
+
 
   
 }
