@@ -146,9 +146,22 @@ macOS 下的可以使用iTerm，自己配置
 ### 新增文件
 
 *   `touch fileName`  生成一个空文件
+
 *   **重定向输出**
     *   `echo 666 > 1.txt`：重新生成一个带内容文件，覆盖原有内容
     *   `echo 666 >> 1.txt`：给文件追加内容
+    
+*   `tee`：可直接复制
+
+    ```bash
+    tee /etc/docker/daemon.json <<-'EOF'
+    {
+      "registry-mirrors": ["https://1c0pd0qz.mirror.aliyuncs.com"]
+    }
+    EOF
+    ```
+
+    
 
 ### 查看文件
 

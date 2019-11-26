@@ -2,35 +2,71 @@
 
 ## Docker 简介
 
-### 为什么会有 Docker 出现
+### Docker 是什么
 
-传统上认为，软件编码开发/测试结束后，所产出的成果即是程序或是能够编译执行的二进制字节码等(java为例)。而为了让这些程序可以顺利执行，开发团队也得准备完整的部署文件，让维运团队得以部署应用程式，开发需要清楚的告诉运维部署团队，用的全部配置文件+所有软件环境。不过，即便如此，仍然常常发生部署失败的状况。Docker镜像的设计，使得Docker得以**打破过去「程序即应用」的观念**。**透过镜像(images)将作业系统核心除外，运作应用程式所需要的系统环境，由下而上打包，达到应用程式跨平台间的无缝接轨运作**。
+Docker 使用 Google 公司推出的 **Go** 语言进行开发实现，基于 Linux 内核的 `cgroup`，`namespace`，以及 `AUFS` 类的 `Union FS` 等技术，对**进程进行封装隔离**，属于操作系统层面的**虚拟化技术**。由于**隔离的进程独立于宿主和其它的隔离的进程**，因此也称其为 **容器** 。最初实现是基于 LXC，从 0.7 版本以后开始去除 LXC，转而使用自行开发的 libcontainer，从 1.11 开始，则进一步演进为使用 runC 和 containerd。Docker 在容器的基础上，进行了进一步的封装，从文件系统、网络互联到进程隔离等等，极大的简化了容器的创建和维护。使得 Docker 技术比虚拟机技术更为轻便、快捷。
 
-Docker 使用 Google 公司推出的 [Go 语言](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9nb2xhbmcub3JnLw==) 进行开发实现，基于 Linux 内核的 [cgroup](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvQ2dyb3Vwcw==)，[namespace](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTGludXhfbmFtZXNwYWNlcw==)，以及 [AUFS](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQXVmcw==) 类的 [Union FS](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvVW5pb25fbW91bnQ=) 等技术，对进程进行封装隔离，属于 [操作系统层面的虚拟化技术](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvT3BlcmF0aW5nLXN5c3RlbS1sZXZlbF92aXJ0dWFsaXphdGlvbg==)。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为 **容器** 。最初实现是基于 [LXC](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9saW51eGNvbnRhaW5lcnMub3JnL2x4Yy9pbnRyb2R1Y3Rpb24v)，从 0.7 版本以后开始去除 LXC，转而使用自行开发的 [libcontainer](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9naXRodWIuY29tL2RvY2tlci9saWJjb250YWluZXI=)，从 1.11 开始，则进一步演进为使用 [runC](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9naXRodWIuY29tL29wZW5jb250YWluZXJzL3J1bmM=) 和 [containerd](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9naXRodWIuY29tL2NvbnRhaW5lcmQvY29udGFpbmVyZA==)。
+下面的图片比较了 Docker 和传统虚拟化方式的不同之处。传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。
 
-其主要目标是“**Build，Ship and Run Any App,Anywhere**”，也就是通过对应用组件的封装、分发、部署、运行等生命周期的管理，使用户的APP（可以是一个WEB应用或数据库应用等等）及其运行环境能够做到“一次封装，到处运行”。Linux 容器技术的出现就解决了这样一个问题，而 Docker 就是在它的基础上发展过来的。将应用运行在 Docker 容器上面，而 Docker 容器在任何操作系统上都是一致的，这就实现了跨平台、跨服务器。只需要一次配置好环境，换到别的机子上就可以一键部署好，大大简化了操作。**解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。**软件可以带环境安装？也就是说，安装的时候，把原始环境一模一样地复制过来。开发人员利用 Docker 可以消除协作编码时“在我的机器上可正常工作”的问题。
+<img src="./images/c8aa2f2dde50973.png" alt="img" style="zoom:50%;" />
 
-![img](./images/BD7EE2EF-EFE3-404F-AC33-2B480797FE4E.png)
+<img src="./images/337ebe0ed8d0bb8.png" alt="img" style="zoom:50%;" />
+
+
+
+
 
 ### Docker 能干什么
 
+传统上认为，软件编码开发/测试结束后，所产出的成果即是程序或是能够编译执行的二进制字节码等(java为例)。而为了让这些程序可以顺利执行，开发团队也得准备完整的部署文件，让维运团队得以部署应用程式，开发需要清楚的告诉运维部署团队，用的全部配置文件+所有软件环境。不过，即便如此，仍然常常发生部署失败的状况。
+
+Docker镜像的设计，使得Docker得以**打破过去「程序即应用」的观念**。**透过镜像(images)将作业系统核心除外，运作应用程式所需要的系统环境，由下而上打包，达到应用程式跨平台间的无缝接轨运作**。其主要目标是“**Build，Ship and Run Any App,Anywhere**”，也就是通过对应用组件的封装、分发、部署、运行等生命周期的管理，使用户的APP（可以是一个WEB应用或数据库应用等等）及其运行环境能够做到“一次封装，到处运行”。Linux 容器技术的出现就解决了这样一个问题，而 Docker 就是在它的基础上发展过来的。将应用运行在 Docker 容器上面，而 Docker 容器在任何操作系统上都是一致的，这就实现了跨平台、跨服务器。只需要一次配置好环境，换到别的机子上就可以一键部署好，大大简化了操作。**解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。**软件可以带环境安装？也就是说，安装的时候，把原始环境一模一样地复制过来。开发人员利用 Docker 可以消除协作编码时“在我的机器上可正常工作”的问题。
+
 **开发/运维（DevOps）**：一次构建、随处运行
 
-- **更快速的应用交付和部署**
+- **一致的运行环境**
 
-  传统的应用开发完成后，需要提供一堆安装程序和配置说明文档，安装部署后需根据配置文档进行繁杂的配置才能正常运行。Docker化之后只需要交付少量容器镜像文件，在正式生产环境加载镜像并运行即可，应用安装配置在镜像里已经内置好，大大节省部署配置和测试验证时间。
+  应用容器化运行后，生产环境运行的应用可与开发、测试环境的应用高度一致，容器会将应用程序相关的环境和状态完全封装起来，不会因为底层基础架构和操作系统的不一致性给应用带来影响，产生新的BUG。当出现程序异常时，也可以通过测试环境的相同容器进行快速定位和修复。
+
+- **更快速的启动时间**
+
+    传统的虚拟机技术启动应用服务往往需要数分钟，而 Docker 容器应用，由于直接运行于宿主内核，无需启动完整的操作系统，因此可以做到秒级、甚至毫秒级的启动时间。大大的节约了开发、测试、部署的时间。
+
+- **持续交付和部署**
+
+    使用 Docker 可以通过定制应用镜像来实现持续集成、持续交付、部署。开发人员可以通过 Dockerfile 来进行镜像构建，并结合**持续集成**(Continuous Integration) 系统进行集成测试，而运维人员则可以直接在生产环境中快速部署该镜像，甚至结合**持续部署**(Continuous Delivery/Deployment) 系统进行自动部署。而且使用 Dockerfile 使镜像构建透明化，不仅仅开发团队可以理解应用运行环境，也方便运维团队理解应用运行所需条件，帮助更好的生产环境中部署该镜像。
+
+- **更轻松的迁移**
+
+    由于 Docker 确保了执行环境的一致性，使得应用的迁移更加容易。Docker 可以在很多平台上运行，无论是物理机、虚拟机、公有云、私有云（可使用 OpenStack 搭建），甚至是笔记本，其运行结果是一致的。因此用户可以很轻易的将在一个平台上运行的应用，迁移到另一个平台上，而不用担心运行环境的变化导致应用无法正常运行的情况。
+
+- **更高效的计算资源利用**
+
+  Docker是内核级虚拟化，其不像传统的虚拟化技术一样需要额外的Hypervisor支持，不需要进行硬件虚拟以及运行完整操作系统等额外开销，所以在一台物理机上可以运行很多个容器实例，可大大提升物理服务器的CPU和内存的利用率。
 
 - **更便捷的升级和扩缩容**
 
   随着微服务架构和Docker的发展，大量的应用会通过微服务方式架构，应用的开发构建将变成搭乐高积木一样，每个Docker容器将变成一块“积木”，应用的升级将变得非常容易。当现有的容器不足以支撑业务处理时，可通过镜像运行新的容器进行快速扩容，使应用系统的扩容从原先的天级变成分钟级甚至秒级。
 
-- **更简单的系统运维**
+对比传统虚拟机总结
 
-  应用容器化运行后，生产环境运行的应用可与开发、测试环境的应用高度一致，容器会将应用程序相关的环境和状态完全封装起来，不会因为底层基础架构和操作系统的不一致性给应用带来影响，产生新的BUG。当出现程序异常时，也可以通过测试环境的相同容器进行快速定位和修复。
+| 特性       | 容器               | 虚拟机      |
+| :--------- | :----------------- | :---------- |
+| 启动       | 秒级               | 分钟级      |
+| 硬盘使用   | 一般为 `MB`        | 一般为 `GB` |
+| 性能       | 接近原生           | 弱于        |
+| 系统支持量 | 单机支持上千个容器 | 一般几十个  |
 
-- **更高效的计算资源利用**
+![img](./images/BD7EE2EF-EFE3-404F-AC33-2B480797FE4E.png)
 
-  Docker是内核级虚拟化，其不像传统的虚拟化技术一样需要额外的Hypervisor支持，所以在一台物理机上可以运行很多个容器实例，可大大提升物理服务器的CPU和内存的利用率。
+
+
+### Docker 安装
+
+1. 查看[官网文档](https://docs.docker.com/install/)，有各种系统的安装介绍。
+2. 配置镜像加速，在[阿里云的容器镜像服务](https://cr.console.aliyun.com/cn-hangzhou/instances/repositories)中镜像加速器按步骤配置即可。
+
+
 
 
 
@@ -45,16 +81,6 @@ Docker 本身是一个容器运行载体或称之为管理引擎。我们把应�
 - **镜像**：Docker 镜像（Image）就是一个**只读的模板**。镜像可以**用来创建 Docker 容器**，一个镜像可以创建很多容器。
 - **容器**：Docker 利用容器（Container）独立运行的一个或一组应用。**容器是用镜像创建的运行实例**。它可以被启动、开始、停止、删除。每个容器都是相互隔离的、保证安全的平台。**可以把容器看做是一个简易版的 Linux 环境**（包括root用户权限、进程空间、用户空间和网络空间等）和运行在其中的应用程序。容器的定义和镜像几乎一模一样，也是一堆层的统一视角，唯一区别在于容器的最上面那一层是可读可写的。
 - **仓库**：仓库（Repository）是**集中存放镜像文件的场所**。仓库（Repository）和仓库注册服务器（Registry）是有区别的。仓库注册服务器上往往存放着多个仓库，每个仓库中又包含了多个镜像，每个镜像有不同的标签（tag）。仓库分为公开仓库（Public）和私有仓库（Private）两种形式。最大的公开仓库是 Docker Hub(https://hub.docker.com/)，存放了数量庞大的镜像供用户下载。国内的公开仓库包括阿里云 、网易云等
-
-
-
-### Docker 安装及 Hello World
-
-1. 查看[官网文档](https://docs.docker.com/install/)，有各种系统的安装介绍。
-2. 配置镜像加速，在[阿里云的容器镜像服务](https://cr.console.aliyun.com/cn-hangzhou/instances/repositories)中镜像加速器按步骤配置即可。
-3. `sudo docker run hello-world`可测试是否安装成功。
-
-
 
 ### Docker 的底层原理
 
