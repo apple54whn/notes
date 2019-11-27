@@ -1,6 +1,6 @@
 # Docker
 
-## Docker 简介
+## Docker 概述
 
 ### Docker 是什么
 
@@ -61,20 +61,45 @@ Docker镜像的设计，使得Docker得以**打破过去「程序即应用」的
 
 
 
-### Docker 安装
+### Docker 的安装
 
 1. 查看[官网文档](https://docs.docker.com/install/)，有各种系统的安装介绍。
 2. 配置镜像加速，在[阿里云的容器镜像服务](https://cr.console.aliyun.com/cn-hangzhou/instances/repositories)中镜像加速器按步骤配置即可。
 
 
 
+### Docker 引擎
+
+Docker 引擎是一个包含以下主要组件的客户端服务器应用程序。
+
+-   一种服务器，它是一种称为**守护进程并且长时间运行的程序**。
+-   REST API 用于指定程序可以用来与守护进程通信的接口，并指示它做什么。
+-   一个有命令行界面 (CLI) 工具的客户端。
+
+![img](./images/6bf7ceddc852371.png)
+
+### Docker 架构
+
+-   Docker 使用客户端 - 服务器 (C/S) 架构模式，使用远程 API 来管理和创建 Docker 容器。
+-   Docker 容器通过 Docker 镜像来创建。
+-   容器与镜像的关系类似于面向对象编程中的对象与类。
+
+![img](./images/5270ab20cec963d.png)
+
+| 标题            | 说明                                                         |
+| :-------------- | :----------------------------------------------------------- |
+| 镜像(Images)    | Docker 镜像是用于创建 Docker 容器的模板。                    |
+| 容器(Container) | 容器是独立运行的一个或一组应用。                             |
+| 客户端(Client)  | Docker 客户端通过命令行或者其他工具使用 Docker API ([https://docs.docker.com/reference/api/docker_remote_api](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vcmVmZXJlbmNlL2FwaS9kb2NrZXJfcmVtb3RlX2FwaQ==)) 与 Docker 的守护进程通信。 |
+| 主机(Host)      | 一个物理或者虚拟的机器用于执行 Docker 守护进程和容器。       |
+| 仓库(Registry)  | Docker 仓库用来保存镜像，可以理解为代码控制中的代码仓库。Docker Hub([https://hub.docker.com](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9odWIuZG9ja2VyLmNvbS8=)) 提供了庞大的镜像集合供使用。 |
+| Docker Machine  | Docker Machine是一个简化Docker安装的命令行工具，通过一个简单的命令行即可在相应的平台上安装Docker，比如VirtualBox、 Digital Ocean、Microsoft Azure。 |
+
+
+
 
 
 ### Docker 基本组成
-
-Docker 的架构图如下：
-
-![1557592894981](./images/1557592894981.png)
 
 Docker 本身是一个容器运行载体或称之为管理引擎。我们把应用程序和配置依赖打包好形成一个可交付的运行环境，这个打包好的运行环境就就是 image 镜像文件。只有通过这个镜像文件才能生成 Docker 容器。image 文件可以看作是容器的模板。Docker 根据 image 文件生成容器的实例。同一个 image 文件，可以生成多个同时运行的容器实例。
 
@@ -120,28 +145,233 @@ Docker是一个Client-Server 结构的系统，Docker守护进程运行在主机
 
 ### 镜像命令
 
+#### 列出镜像
+
 - `docker images [options]`：列出**本地主机**上的镜像
 
+  - `ls`：可省略，简写
   - `-a`：**列出本地所有的镜像（含中间映像层）**
   - `-q`：**静默**模式，**只显示镜像ID**。
   - `--digests`：显示镜像的摘要信息
   - `--no-trunc`：显示完整的镜像信息
 
-  REPOSITORY：表示镜像的仓库源；TAG：镜像的标签；IMAGE ID：镜像ID；CREATED：镜像创建时间；SIZE：镜像大小
+  ```bash
+  docker image ls
+  # 输出如下
+  REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+  redis                latest              5f515359c7f8        5 days ago          183 MB
+  nginx                latest              05a60462f8ba        5 days ago          181 MB
+  mongo                3.2                 fe9198c04d62        5 days ago          342 MB
+  <none>               <none>              00285df0df87        5 days ago          342 MB
+  ubuntu               16.04               f753707788c5        4 weeks ago         127 MB
+  ubuntu               latest              f753707788c5        4 weeks ago         127 MB
+  ubuntu               14.04               1e0c3dd64ccd        4 weeks ago         188 MB
+  ```
+
+  REPOSITORY：表示镜像的仓库名；TAG：镜像的标签；IMAGE ID：镜像ID；CREATED：镜像创建时间；SIZE：镜像大小
+
+#### 搜索镜像
 
 - `docker search [OPTIONS] 镜像名字`：从https://hub.docker.com来查找镜像的！
-
-  - `--no-trunc` : 显示完整的镜像描述
+- `--no-trunc` : 显示完整的镜像描述
   - `-s` : **列出收藏数不小于指定值的镜像**，star缩写
   - `--automated` : 只列出 automated build类型的镜像；
 
-- `docker pull 镜像名字[:TAG]`：**下载镜像**
+#### 拉取镜像
 
-- `docker rmi 某个XXX镜像名字ID`：**删除镜像**，`-f`为强制删除
+- `docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]`：**下载镜像**
+    - **镜像仓库地址：** 地址的格式一般是 `<域名/IP>[:端口号]`。默认地址是 Docker Hub。
+    - **仓库名：** 如之前所说，这里的仓库名是两段式名称，即 `<用户名>/<软件名>`。对于 Docker Hub，如果不给出用户名，则默认为 `library`，也就是官方镜像。
 
+#### 删除镜像
+
+- `docker image rm [选项] <镜像1> [<镜像2> ...]`：**删除镜像**，`-f`为强制删除
+
+  其中，`<镜像>` 可以是 `镜像短 ID`（截取长 ID 首部即可）、`镜像长 ID`、`镜像名` 或者 `镜像摘要`
+  
   - `docker rmi -f 镜像ID`：删除单个，不写tag默认为latest
   - `docker rmi -f 镜像名1:TAG 镜像名2:TAG `：删除多个
   - `docker rmi -f $(docker images -qa)`：删除全部
+  
+- 用 `docker image ls` 命令来配合
+
+    像其它可以承接多个实体的命令一样，可以使用 `docker image ls -q` 来配合使用 `docker image rm`，这样可以成批的删除希望删除的镜像。我们在“镜像列表”章节介绍过很多过滤镜像列表的方式都可以拿过来使用。比如，我们需要删除所有仓库名为 `redis` 的镜像：
+
+    ```bash
+    docker image rm $(docker image ls -q redis)
+    ```
+
+    或者删除所有在 `mongo:3.2` 之前的镜像：
+
+    ```bash
+    docker image rm $(docker image ls -q -f before=mongo:3.2)
+    ```
+
+    
+
+    
+
+
+
+#### 镜像、容器等体积
+
+如果仔细观察，会注意到，这里标识的所占用空间和在 Docker Hub 上看到的镜像大小不同。比如，`ubuntu:16.04` 镜像大小，在这里是 `127 MB`，但是在 Docker Hub 显示的却是 `50 MB`。这是因为 Docker Hub 中显示的体积是压缩后的体积。在镜像下载和上传过程中镜像是保持着压缩状态的，因此 Docker Hub 所显示的大小是网络传输中更关心的流量大小。而 `docker image ls` 显示的是镜像下载到本地后，展开的大小，准确说，是展开后的各层所占空间的总和，因为镜像到本地后，查看空间的时候，更关心的是本地磁盘空间占用的大小。
+
+另外一个需要注意的问题是，`docker image ls` 列表中的镜像体积总和并非是所有镜像实际硬盘消耗。由于 Docker 镜像是多层存储结构，并且可以继承、复用，因此不同镜像可能会因为使用相同的基础镜像，从而拥有共同的层。由于 Docker 使用 Union FS，相同的层只需要保存一份即可，因此实际镜像硬盘占用空间很可能要比这个列表镜像大小的总和要小的多。你可以通过以下命令来便捷的查看镜像、容器、数据卷所占用的空间。
+
+*   `docker system df`：查看镜像、容器、本地卷、构建缓存的空间
+
+    ```bash
+    docker system df
+    # 输出如下
+    TYPE                TOTAL               ACTIVE              SIZE                RECLAIMABLE
+    Images              24                  0                   1.992GB             1.992GB (100%)
+    Containers          1                   0                   62.82MB             62.82MB (100%)
+    Local Volumes       9                   0                   652.2MB             652.2MB (100%)
+    Build Cache                                                 0B                  0B
+    ```
+
+
+
+#### 虚悬镜像
+
+上面`iamges`的镜像列表中，还可以看到一个特殊的镜像，这个镜像既没有仓库名，也没有标签，均为 `none`
+
+```bash
+<none>               <none>              00285df0df87        5 days ago          342 MB
+```
+
+这个镜像原本是有镜像名和标签的，原来为 `mongo:3.2`，随着官方镜像维护，发布了新版本后，重新 `docker pull mongo:3.2` 时，`mongo:3.2` 这个镜像名被转移到了新下载的镜像身上，而旧的镜像上的这个名称则被取消，从而成为了`none`。除了 `docker pull` 可能导致这种情况，`docker build` 也同样可以导致这种现象。由于新旧镜像同名，旧镜像名称被取消，从而出现仓库名、标签均为 `none` 的镜像。这类无标签镜像也被称为 **虚悬镜像(dangling image)** ，可以用下面的命令专门显示这类镜像：
+
+```bash
+docker image ls -f dangling=true
+# 输出如下
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+<none>              <none>              00285df0df87        5 days ago          342 MB
+```
+
+一般来说，虚悬镜像已经失去了存在的价值，是可以随意删除的，可以用下面的命令删除。
+
+```bash
+docker image prune
+```
+
+
+
+#### 中间层镜像
+
+为了加速镜像构建、重复利用资源，Docker 会利用 **中间层镜像**。所以在使用一段时间后，可能会看到一些依赖的中间层镜像。默认的 `docker image ls` 列表中只会显示顶层镜像，如果希望显示包括中间层镜像在内的所有镜像的话，需要加 `-a` 参数。
+
+```bash
+docker image ls -a
+```
+
+这样会看到很多无标签的镜像，与之前的虚悬镜像不同，这些无标签的镜像很多都是中间层镜像，是其它镜像所依赖的镜像。这些无标签镜像不应该删除，否则会导致上层镜像因为依赖丢失而出错。实际上，这些镜像也没必要删除，因为之前说过，相同的层只会存一遍，而这些镜像是别的镜像的依赖，因此并不会因为它们被列出来而多存了一份，无论如何你也会需要它们。只要删除那些依赖它们的镜像后，这些依赖的中间层镜像也会被连带删除。
+
+
+
+#### 列出部分镜像
+
+不加任何参数的情况下，`docker image ls` 会列出所有顶级镜像，但是有时候我们只希望列出部分镜像。`docker image ls` 有好几个参数可以帮助做到这个事情。
+
+*   根据仓库名列出镜像
+
+    ```bash
+    docker image ls ubuntu
+    # 输出如下
+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+    ubuntu              16.04               f753707788c5        4 weeks ago         127 MB
+    ubuntu              latest              f753707788c5        4 weeks ago         127 MB
+    ubuntu              14.04               1e0c3dd64ccd        4 weeks ago         188 MB
+    ```
+
+*   列出特定的某个镜像，也就是说指定仓库名和标签
+
+    ```bash
+    docker image ls ubuntu:16.04
+    # 输出如下
+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+    ubuntu              16.04               f753707788c5        4 weeks ago         127 MB
+    ```
+
+*   除此以外，`docker image ls` 还支持强大的过滤器参数 `--filter`，或者简写 `-f`。之前我们已经看到了使用过滤器来列出虚悬镜像的用法，它还有更多的用法。比如，我们希望看到在 `mongo:3.2` 之后建立的镜像，可以用下面的命令
+
+    ```bash
+    docker image ls -f since=mongo:3.2
+    # 输出如下
+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+    redis               latest              5f515359c7f8        5 days ago          183 MB
+    nginx               latest              05a60462f8ba        5 days ago          181 MB
+    ```
+
+*   想查看某个位置之前的镜像也可以，只需要把 `since` 换成 `before` 即可。
+
+    此外，如果镜像构建时，定义了 `LABEL`，还可以通过 `LABEL` 来过滤。
+
+    ```bash
+    docker image ls -f label=com.example.version=0.1
+    ```
+
+    
+
+
+
+#### 以特定格式显示
+
+默认情况下，`docker image ls` 会输出一个完整的表格，但是我们并非所有时候都会需要这些内容。比如，刚才删除虚悬镜像的时候，我们需要利用 `docker image ls` 把所有的虚悬镜像的 ID 列出来，然后才可以交给 `docker image rm` 命令作为参数来删除指定的这些镜像，这个时候就用到了 `-q` 参数。
+
+```bash
+docker image ls -q
+# 输出如下
+5f515359c7f8
+05a60462f8ba
+fe9198c04d62
+00285df0df87
+f753707788c5
+f753707788c5
+1e0c3dd64ccd
+```
+
+`--filter` 配合 `-q` 产生出指定范围的 ID 列表，然后送给另一个 `docker` 命令作为参数，从而针对这组实体成批的进行某种操作的做法在 Docker 命令行使用过程中非常常见，不仅仅是镜像，将来我们会在各个命令中看到这类搭配以完成很强大的功能。因此每次在文档看到过滤器后，可以多注意一下它们的用法。
+
+另外一些时候，我们可能只是对表格的结构不满意，希望自己组织列；或者不希望有标题，这样方便其它程序解析结果等，这就用到了 [Go 的模板语法](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9nb2h1Z28uaW8vdGVtcGxhdGVzL2dvLXRlbXBsYXRlcy8=)。
+
+比如，下面的命令会直接列出镜像结果，并且只包含镜像 ID 和仓库名：
+
+```bash
+docker image ls --format "{{.ID}}: {{.Repository}}"
+# 输出如下
+5f515359c7f8: redis
+05a60462f8ba: nginx
+fe9198c04d62: mongo
+00285df0df87: <none>
+f753707788c5: ubuntu
+f753707788c5: ubuntu
+1e0c3dd64ccd: ubuntu
+```
+
+或者打算以表格等距显示，并且有标题行，和默认一样，不过自己定义列：
+
+```bash
+docker image ls --format "table {{.ID}}\t{{.Repository}}\t{{.Tag}}"
+# 输出如下
+IMAGE ID            REPOSITORY          TAG
+5f515359c7f8        redis               latest
+05a60462f8ba        nginx               latest
+fe9198c04d62        mongo               3.2
+00285df0df87        <none>              <none>
+f753707788c5        ubuntu              16.04
+f753707788c5        ubuntu              latest
+1e0c3dd64ccd        ubuntu              14.04
+```
+
+
+
+
+
+
+
+
 
 ### 容器命令
 
@@ -155,10 +385,10 @@ Docker是一个Client-Server 结构的系统，Docker守护进程运行在主机
   - `-t`：为容器重新**分配一个伪输入终端**，通常与 -i 同时使用；
   - `-P`: 随机端口映射；
   - `-p`: **指定端口映射**，有以下四种格式
-    - ip:hostPort:containerPort
-    - ip::containerPort
-    - **hostPort:containerPort**
-    - containerPort
+    - `ip:hostPort:containerPort`
+    - `ip::containerPort`
+    - `hostPort:containerPort`（常用）
+    - `containerPort`
 
 - **启动守护式容器**：`docker run -d 容器名`
 
@@ -208,7 +438,13 @@ Docker是一个Client-Server 结构的系统，Docker守护进程运行在主机
 
 
 
-### 常用命令
+### 系统命令
+
+
+
+
+
+### 常用命令表
 
 ![img](./images/18126975-DB12-4B9E-B653-D921C7BFFA70.png)
 
