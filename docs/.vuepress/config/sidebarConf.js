@@ -105,6 +105,23 @@ module.exports = {
   ],
 
 
+  // ---------------------Design start---------------------------
+
+
+
+
+  // ---------------------Design end---------------------------
+  '/Design/Design Pattern/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    }
+  ],
+
+
 
   // ---------------------Devops start---------------------------
 
@@ -141,7 +158,8 @@ module.exports = {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        'Docker',
+        '0 Docker',
+        '1 Docker Compose',
       ]
     }
   ],

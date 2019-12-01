@@ -707,6 +707,10 @@ public static void myStore() throws IOException {
         Collections.copy(dest,list);
         ```
 
+    *   `unmodifiableCollection/List/[Navigable]Set/[Navigable]Map/SortedSet/SortedMap` 
+
+        **返回不可修改的 Container 对象**，若修改则抛`UnsupportedOperationException`
+
 -   同步控制方法，将指定集 合包装成线程同步的集合，从而可以解决多线程并发访问集合时的线程安全问题
 
     `Collection.synchronizedCollection/List/Set/Map/SortedSet/SortedMap`

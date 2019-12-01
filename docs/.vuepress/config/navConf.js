@@ -57,7 +57,7 @@ module.exports = [
   {
     text: 'Design',
     items: [
-      { text: 'Design Pattern', link: '/Design/Design Pattern/0 Basic' },
+      { text: 'Design Pattern', link: '/Design/Design Pattern/0 Intro' },
       { text: 'DDD', link: '/Design/DDD/0 Basic' },
       { text: 'MicroServer', link: '/Design/MicroServer/0 Basic' },
     ]
@@ -68,7 +68,7 @@ module.exports = [
       { text: 'Vim', link: '/Devops/Vim/Vim' },
       { text: 'Git', link: '/Devops/Git/Git' },
       { text: 'Maven', link: '/Devops/Maven/Maven' },
-      { text: 'Docker', link: '/Devops/Docker/Docker' },
+      { text: 'Docker', link: '/Devops/Docker/0 Docker' },
       { text: 'K8', link: '/Devops/K8/K8' },
 
     ]
