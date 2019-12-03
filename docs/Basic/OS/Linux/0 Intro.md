@@ -41,7 +41,7 @@ Linux的版本分为两种：
 
 1.  在 iTerm2 中输入`ifconfig`查看`vmnet8`即 NAT 模式的 IP 段，如下图
 
-    ![image-20191204001039734](images/image-20191204001039734.png)
+    ![image-20191204001039734](./images/image-20191204001039734.png)
 
 2.  在 Linux 中配置固定 IP
 
