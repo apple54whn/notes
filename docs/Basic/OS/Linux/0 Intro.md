@@ -37,19 +37,17 @@ Linux的版本分为两种：
 
 ### VMware Fusion
 
-安装如上。需要配置固定 IP，步骤如下：
+安装如上。需要配置固定 IP，步骤如下（暂时测试是 OK 的）：
 
-1.  在 VMware Fusion 的偏好设置—>网络中添加如下自定义 vmnet2。需注意子网 IP 即后续该网络可以使用的 IP 范围
+1.  在 iTerm2 中输入`ifconfig`查看`vmnet8`即 NAT 模式的 IP 段，如下图
 
-    <img src="./images/image-20191201165724643.png" alt="image-20191201165724643" style="zoom: 50%;" />
+    ![image-20191204001039734](images/image-20191204001039734.png)
 
-2.  在该 Ubuntu 的网络适配器中选择如下选项
-
-    <img src="./images/image-20191201193204048.png" alt="image-20191201193204048" style="zoom:50%;" />
-
-3.  在 Linux 中配置固定 IP
+2.  在 Linux 中配置固定 IP
 
     Ubuntu 从17.10开始，已放弃在 /etc/network/interfaces 里固定 IP 的配置，即使配置也不会生效，而是改成 netplan 方式 ，配置写在 /etc/netplan/01-netcfg.yaml 或者类似名称的 yaml 文件里。修改该文件：
+
+    目前测试只需修改 `dhcp4: true`，`addresses: [172.16.154.11/24]`即可
 
     ```yaml
     network:
@@ -67,7 +65,7 @@ Linux的版本分为两种：
 
     执行 `netplan apply` 命令可以让配置直接生效
 
-4.  有可能需要关闭防火墙`sudo ufw disable`
+3.  有可能需要关闭防火墙`sudo ufw disable`，具体命令查看后续章节
 
 
 
