@@ -586,7 +586,7 @@ touch Dockerfile
 
 `Dockerfile`其内容为
 
-```
+```dockerfile
 FROM nginx:latest
 RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html
 ```
@@ -607,7 +607,7 @@ RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html
 
 -   **shell 格式：** `RUN <命令>`，就像直接在命令行中输入的命令一样。刚才写的 Dockerfile 中的 `RUN` 指令就是这种格式。
 
-    ```
+    ```dockerfile
     RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html
     ```
 
@@ -615,7 +615,7 @@ RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html
 
 既然 `RUN` 就像 Shell 脚本一样可以执行命令，那么我们是否就可以像 Shell 脚本一样把每个命令对应一个 RUN 呢？比如这样：
 
-```
+```dockerfile
 FROM debian:jessie
 RUN apt-get update
 RUN apt-get install -y gcc libc6-dev make
@@ -634,7 +634,7 @@ RUN make -C /usr/src/redis install
 
 上面的 `Dockerfile` 正确的写法应该是这样：
 
-```
+```dockerfile
 FROM debian:jessie
 RUN buildDeps='gcc libc6-dev make' \
     && apt-get update \
@@ -669,13 +669,13 @@ RUN buildDeps='gcc libc6-dev make' \
 
 和 `RUN` 指令一样，也有两种格式，一种类似于命令行，一种类似于函数调用。`COPY` 指令将从构建上下文目录中 `<源路径>` 的文件/目录复制到新的一层的镜像内的 `<目标路径>` 位置。比如：
 
-```
+```dockerfile
 COPY package.json /usr/src/app/
 ```
 
 `<源路径>` 可以是多个，甚至可以是通配符，其通配符规则要满足 Go 的 `filepath.Match`规则，如：
 
-```
+```dockerfile
 COPY hom* /mydir/
 COPY hom?.txt /mydir/
 ```
@@ -688,7 +688,7 @@ COPY hom?.txt /mydir/
 
 修改默认 Tomcat 容器中的 `index.jsp`
 
-```
+```dockerfile
 COPY index.jsp /usr/local/tomcat/webapps/ROOT
 ```
 
@@ -704,7 +704,7 @@ COPY index.jsp /usr/local/tomcat/webapps/ROOT
 
 如果 `<源路径>` 为一个 `tar` 压缩文件的话，压缩格式为 `gzip`, `bzip2` 以及 `xz` 的情况下，`ADD` 指令将会自动解压缩这个压缩文件到 `<目标路径>` 去。在某些情况下，这个自动解压缩的功能非常有用，比如官方镜像 `ubuntu` 中：
 
-```
+```dockerfile
 FROM scratch
 ADD ubuntu-xenial-core-cloudimg-amd64-root.tar.gz /
 ```
@@ -729,13 +729,13 @@ ADD ubuntu-xenial-core-cloudimg-amd64-root.tar.gz /
 
 在指令格式上，一般**推荐**使用 `exec` 格式，这类格式在解析时会被解析为 JSON 数组，因此一定要使用双引号 `"`，而不要使用单引号。如果使用 `shell` 格式的话，实际的命令会被包装为 `sh -c` 的参数的形式进行执行。比如：
 
-```
+```dockerfile
 CMD echo $HOME
 ```
 
 在实际执行中，会将其变更为：
 
-```
+```dockerfile
 CMD [ "sh", "-c", "echo $HOME" ]
 ```
 
@@ -745,7 +745,7 @@ CMD [ "sh", "-c", "echo $HOME" ]
 
 一些初学者将 `CMD` 写为：
 
-```
+```dockerfile
 CMD service nginx start
 ```
 
@@ -755,7 +755,7 @@ CMD service nginx start
 
 正确的做法是直接执行 `nginx` 可执行文件，并且要求以前台形式运行。比如：
 
-```
+```dockerfile
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
@@ -767,7 +767,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 `ENTRYPOINT` 的目的和 `CMD` 一样，都是在指定容器启动程序及参数。`ENTRYPOINT` 在运行时也可以替代，不过比 `CMD` 要略显繁琐，需要通过 `docker run` 的参数 `--entrypoint` 来指定。当指定了 `ENTRYPOINT` 后，`CMD` 的含义就发生了改变，不再是直接的运行其命令，而是将 `CMD` 的内容作为参数传给 `ENTRYPOINT` 指令，换句话说实际执行时，将变为：
 
-```
+```dockerfile
 <ENTRYPOINT> "<CMD>"
 ```
 
@@ -777,7 +777,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 假设我们需要一个得知自己当前公网 IP 的镜像，那么可以先用 `CMD` 来实现：
 
-```
+```dockerfile
 FROM ubuntu:16.04
 RUN apt-get update \
     && apt-get install -y curl \
@@ -787,14 +787,14 @@ CMD [ "curl", "-s", "http://ip.cn" ]
 
 假如我们使用 `docker build -t myip .` 来构建镜像的话，如果我们需要查询当前公网 IP，只需要执行：
 
-```
+```bash
 docker run myip
 当前 IP：61.148.226.66 来自：北京市 联通
 ```
 
 嗯，这么看起来好像可以直接把镜像当做命令使用了，不过命令总有参数，如果我们希望加参数呢？比如从上面的 `CMD` 中可以看到实质的命令是 `curl`，那么如果我们希望显示 HTTP 头信息，就需要加上 `-i` 参数。那么我们可以直接加 `-i` 参数给 `docker run myip` 么？
 
-```
+```bash
 docker run myip -i
 docker: Error response from daemon: invalid header field value "oci runtime error: container_linux.go:247: starting container process caused \"exec: \\\"-i\\\": executable file not found in $PATH\"\n".
 ```
@@ -803,13 +803,13 @@ docker: Error response from daemon: invalid header field value "oci runtime erro
 
 那么如果我们希望加入 `-i` 这参数，我们就必须重新完整的输入这个命令：
 
-```
+```bash
 docker run myip curl -s http://ip.cn -i
 ```
 
 这显然不是很好的解决方案，而使用 `ENTRYPOINT` 就可以解决这个问题。现在我们重新用 `ENTRYPOINT` 来实现这个镜像：
 
-```
+```dockerfile
 FROM ubuntu:16.04
 RUN apt-get update \
     && apt-get install -y curl \
@@ -819,7 +819,7 @@ ENTRYPOINT [ "curl", "-s", "http://ip.cn" ]
 
 这次我们再来尝试直接使用 `docker run myip -i`：
 
-```
+```bash
 docker run myip
 当前 IP：61.148.226.66 来自：北京市 联通
 docker run myip -i
@@ -852,7 +852,7 @@ Connection: keep-alive
 
 这些准备工作是和容器 `CMD` 无关的，无论 `CMD` 为什么，都需要事先进行一个预处理的工作。这种情况下，可以写一个脚本，然后放入 `ENTRYPOINT` 中去执行，而这个脚本会将接到的参数（也就是 ``）作为命令，在脚本最后执行。比如官方镜像 `redis` 中就是这么做的：
 
-```
+```dockerfile
 FROM alpine:3.4
 RUN addgroup -S redis && adduser -S -G redis redis
 ENTRYPOINT ["docker-entrypoint.sh"]
@@ -874,7 +874,7 @@ exec "$@"
 
 该脚本的内容就是根据 `CMD` 的内容来判断，如果是 `redis-server` 的话，则切换到 `redis` 用户身份启动服务器，否则依旧使用 `root` 身份执行。比如：
 
-```
+```bash
 docker run -it redis id
 uid=0(root) gid=0(root) groups=0(root)
 ```
@@ -890,7 +890,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 这个指令很简单，就是设置环境变量而已，无论是后面的其它指令，如 `RUN`，还是运行时的应用，都可以直接使用这里定义的环境变量。
 
-```
+```dockerfile
 ENV VERSION=1.0 DEBUG=on \
     NAME="Happy Feet"
 ```
@@ -899,7 +899,7 @@ ENV VERSION=1.0 DEBUG=on \
 
 定义了环境变量，那么在后续的指令中，就可以使用这个环境变量。比如在官方 `node` 镜像 `Dockerfile` 中，就有类似这样的代码：
 
-```
+```dockerfile
 ENV NODE_VERSION 7.2.0
 RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
@@ -929,13 +929,13 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 
 之前我们说过，容器运行时应该尽量保持容器存储层不发生写操作，对于数据库类需要保存动态数据的应用，其数据库文件应该保存于卷(volume)中，后面的章节我们会进一步介绍 Docker 卷的概念。为了防止运行时用户忘记将动态文件所保存目录挂载为卷，在 `Dockerfile` 中，我们可以事先指定某些目录挂载为匿名卷，这样在运行时如果用户不指定挂载，其应用也可以正常运行，不会向容器存储层写入大量数据。
 
-```
+```dockerfile
 VOLUME /data
 ```
 
 这里的 `/data` 目录就会在运行时自动挂载为匿名卷，任何向 `/data` 中写入的信息都不会记录进容器存储层，从而保证了容器存储层的无状态化。当然，运行时可以覆盖这个挂载设置。比如：
 
-```
+```bash
 docker run -d -v mydata:/data xxxx
 ```
 
@@ -963,7 +963,7 @@ docker run -d -v mydata:/data xxxx
 
 使用 `WORKDIR` 指令可以来**指定工作目录**（或者称为当前目录）类似`cd`，使用`exec`进入容器后的目录。以后各层的当前目录就被改为指定的目录，如该目录不存在，`WORKDIR` 会帮你建立目录。之前提到一些初学者常犯的错误是把 `Dockerfile` 等同于 Shell 脚本来书写，这种错误的理解还可能会导致出现下面这样的错误：
 
-```
+```dockerfile
 RUN cd /app
 RUN echo "hello" > world.txt
 ```
@@ -1012,7 +1012,7 @@ Successfully tagged mynginx:v1
 
 如果在 `Dockerfile` 中这么写：
 
-```
+```dockerfile
 COPY ./package.json /app/
 ```
 
