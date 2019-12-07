@@ -26,7 +26,9 @@ Linux的版本分为两种：
 
 
 
-### 安装 Ubuntu
+### 安装
+
+此处使用 Ubuntu 18.04
 
 *   选择Use An Entire Disk And Set Up LVM，以便后续扩容
 *   将磁盘可用空间使用完，即调整 lv 分区（逻辑卷）大小
@@ -35,9 +37,48 @@ Linux的版本分为两种：
 
 
 
-### VMware Fusion
+### 配置
 
-安装如上。需要配置固定 IP，步骤如下（暂时测试是 OK 的）：
+#### hostname
+
+-   修改 `/etc/cloud/cloud.cfg` 防止重启后主机名还原
+
+    ```cfg
+    vim /etc/cloud/cloud.cfg
+    
+    # 该配置默认为 false，修改为 true 即可
+    preserve_hostname: true
+    ```
+
+-   修改主机名
+
+    ```sh
+    # 查看主机名
+    root@ubuntu:/home/conanan# hostnamectl
+       Static hostname: ubuntu
+             Icon name: computer-vm
+               Chassis: vm
+            Machine ID: 7401befbdbaf4b3c9bfd8356535bd75f
+               Boot ID: 4acdda6f0f4540f2b906d8a2cd4a58fe
+        Virtualization: vmware
+      Operating System: Ubuntu 18.04.3 LTS
+                Kernel: Linux 4.15.0-70-generic
+          Architecture: x86-64
+    
+    # 修改主机名
+    hostnamectl set-hostname deployment
+    
+    # 配置 hosts，和本机 IP 一致
+    cat >> /etc/hosts << EOF
+    172.16.154.11 deployment
+    EOF
+    ```
+
+    
+
+#### IP
+
+需要配置固定 IP，步骤如下（暂时测试是 OK 的）：
 
 1.  在 iTerm2 中输入`ifconfig`查看`vmnet8`即 NAT 模式的 IP 段，如下图
 
@@ -47,29 +88,43 @@ Linux的版本分为两种：
 
     Ubuntu 从17.10开始，已放弃在 /etc/network/interfaces 里固定 IP 的配置，即使配置也不会生效，而是改成 netplan 方式 ，配置写在 /etc/netplan/01-netcfg.yaml 或者类似名称的 yaml 文件里。修改该文件：
 
-    目前测试只需修改 `dhcp4: true`，`addresses: [172.16.154.11/24]`即可
-
     ```yaml
-    network:
-      version: 2 # 可不配置
-      renderer: networkd # 可不配置
-      ethernets:
-        ens33:   #配置的网卡名称
-          dhcp4: no    #dhcp4关闭
-          dhcp6: no    #dhcp6关闭
-          addresses: [192.168.210.1/24]   #设置本机IP及掩码，注意此处 IP 在步骤1中的子网 IP 范围内
-          gateway4: 192.168.210.254   #设置网关，注意此处 IP 在步骤1中的子网 IP 范围内
+    network: # 网络
+      ethernets: # 网卡
+        ens33:   # 网卡名称，根据 Linux 发行版不同也会随之改变，可以使用 ifconfig 来确定
+          dhcp4: true # DHCP 协议，动态分配 IP，需改为 true，否则 ping 不通外网
+          dhcp6: true # DHCP 协议，动态分配 IP
+          addresses: [172.16.154.10/24]   # 本机IP/子网掩码（确定局域网内主机 IP 范围）
+          
+          # 如下配置后会 ping 不通外网，暂时不知道原因
+          gateway4: 172.16.154.1   # 网关（通过网关再通过路由器连接网络）
           nameservers:
-              addresses: [114.114.114.114, 8.8.8.8]   #设置DNS，可不配置
+              addresses: [172.16.154.1]   # DNS，可不配置
+      version: 2 # 可不配置
     ```
 
-    执行 `netplan apply` 命令可以让配置直接生效
+3.  应用配置
 
-3.  有可能需要关闭防火墙`sudo ufw disable`，具体命令查看后续章节
+    ```bash
+    netplan apply
+    ```
+
+4.  有可能需要关闭防火墙，具体命令查看后续章节
+
+
+
+#### DNS
+
+```sh
+# 取消 DNS 行注释，并增加 DNS 配置如：114.114.114.114，修改后重启下计算机
+vim /etc/systemd/resolved.conf
+```
 
 
 
 
+
+ 
 
 ### 目录结构
 
@@ -137,7 +192,7 @@ macOS 下的可以使用iTerm，自己配置
 *   `ssh -l conanan -p 22 123.11.11.11`
 *   传输文件：`scp D:\zookeeper.tar.gz conanan@123.11.11.11:/root/也可以指定文件名称扩展名`
 
-
+    可反过来
 
 *   SecureCRT软件：按`Alt+P`可打开sftp来传输文件，如`put d:\zookeeper-3.4.6.tar.gz`
 
