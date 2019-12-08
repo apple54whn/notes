@@ -1,8 +1,6 @@
 # Docker Compose
 
-## 概述
-
-### 简介
+## 简介
 
 Compose 项目是 Docker 官方的开源项目，负责实现对 Docker 容器集群的快速**编排**（常用于开发测试环境，生产环境使用 K8S）。从功能上看，跟 OpenStack 中的 Heat 十分类似。其代码目前在 [https://github.com/docker/compose](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cHM6Ly9naXRodWIuY29tL2RvY2tlci9jb21wb3Nl) 上开源。Compose 定位是 「定义和运行多个 Docker 容器的应用（Defining and running multi-container Docker applications）」，其前身是开源项目 Fig。
 
@@ -15,15 +13,13 @@ Compose 的默认管理对象是项目，通过子命令对项目中的一组容
 
 
 
-### 安装
+## 安装
 
 Compose 支持 Linux、macOS、Windows 10 三大平台。详细查看官方文档https://docs.docker.com/compose/install/，Github 上也有https://github.com/docker/compose/releases。
 
 
 
-## 使用
-
-### 命令
+## 命令
 
 执行 Compose 命令，会自动下载镜像，运行容器。命令必须在 `docker-compose.yaml` 文件所在路径下执行。
 
@@ -41,7 +37,7 @@ docker-compose down
 
 
 
-### Tomcat
+## Tomcat
 
 在`/usr/local/docker/tomcat`下编写 `docker-compose.yaml` 文件，如下面的 tomcat 配置文件
 
@@ -66,7 +62,7 @@ services:
 
 
 
-### MySQL
+## MySQL
 
 ```yaml
 version: '3.1'
@@ -99,9 +95,9 @@ services:
 
 
 
-### GitLab
+## GitLab
 
-#### 部署
+### 部署
 
 GitLab 是利用 Ruby on Rails 一个开源的版本管理系统，实现一个自托管的 Git 项目仓库，可通过 Web 界面进行访问公开的或者私人项目。它拥有与 Github 类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。团队成员可以利用内置的简单聊天程序 (Wall) 进行交流。它还提供一个代码片段收集功能可以轻松实现代码复用，便于日后有需要的时候进行查找。
 
@@ -183,7 +179,7 @@ services:
 >           - config:/etc/gitlab
 >           - data:/var/opt/gitlab
 >           - logs:/var/log/gitlab
->   volumes: # 这里的数据卷，由于上面的数据卷配置后没有访问权限，所以这里配置，其目录会在/var/
+>   volumes: # 这里的数据卷，由于上面的数据卷配置后没有访问权限，所以这里配置，其目录会在/var/lib/docker/volumes下
 >       config:
 >       data:
 >       logs:
@@ -198,7 +194,7 @@ services:
 *   修改用户密码，由于我们创建时并没有配置邮箱，所以还需要重新编辑用户信息并手动设置密码。第一次登录还是会提示修改密码，直接用原密码修改即可
 *   **新建项目**
 
-#### SSH 方式
+### SSH 方式
 
 *   目的：
     *   安全：无密码
@@ -224,7 +220,7 @@ services:
 
     
 
-#### 小 Case
+### 小 Case
 
 *   Gravatar
 
@@ -232,7 +228,7 @@ services:
 
 
 
-### Nexus
+## Nexus
 
 Nexus 是一个强大的 Maven 仓库管理器，极大地简化了内部仓库的维护和外部仓库的访问。2016 年 4 月 6 日 Nexus 3.0 版本发布，相较 2.x 版本有了很大的改变
 
@@ -242,7 +238,7 @@ Nexus 是一个强大的 Maven 仓库管理器，极大地简化了内部仓库�
 -   增加对 Docker, NeGet, npm, Bower 的支持。
 -   提供新的管理接口，以及增强对自动任务的管理。
 
-#### 部署
+### 部署
 
 我们使用 Docker 来安装和运行 Nexus，`docker-compose.yml` 配置如下：
 
@@ -261,13 +257,13 @@ volumes: # 其文件会在/var/lib/docker/volumes/nexus_data/下，前缀 nexus 
   data:
 ```
 
-#### 验证安装是否成功
+### 验证安装是否成功
 
 -   **地址：** [http://ip:port/](http://www.qfdmy.com/wp-content/themes/quanbaike/go.php?url=aHR0cDovL2lwOnBvcnQv)
 -   **用户名：** admin
 -   **密码：** 在 `cat /var/lib/docker/volumes/nexus_data/_data/admin.password`中，第一次进入后提示可修改，可改为 admin123456
 
-#### Maven 仓库介绍
+### Maven 仓库介绍
 
 *   代理仓库(Proxy Repository)
     *   第三方仓库
@@ -295,9 +291,11 @@ volumes: # 其文件会在/var/lib/docker/volumes/nexus_data/下，前缀 nexus 
 
 
 
-#### 在项目中使用 Nexus
+### 在项目中使用 Nexus
 
-**从私服下载——配置代理仓库**（不过需要注释掉之前的 mirror 镜像，否则不起作用）
+#### 从私服下载
+
+**配置代理仓库**（不过需要注释掉之前的 mirror 镜像，否则不起作用）
 
 ```xml
 <repositories>
@@ -328,7 +326,9 @@ volumes: # 其文件会在/var/lib/docker/volumes/nexus_data/下，前缀 nexus 
 </pluginRepositories>
 ```
 
-**部署到私服——配置自动化部署到私服**
+#### 部署到私服
+
+**配置自动化部署到私服**
 
 *   **配置认证信息**，在 Maven `settings.xml` 中添加 Nexus 认证信息 (**servers** 节点下)
 
@@ -385,7 +385,7 @@ volumes: # 其文件会在/var/lib/docker/volumes/nexus_data/下，前缀 nexus 
 
 
 
-#### 扩展阅读
+### 扩展阅读
 
 *   手动上传第三方依赖（解决通过 POM 下载不下来的依赖）
 
@@ -412,5 +412,305 @@ volumes: # 其文件会在/var/lib/docker/volumes/nexus_data/下，前缀 nexus 
 
 
 
-### Harbor
+## Harbor
+
+### 简介
+
+Harbor 是一个用于存储和分发 Docker 镜像的企业级 Registry 服务器，通过添加一些企业必需的功能特性，例如安全、标识和管理等，扩展了开源 Docker Distribution。作为一个企业级私有 Registry 服务器，Harbor 提供了更好的性能和安全。提升用户使用 Registry 构建和运行环境传输镜像的效率。Harbor 支持安装在多个 Registry 节点的镜像资源复制，镜像全部保存在私有 Registry 中， 确保数据和知识产权在公司内部网络中管控。另外，Harbor 也提供了高级的安全特性，诸如用户管理，访问控制和活动审计等。
+
+### Harbor 特性
+
+-   **基于角色的访问控制 ：** 用户与 Docker 镜像仓库通过 “项目” 进行组织管理，一个用户可以对多个镜像仓库在同一命名空间（project）里有不同的权限。
+-   **镜像复制 ：** 镜像可以在多个 Registry 实例中复制（同步）。尤其适合于负载均衡，高可用，混合云和多云的场景。
+-   **图形化用户界面 ：** 用户可以通过浏览器来浏览，检索当前 Docker 镜像仓库，管理项目和命名空间。
+-   **AD/LDAP 支持 ：** Harbor 可以集成企业内部已有的 AD/LDAP，用于鉴权认证管理。
+-   **审计管理 ：** 所有针对镜像仓库的操作都可以被记录追溯，用于审计管理。
+-   **国际化 ：** 已拥有英文、中文、德文、日文和俄文的本地化版本。更多的语言将会添加进来。
+-   **RESTful API ：** RESTful API 提供给管理员对于 Harbor 更多的操控，使得与其它管理软件集成变得更容易。
+-   **部署简单 ：** 提供在线和离线两种安装工具， 也可以安装到 vSphere 平台 (OVA 方式) 虚拟设备。
+
+### Harbor 组件
+
+-   **Proxy：** Harbor 的 registry, UI, token 等服务，通过一个前置的反向代理统一接收浏览器、Docker 客户端的请求，并将请求转发给后端不同的服务。
+-   **Registry：** 负责储存 Docker 镜像，并处理 docker push/pull 命令。由于我们要对用户进行访问控制，即不同用户对 Docker image 有不同的读写权限，Registry 会指向一个 token 服务，强制用户的每次 docker pull/push 请求都要携带一个合法的 token, Registry 会通过公钥对 token 进行解密验证。
+-   **Core services**：这是 Harbor 的核心功能，主要提供以下服务：
+    -   **UI：** 提供图形化界面，帮助用户管理 registry 上的镜像（image）, 并对用户进行授权。
+    -   **WebHook：** 为了及时获取 registry 上 image 状态变化的情况， 在 Registry 上配置 webhook，把状态变化传递给 UI 模块。
+    -   **Token：** 负责根据用户权限给每个 docker push/pull 命令签发 token. Docker 客户端向 - Registry 服务发起的请求，如果不包含 token，会被重定向到这里，获得 token 后再重新向 Registry 进行请求。
+-   **Database：** 为 core services 提供数据库服务，负责储存用户权限、审计日志、Docker image 分组信息等数据。
+-   **Job Services：** 提供镜像远程复制功能，可以把本地镜像同步到其他 Harbor 实例中。
+-   **Log Collector：** 为了帮助监控 Harbor 运行，负责收集其他组件的 log，供日后进行分析。
+
+![img](./images/3eb420c96b75b44.png)
+
+
+
+### Harbor 安装
+
+[Harbor GitHub](https://github.com/goharbor/harbor) 有详细介绍
+
+*   解压
+
+    ```bash
+    tar xvf harbor-offline-installer-v1.10.0-
+    ```
+
+*   修改配置文件
+
+    ```bash
+    cd harbor/
+    vim harbor.yml
+    
+    # 修改为域名或你服务器 IP
+    hostname: 172.16.154.12
+    
+    http: 
+    	port: 8082 # 端口根据需要修改
+    https: # 不需要 https 则先注释掉 https 的 attribute
+    	# port: 443
+    	# ...
+    harbor_admin_password: Harbor12345 # 密码也可以修改
+    ```
+
+*   执行安装脚本
+
+    ```bash
+    ./install.sh
+    
+    # 会执行5步
+    ✔ ----Harbor has been installed and started successfully.----
+    ```
+
+    通过浏览器访问 http://172.16.154.12:8082/，即可看到登录页面。输入账号 `admin`，密码 `Harbor12345`
+
+
+
+### Harbor 启动和停止
+
+Harbor 的日常运维管理是通过 docker-compose 来完成的，Harbor 本身有多个服务进程，都放在 docker 容器之中运行，我们可以通过 `docker ps` 命令查看。
+
+```bash
+docker ps | grep goharbor
+```
+
+```bash
+# 启动
+docker-compose start # 也可以 up
+# 停止
+docker-compose stop # 也可以 down
+# 重启
+docker-compose restart
+```
+
+**说明：**
+
+-   **nginx：** nginx 负责流量转发和安全验证，对外提供的流量都是从 nginx 中转，所以开放 https 的 443 端口，它将流量分发到后端的 ui 和正在 docker 镜像存储的 docker registry
+-   **harbor-jobservice：**harbor-jobservice 是 harbor 的 job 管理模块，job 在 harbor 里面主要是为了镜像仓库之前同步使用的
+-   **harbor-ui：** harbor-ui 是 web 管理页面，主要是前端的页面和后端 CURD 的接口
+-   **registry：** registry 就是 docker 原生的仓库，负责保存镜像
+-   **harbor-adminserver：** harbor-adminserver 是 harbor 系统管理接口，可以修改系统配置以及获取系统信息
+-   **harbor-db：** harbor-db 是 harbor 的数据库，这里保存了系统的 job 以及项目、人员权限管理。由于本 harbor 的认证也是通过数据，在生产环节大多对接到企业的 ldap 中
+-   **harbor-log：** harbor-log 是 harbor 的日志服务，统一管理 harbor 的日志。通过 inspect 可以看出容器统一将日志输出的 syslog
+
+这几个容器通过 Docker link 的形式连接在一起，这样，在容器之间可以通过容器名字互相访问。对终端用户而言，只需要暴露 proxy （即 Nginx）的服务端口。
+
+
+
+### Harbor 配置客户端
+
+在 `/etc/docker/daemon.json` 中增加如下内容（如果文件不存在请新建该文件）
+
+```json
+{
+  "registry-mirrors": ["https://1c0pd0qz.mirror.aliyuncs.com"],
+  "insecure-registries": ["172.16.154.12:8082"]
+}
+```
+
+该文件必须符合 JSON 规范，否则 Docker 将不能启动。
+
+重启服务
+
+```bash
+systemctl daemon-reload
+systemctl restart docker # 容器多，需要时间
+```
+
+检查客户端配置是否生效
+
+```bash
+docker info
+# ------信息如下-----------
+Insecure Registries:
+  172.16.154.12:8082
+  127.0.0.0/8
+```
+
+
+
+
+
+### Harbor 上传镜像
+
+我们以推送 Nginx 为例，首先需要在 Harbor 上创建一个 **公开/私有** 的项目
+
+```bash
+# 在项目中标记镜像：
+docker tag SOURCE_IMAGE[:TAG] 172.16.154.12:8082/myshop/IMAGE[:TAG]
+docker tag nginx 172.16.154.12:8082/myshop/nginx:latest
+# 查看标记的镜像
+172.16.154.12:8082/myshop/nginx   latest    231d40e811cd    2 weeks ago    126MB
+
+# 登录 Harbor，私有项目需要登录
+docker login 172.16.154.12:8082 -u admin -p Harbor12345
+
+# 推送镜像到当前项目
+docker push 172.16.154.12:8082/myshop/IMAGE[:TAG]
+docker push 172.16.154.12:8082/myshop/nginx:latest
+```
+
+进入 Harbor 站点即可看到 push 的镜像了
+
+
+
+### Harbor 下载镜像
+
+在其它机器下载镜像只需要配置好客户端即可
+
+```bash
+docker pull 172.16.154.12:8082/myshop/nginx:latest
+```
+
+
+
+## 网络配置
+
+### 简介
+
+>   注意：Compose 只能用于同一台服务器上网络共享，多台之间不可以，所以只能用于测试环境，生产环境需要 K8S
+
+默认情况下，Compose 会为我们的应用创建一个网络，服务的每个容器都会加入该网络中。这样，容器就可被该网络中的其他容器访问，不仅如此，**该容器还能以服务名称作为 Hostname 被其他容器访问**。
+
+默认情况下，应用程序的网络名称基于 Compose 的工程名称，而项目名称基于 `docker-compose.yml` 所在目录的名称。如需修改工程名称，可使用 `--project-name` 标识或 `COMPOSE_PORJECT_NAME` 环境变量。
+
+假如一个应用程序在名为 `myapp` 的目录中，并且 `docker-compose.yml` 如下所示：
+
+```yaml
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+  db:
+    image: postgres
+```
+
+当我们运行 `docker-compose up` 时，将会执行以下几步：
+
+-   创建一个名为 **myapp_default** 的网络
+-   使用 web 服务的配置创建容器，它以 **web** 这个名称加入网络 myapp_default
+-   使用 db 服务的配置创建容器，它以 **db** 这个名称加入网络 myapp_default
+
+容器间可使用服务名称（web 或 db）作为 Hostname 相互访问。例如，web 这个服务可使用 `postgres://db:5432` 访问 db 容器。
+
+当服务的配置发生更改时，可使用 `docker-compose up` 命令更新配置。此时，Compose 会删除旧容器并创建新容器。新容器会以不同的 IP 地址加入网络，名称保持不变。任何指向旧容器的连接都会被关闭，容器会重新找到新容器并连接上去。
+
+
+
+### 使用 links
+
+默认情况下，服务之间可使用服务名称相互访问。links 允许我们定义一个别名，从而使用该别名访问其他服务。
+
+```yaml
+version: '2'
+services:
+  web:
+    build: .
+    links:
+      - "db:database"
+  db:
+    image: postgres
+```
+
+### 自定义网络
+
+一些场景下，默认的网络配置满足不了我们的需求，此时我们可使用 `networks` 命令自定义网络。networks 命令允许我们创建更加复杂的网络拓扑并指定自定义网络驱动和选项。不仅如此，我们还可使用 networks 将服务连接到不是由 Compose 管理的、外部创建的网络。
+
+```yaml
+version: '2'
+services:
+  proxy:
+    build: ./proxy
+    networks:
+      - front
+  app:
+    build: ./app
+    networks:
+      - front
+      - back
+  db:
+    image: postgres
+    networks:
+      - back
+networks:
+  front:
+    # Use a custom driver
+    driver: custom-driver-1
+  back:
+    # Use a custom driver which takes special options
+    driver: custom-driver-2
+    driver_opts:
+      foo: "1"
+      bar: "2"
+```
+
+其中，proxy 服务与 db 服务隔离，两者分别使用自己的网络；app 服务可与两者通信。使用 networks 命令，即可方便实现服务间的网络隔离与连接。
+
+### 配置默认网络
+
+```yaml
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+  db:
+    image: postgres
+networks:
+  default:
+    # Use a custom driver
+    driver: custom-driver-1
+```
+
+这样，就可为该应用指定自定义的网络驱动
+
+### 已存在的网络
+
+我们可以预先创建一个名为 myapp 的网络，让 Compose 加入这个新创建的网络（配置文件配置如下），使所有 Compose 可以通信，此时使用 external 选项。
+
+```bash
+# 创建网络
+docker network create <Network Name>
+# 查看已存在的网络
+docker network list
+```
+
+```yaml
+networks:
+  default:
+    external:
+      name: myapp
+```
+
+
+
+
+
+
+
+## 一次构建，到处运行
+
+从 Dockerfile 到 Docker Compose 的编写，到 push 到 Harbor
 

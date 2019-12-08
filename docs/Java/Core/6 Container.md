@@ -81,8 +81,8 @@
 - 注意：添加**自定义元素**到`Collection`集合中时，需要**重写**该元素所属类的`equals()`
 - **常用方法（底层会调用`equals`方法，建议重写）**
     - **添加**
-        - `boolean add(E e)`：当成单独元素
-        - `boolean addAll(Collection c)`：以整体添加，但每个都是独立的
+        - `boolean add(E e)`：添加该对象到下一个索引，当成一个元素
+        - `boolean addAll(Collection c)`：复制容器中其每一个元素
     - **删除**
         - `void clear()`：删除集合中所有元素，但集合还存在
         - `boolean remove(Object o)`：区别 List 中的
