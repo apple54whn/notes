@@ -44,11 +44,11 @@ module.exports = [
         ]
       },
       {
-        text: 'Server Framwork', items: [
-          { text: 'SpringBoot', link: '/language/chinese/' },
+        text: 'Service', items: [
+          { text: 'Spring Boot', link: '/Java/Framwork/Service/Spring Boot/0 Primer' },
           { text: 'Dubbo', link: '/language/chinese/' },
-          { text: 'SpringCloud Netflix', link: '/language/japanese/' },
-          { text: 'SpringCloud Alibaba', link: '/language/japanese/' }
+          { text: 'Spring Cloud Netflix', link: '/language/japanese/' },
+          { text: 'Spring Cloud Alibaba', link: '/language/japanese/' }
 
         ]
       },
@@ -59,7 +59,7 @@ module.exports = [
     items: [
       { text: 'Design Pattern', link: '/Design/Design Pattern/0 Intro' },
       { text: 'DDD', link: '/Design/DDD/0 Basic' },
-      { text: 'MicroServer', link: '/Design/MicroServer/0 Basic' },
+      { text: 'MicroServer', link: '/Design/MicroServer/0 Intro' },
     ]
   },
   {

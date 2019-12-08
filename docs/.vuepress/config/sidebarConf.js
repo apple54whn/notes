@@ -11,6 +11,8 @@ module.exports = {
       children: [
         '0 Intro',
         '1 Intro1',
+        '2 Intro2',
+
 
       ]
     }
@@ -28,9 +30,9 @@ module.exports = {
     {
       title: 'HTTP',
       collapsable: false, // 控制 组 的 close
-      sidebarDepth: 2,
+      sidebarDepth: 1,
       children: [
-        '0 Intro',
+        'HTTP/0 Intro',
       ]
     }
   ],
@@ -63,6 +65,9 @@ module.exports = {
   ],
 
 
+
+
+  // ---------------------Core Java start-----------------------
   '/Java/Core/': [
     {
       title: 'Core',
@@ -99,18 +104,30 @@ module.exports = {
 
       ]
     },
-
-
-
   ],
+  // ---------------------Core Java end-------------------------
 
 
+  // -----------------Service Framwork start--------------------
+  '/Java/Framwork/Service/Spring Boot/': [
+    {
+      title: 'Spring Boot',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Primer',
+      ]
+    },
+  ],
+  // -----------------Service Framwork end----------------------
+
+
+
+  
+  
+  
+  
   // ---------------------Design start---------------------------
-
-
-
-
-  // ---------------------Design end---------------------------
   '/Design/Design Pattern/': [
     {
       collapsable: false, // 控制 组 的 close
@@ -120,11 +137,21 @@ module.exports = {
       ]
     }
   ],
+  '/Design/MicroServer/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    }
+  ],
+  // ---------------------Design end-----------------------------
+  
+  
 
-
-
+  
   // ---------------------Devops start---------------------------
-
   '/Devops/Vim/': [
     {
       collapsable: false, // 控制 组 的 close
@@ -152,7 +179,6 @@ module.exports = {
       ]
     }
   ],
-
   '/Devops/Docker/': [
     {
       collapsable: false, // 控制 组 的 close
@@ -172,8 +198,7 @@ module.exports = {
       ]
     }
   ],
-
-  // ---------------------Devops end---------------------------
+  // ---------------------Devops end-----------------------------
 
 
   
