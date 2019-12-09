@@ -24,7 +24,6 @@ module.exports = {
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        '0 Intro',
       ]
     },
     {
@@ -32,7 +31,6 @@ module.exports = {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 1,
       children: [
-        'HTTP/0 Intro',
       ]
     }
   ],
