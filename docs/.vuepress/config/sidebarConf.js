@@ -114,6 +114,9 @@ module.exports = {
       sidebarDepth: 2,
       children: [
         '0 Primer',
+        '1 Conf',
+        '2 DB',
+
       ]
     },
   ],
