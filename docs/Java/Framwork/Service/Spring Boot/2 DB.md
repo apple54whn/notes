@@ -60,7 +60,7 @@ Spring Boot 可以自动配置嵌入式（embedded）数据库如：H2, HSQL, De
 
 ![img](./images/f976c3fb5ce1233.png)
 
-### HikariCP 的 Power 🔥
+### HikariCP 的 Power 💥
 
 BoneCP 作者放弃维护，并在 Github 项目主页推荐大家使用 HikariCP，Hikari（ひかり [hi·ka·'lē] ） 来自日文，是 **光** 的意思。这个产品的口号是 **快速、简单、可靠**
 
@@ -109,7 +109,13 @@ BoneCP 作者放弃维护，并在 Github 项目主页推荐大家使用 HikariC
 
 #### POM
 
-如果你使用了`spring-boot-starter[-data]-jdbc` 或 `spring-boot-starter-data-jpa`或`mybatis-spring-boot-starter` starters，你将自动获得对HikariCP 的依赖。例如 Mybatis
+如果你使用了
+
+`spring-boot-starter[-data]-jdbc` 或
+
+ `spring-boot-starter-data-jpa`或
+
+`mybatis-spring-boot-starter` starters，你将自动获得对HikariCP 的依赖。例如 Mybatis
 
 ```xml
 <dependency>
@@ -124,9 +130,9 @@ BoneCP 作者放弃维护，并在 Github 项目主页推荐大家使用 HikariC
 ```yaml
 spring:
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.141.130:3306/myshop?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    # type: com.zaxxer.hikari.HikariDataSource # 可省略，Spring Boot 会自动检测
+    # driver-class-name: com.mysql.cj.jdbc.Driver # 可省略，Spring Boot 会自动检测
+    url: jdbc:mysql://172.16.154.11:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
     hikari:

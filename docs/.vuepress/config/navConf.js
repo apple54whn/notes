@@ -39,7 +39,8 @@ module.exports = [
       { text: 'Core', link: '/Java/Core/0 Basic' },
       {
         text: 'Persistence', items: [
-          { text: 'Mybatis', link: '/language/chinese/' },
+          { text: 'Mybatis', link: '/Java/Framwork/Persistence/Mybatis/0 Primer' },
+          { text: 'Mybatis Plus', link: '/Java/Framwork/Persistence/Mybatis Plus/0 Primer' },
           { text: 'JPA', link: '/language/japanese/' }
         ]
       },

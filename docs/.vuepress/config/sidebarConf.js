@@ -123,6 +123,36 @@ module.exports = {
   // -----------------Service Framwork end----------------------
 
 
+  // -----------------Persistence Framwork start--------------------
+  '/Java/Framwork/Persistence/Mybatis/': [
+    {
+      title: 'Mybatis',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Primer',
+
+      ]
+    },
+  ],
+  '/Java/Framwork/Persistence/Mybatis Plus/': [
+    {
+      title: 'Mybatis Plus',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Primer',
+        '1 Conf',
+        '2 CRUD',
+        '3 Wrapper',
+        '4 Plugins',
+
+
+
+      ]
+    },
+  ],
+  // -----------------Persistence Framwork end----------------------
 
   
   
