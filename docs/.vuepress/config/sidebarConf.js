@@ -137,7 +137,7 @@ module.exports = {
   ],
   '/Java/Framwork/Persistence/Mybatis Plus/': [
     {
-      title: 'Mybatis Plus',
+      title: 'Mybatis Plus 3.3.0',
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
@@ -146,6 +146,7 @@ module.exports = {
         '2 CRUD',
         '3 Wrapper',
         '4 Plugins',
+        '5 ActiveRecord',
 
 
 

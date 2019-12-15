@@ -66,7 +66,7 @@ spring:
   datasource:
   	# type: com.zaxxer.hikari.HikariDataSource # 可省略，Spring Boot 会自动检测
     # driver-class-name: com.mysql.cj.jdbc.Driver # 可省略，Spring Boot 会自动检测
-  	url: jdbc:mysql://172.16.154.11:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
+  	url: jdbc:mysql://172.16.154.11:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: 123456
     hikari:
