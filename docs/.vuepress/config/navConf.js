@@ -1,5 +1,5 @@
 module.exports = [
-  { text: 'Home', link: '/' },
+  // { text: 'Home', link: '/' },
   {
     text: 'Basic',
     items: [
@@ -72,6 +72,23 @@ module.exports = [
       { text: 'Docker', link: '/Devops/Docker/0 Docker' },
       { text: 'K8', link: '/Devops/K8/K8' },
 
+    ]
+  },
+  {
+    text: 'Front End',
+    items: [
+      { text: 'Web', link: '/Front End/Web/HTML' },
+      { text: 'Android', link: '/Front End/Android/0 Intro' },
+      { text: 'Flutter', link: '/Front End/Flutter/0 Intro' },
+    ]
+  },
+  {
+    text: 'Environment',
+    items: [
+      { text: 'macOS', link: '/Environment/macOS/macOs' },
+      { text: 'Linux', link: '/Environment/Linux/Linux' },
+      { text: 'Windows', link: '/Environment/Windows/Windows' },
+      { text: 'Software', link: '/Environment/Software/Software' },
     ]
   },
 

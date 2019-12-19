@@ -233,5 +233,41 @@ module.exports = {
   // ---------------------Devops end-----------------------------
 
 
+  // ---------------------Front End start---------------------------
+  '/Front End/Web/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'HTML',
+      ]
+    }
+  ],
+
+  // ---------------------Front End end---------------------------
+
+
+
+
+  // ---------------------Environment start---------------------------
+  '/Environment/macOS/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'macOS',
+      ]
+    }
+  ],
+  '/Environment/Software/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'Software',
+      ]
+    }
+  ],
+  // ---------------------Environment end-----------------------------
   
 }
