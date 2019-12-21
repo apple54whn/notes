@@ -236,10 +236,19 @@ module.exports = {
   // ---------------------Front End start---------------------------
   '/Front End/Web/': [
     {
-      collapsable: false, // 控制 组 的 close
+      title: 'HTML',
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        'HTML',
+        '1 HTML',
+      ]
+    },
+    {
+      title: 'CSS',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '2 CSS',
       ]
     }
   ],
