@@ -48,3 +48,8 @@ open in browser
 "editor.formatOnSave": true
 ```
 
+
+## 截图工具
+* macOS：xnip
+* Windows：snipaste
+

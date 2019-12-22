@@ -155,10 +155,10 @@ module.exports = {
   ],
   // -----------------Persistence Framwork end----------------------
 
-  
-  
-  
-  
+
+
+
+
   // ---------------------Design start---------------------------
   '/Design/Design Pattern/': [
     {
@@ -179,10 +179,10 @@ module.exports = {
     }
   ],
   // ---------------------Design end-----------------------------
-  
-  
 
-  
+
+
+
   // ---------------------Devops start---------------------------
   '/Devops/Vim/': [
     {
@@ -237,7 +237,7 @@ module.exports = {
   '/Front End/Web/': [
     {
       title: 'HTML',
-      collapsable: true, // 控制 组 的 close
+      collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '1 HTML',
@@ -245,10 +245,11 @@ module.exports = {
     },
     {
       title: 'CSS',
-      collapsable: true, // 控制 组 的 close
+      collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        '2 CSS',
+        '2 CSS-基础',
+        '3 CSS-布局'
       ]
     }
   ],
@@ -278,5 +279,5 @@ module.exports = {
     }
   ],
   // ---------------------Environment end-----------------------------
-  
+
 }
