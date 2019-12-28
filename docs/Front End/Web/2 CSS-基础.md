@@ -656,34 +656,19 @@ list-style: list-style-type list-style-position list-style-image
 
 
 
-### 尺寸属性
-
-- **`width`(宽度)**：`auto`(默认，浏览器计算)、*`[length]`*、*`%`*、`inherit`
-- **`height`(高度)**：`auto`(默认，浏览器计算)、*`[length]`*、*`%`*、`inherit`
 
 
-
-
-
-### 光标属性(cursor)
+### `cursor` 光标
 
 - auto(默认) ：浏览器设置的光标
 - default：默认为箭头
-- pointer：指示链接的手型
+- `pointer`：指示链接的手型，**常用**
 - text：文本
 - wait：沙漏、转圈、表
 - help：箭头带问号
 - move：四方箭头
 - crosshair：十字架
 - url：自定义光标的url
-
-### 其他
-
-- text-decoration(a标签的)：none即为无下划线
-- **CSS的display属性：规定元素应该生成的框的类型**
-  - **none**：此元素**不会被显示**
-  - **block**：此元素将**显示为块级元素**，此元素前后会带有换行符
-  - **inline**：默认。此元素会被显示为**内联元素**，元素前后没有换行符
 
 
 
