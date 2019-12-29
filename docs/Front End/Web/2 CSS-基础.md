@@ -310,6 +310,8 @@ body {
   * **高、宽直接设置是无效的**。默认宽度就是它**本身内容的宽度**
   * 行内元素只能容纳文本或其他行内元素
   * **链接 a 里面不能再放 a**。特殊情况 **a 里面可以放块级元素**，但是给 a **转换块级模式**最安全
+  
+  * **行内元素为了照顾兼容性，尽量只设置左右内外边距**，不要设置上下内外边距。但是转换为块级和行内块元素就可以都设置了
 
 #### `inline-block`
 
@@ -456,14 +458,36 @@ a {
 
 
 
-#### `vertical-align` 垂直对齐
+#### `vertical-align` 垂直对齐🔥
 
-**没有居中，可以使用`line-height`间接实现，让其等于盒子的height即可**
+用于设置一个元素的垂直对齐方式，但是它只针对于**行内元素**或者**行内块元素**有效。经常用于**设置图片或者表单**（行内块元素）和**文字**垂直对齐（对象是图片或表单）
 
-* `top` 
-* `bottom` 
-* 相对父元素`text-top` 、`text-bottom` 、`middle` 
-* ...
+| 值          | 描述                                                         |
+| :---------- | :----------------------------------------------------------- |
+| baseline    | 默认。元素放置在父元素的**基线**上。                         |
+| sub         | 垂直对齐文本的下标。                                         |
+| super       | 垂直对齐文本的上标                                           |
+| top         | 把元素的顶端与行中最高元素的顶端对齐                         |
+| text-top    | 把元素的顶端与父元素字体的顶端对齐                           |
+| middle🔥     | 把此元素放置在父元素的**中部**。                             |
+| bottom      | 把元素的顶端与行中最低的元素的顶端对齐。                     |
+| text-bottom | 把元素的底端与父元素字体的底端对齐。                         |
+| length      |                                                              |
+| %           | 使用 "line-height" 属性的百分比值来排列此元素。允许使用负值。 |
+| inherit     | 规定应该从父元素继承 vertical-align 属性的值。               |
+
+* 文字的顶线、中线、基线、底线：
+
+![image-20191229230348460](./images/image-20191229230348460.png)
+
+* **解决图片底部默认空白缝隙问题**
+
+  bug：div（不指定height）包裹图片时底侧会有一个**空白缝隙**，原因是**行内块元素会和文字的基线对齐**，解决方法如下：
+
+  * 给图片添加 `vertical-align: middle | top| bottom` 等，**推荐**
+  * 把图片转换为块级元素`display: block;`
+
+  
 
 
 
@@ -531,6 +555,8 @@ text-shadow: h-shadow v-shadow blur color;
 | *v-shadow* | 必需。垂直阴影的位置。允许负值。                             |
 | *blur*     | 可选。模糊的距离。                                           |
 | *color*    | 可选。阴影的颜色。参阅 [CSS 颜色值](https://www.w3school.com.cn/cssref/css_colors_legal.asp)。 |
+
+
 
 
 
@@ -602,7 +628,7 @@ tDiv {
 background-position: x y
 ```
 
-参数代表x，y坐标，可以使用**方位名词**或**精确单位**
+参数代表x，y坐标，可以使用**方位名词**或**精确单位**。可用于**精灵图**（sprites）
 
 * `position` ：`left` 、`center` 、`right`  ；`top` 、`center` 、`bottom` 。
 
@@ -658,17 +684,63 @@ list-style: list-style-type list-style-position list-style-image
 
 
 
-### `cursor` 光标
+### `cursor` 光标🔥
 
-- auto(默认) ：浏览器设置的光标
-- default：默认为箭头
+- `auto` ：默认，浏览器设置的光标
+- `default`：默认为小白箭头
 - `pointer`：指示链接的手型，**常用**
-- text：文本
-- wait：沙漏、转圈、表
-- help：箭头带问号
-- move：四方箭头
-- crosshair：十字架
-- url：自定义光标的url
+- `text`：文本
+- `move`：四方箭头
+- `not-allowed`：禁止
+- `wait`：沙漏、转圈、表
+- `help`：箭头带问号
+- `crosshair`：十字架
+- `url`：自定义光标的url
+
+
+
+### input 表单🔥
+
+* `outline`：表单轮廓蓝线
+  * `none`：取消，写`0`也可与
+* `resize`：防止拖拽 textarea（textarea标签放在同一行即可没有类似padding的空白距离）
+  * `none`：禁止拖拽，右下角那个功能也就没有了
+
+
+
+### 溢出的文字省略号显示
+
+#### 单行文本溢出显示省略号
+
+必须满足三个条件
+
+```css
+/*1. 先强制一行内显示文本，默认 normal 自动换行*/
+white-space: nowrap;
+/*2. 超出的部分隐藏*/ 
+overflow: hidden;
+/*3. 文字用省略号替代超出的部分*/ 
+text-overflow: ellipsis;
+```
+
+
+
+#### 多行文本溢出显示省略号
+
+多行文本溢出显示省略号，有较大兼容性问题， 适合于webKit浏览器或移动端（移动端大部分是webkit内核）
+
+```css
+overflow: hidden;
+text-overflow: ellipsis;
+/* 弹性伸缩盒子模型显示 */
+display: -webkit-box;
+/* 限制在一个块元素显示的文本的行数 */ 
+-webkit-line-clamp: 2;
+/* 设置或检索伸缩盒对象的子元素的排列方式 */ 
+-webkit-box-orient: vertical;
+```
+
+更推荐让后台人员来做这个效果，因为后台人员可以设置显示多少个字，操作更简单。
 
 
 

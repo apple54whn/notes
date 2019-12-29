@@ -1,0 +1,73 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+.promo {
+    position: relative;
+    width: 520px;
+    height: 280px;
+    margin: 100px auto;
+}
+
+/* 防止图片大小不一致，此处强制限制大小 */
+.promo img {
+    width: 520px;
+    height: 280px;
+}
+
+.prew,.next{
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    /* 绝对和固定定位的inline元素可以直接设置宽高 */
+    width: 20px;
+    height: 30px;
+    background: rgba(0, 0, 0, .3);
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+}
+
+.prew {
+    left: 0;
+    border-radius: 0 15px 15px 0;
+}
+
+.next {
+    right: 0;
+    border-radius: 15px 0 0 15px;
+}
+
+.nav {
+    position: absolute;
+    left: 50%;
+    margin-left: -35px;
+    bottom: 10px;
+    width: 70px;
+    height: 13px;
+    background: rgba(255, 255, 255, .3);
+    border-radius: 7px;
+    
+}
+
+.nav li {
+    float: left;
+    width: 8px;
+    height: 8px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin: 3px;
+}
+
+.nav .selected {
+    background-color: #ff5000;
+}

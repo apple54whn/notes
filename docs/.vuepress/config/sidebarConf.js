@@ -249,7 +249,11 @@ module.exports = {
       sidebarDepth: 2,
       children: [
         '2 CSS-基础',
-        '3 CSS-布局'
+        '3 CSS-传统布局',
+        '4 CSS-现代布局',
+        '5 CSS-高级技巧',
+
+
       ]
     }
   ],
