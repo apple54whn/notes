@@ -137,10 +137,27 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 * 方便代码的阅读和维护
 * 同时让浏览器或是网络爬虫可以很好地解析，从而更好分析其中的内容 
 * 使用语义化标签会具有更好地搜索引擎优化 
+* 这些新标签页面中可以使用多次
+* 在 IE9 中，需要把这些元素转换为块级元素
+* 移动端更喜欢使用这些标签
 
-`<header>`页眉`</header`：语义标签，只提高可读性
+标签如下：
 
-`<footer>`页脚`</footer`：语义标签，只提高可读性
+| 标签          | 描述                                               |
+| :------------ | :------------------------------------------------- |
+| <article>     | 定义文章。                                         |
+| <aside>       | 定义页面内容以外的内容。                           |
+| <details>     | 定义用户能够查看或隐藏的额外细节。                 |
+| <figcaption>🔥 | 定义 <figure> 元素的标题。                         |
+| <figure>🔥     | 规定自包含内容，比如图示、图表、照片、代码清单等。 |
+| <footer>🔥     | 定义文档或节的页脚。                               |
+| <header>🔥     | 规定文档或节的页眉。                               |
+| <main>        | 规定文档的主内容。                                 |
+| <mark>        | 定义重要的或强调的文本。                           |
+| <nav>🔥        | 定义导航链接。                                     |
+| <section>🔥    | 定义文档中的节，区域。                             |
+| <summary>     | 定义 <details> 元素的可见标题。                    |
+| <time>        | 定义日期/时间。                                    |
 
 
 
@@ -383,6 +400,70 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
+### 音频标签radio
+
+> HTML5，支持IE9+
+
+| 属性                                                         | 值       | 描述                                                         |
+| :----------------------------------------------------------- | :------- | :----------------------------------------------------------- |
+| [autoplay](https://www.w3school.com.cn/tags/att_audio_autoplay.asp) | autoplay | 如果出现该属性，则音频在就绪后马上播放。                     |
+| [controls](https://www.w3school.com.cn/tags/att_audio_controls.asp) | controls | 如果出现该属性，则向用户显示控件，比如播放按钮。             |
+| [loop](https://www.w3school.com.cn/tags/att_audio_loop.asp)  | loop     | 如果出现该属性，则每当音频结束时重新开始播放。               |
+| [muted](https://www.w3school.com.cn/tags/att_audio_muted.asp) | muted    | 规定视频输出应该被静音。                                     |
+| [preload](https://www.w3school.com.cn/tags/att_audio_preload.asp) | preload  | 如果出现该属性，则音频在页面加载时进行加载，并预备播放。如果使用 "autoplay"，则忽略该属性。 |
+| [src](https://www.w3school.com.cn/tags/att_audio_src.asp)    | *url*    | 要播放的音频的 URL。                                         |
+
+```html
+<audio controls="controls" height="100" width="100">
+  <source src="song.mp3" type="audio/mp3" />
+  <source src="song.ogg" type="audio/ogg" />
+  <embed height="100" width="100" src="song.mp3" />
+  您的浏览器不支持
+</audio>
+```
+
+
+
+
+
+
+
+### 视频标签video
+
+> HTML5，支持IE9+
+
+| 属性                                                         | 值       | 描述                                                         |
+| :----------------------------------------------------------- | :------- | :----------------------------------------------------------- |
+| [autoplay](https://www.w3school.com.cn/tags/att_video_autoplay.asp) | autoplay | 如果出现该属性，则视频在就绪后马上播放。                     |
+| [controls](https://www.w3school.com.cn/tags/att_video_controls.asp) | controls | 如果出现该属性，则向用户显示控件，比如播放按钮。             |
+| [height](https://www.w3school.com.cn/tags/att_video_height.asp) | *pixels* | 设置视频播放器的高度。                                       |
+| [loop](https://www.w3school.com.cn/tags/att_video_loop.asp)  | loop     | 如果出现该属性，则当媒介文件完成播放后再次开始播放。         |
+| [muted](https://www.w3school.com.cn/tags/att_video_muted.asp) | muted    | 规定视频的音频输出应该被静音。                               |
+| [poster](https://www.w3school.com.cn/tags/att_video_poster.asp) | *URL*    | 规定视频下载时显示的图像，或者在用户点击播放按钮前显示的图像。 |
+| [preload](https://www.w3school.com.cn/tags/att_video_preload.asp) | preload  | 如果出现该属性，则视频在页面加载时进行加载，并预备播放。如果使用 "autoplay"，则忽略该属性。 |
+| [src](https://www.w3school.com.cn/tags/att_video_src.asp)    | *url*    | 要播放的视频的 URL。                                         |
+| [width](https://www.w3school.com.cn/tags/att_video_width.asp) | *pixels* | 设置视频播放器的宽度。                                       |
+
+HTML 5 + `<object>` + `<embed>`
+
+```html
+<video width="320" height="240" controls="controls">
+  <source src="movie.mp4" type="video/mp4" />
+  <source src="movie.ogg" type="video/ogg" />
+  <source src="movie.webm" type="video/webm" />
+  <object data="movie.mp4" width="320" height="240">
+    <embed src="movie.swf" width="320" height="240" />
+  </object>
+  您的浏览器不支持
+</video>
+```
+
+上例中使用了 4 中不同的视频格式。HTML 5 `<video>` 元素会尝试播放以 mp4、ogg 或 webm 格式中的一种来播放视频。如果均失败，则回退到 `<embed> `元素。
+
+但是由于每个浏览器的样式不一样，通常会使用 JS 来自定义
+
+
+
 
 
 ## 表单标签
@@ -443,10 +524,13 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
        value="你好" 
        size="以字符数计的可见宽度，正整数" 
        maxlength="允许输入的最大字符数，正整数，使用较少" 
+       
        placeholder="占位符"  
        readonly="只读"  
        required="必填" 
-       autofocus="自动获得焦点" >          	      
+       autofocus="自动获得焦点"
+       autocomplate=on/off
+       multiple="文件多选">          	      
 ```
 
 - **text**：文本，默认宽度size为20个字符。使用 action 提交后台需指定 **name** 属性
@@ -487,14 +571,23 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 HTML5新添加的type类型
 
-- **date**：定义 date 控件（包括年、月、日，不包括时间）
+* **search**：搜索
+* **number**：定义用于输入数字的字段，会用正则自动校验
+* **tel**：电话，会用正则自动校验
+
+- date：定义 date 控件（包括年、月、日，不包括时间）
 - time：定义用于输入时间的控件（不带时区）
-- **datetime-local**：定义 date 和 time 控件（包括年、月、日、时、分、秒、几分之一秒，不带时区）
+- datetime-local：定义 date 和 time 控件（包括年、月、日、时、分、秒、几分之一秒，不带时区）
 - **email**：定义用于 e-mail 地址的字段，会用正则自动校验
 - **url**：定义用于输入 URL 的字段，会用正则自动校验
-- **number**：定义用于输入数字的字段
 - color：定义拾色器 
 - range：定义用于精确值不重要的输入数字的控件（比如 slider 控件）
+
+
+
+### 表单属性
+
+查看文档吧
 
 
 
