@@ -183,17 +183,17 @@
 
 | 选择器                 | 例子                                                       | 例子描述                                                     | CSS  |
 | :--------------------- | :--------------------------------------------------------- | :----------------------------------------------------------- | :--- |
-| :first-letter          | p:first-letter                                             | 选择每个 <p> 元素的首字母。                                  | 1    |
-| :first-line            | p:first-line                                               | 选择每个 <p> 元素的首行。                                    | 1    |
+| :first-letter          | p:first-letter                                             | 选择每个 `<p>` 元素的首字母。                                | 1    |
+| :first-line            | p:first-line                                               | 选择每个 `<p>` 元素的首行。                                  | 1    |
 |                        |                                                            |                                                              |      |
-| :first-child           | p:first-child                                              | 选择属于父元素的第一个子元素的每个 <p> 元素。                | 2    |
-| :last-child            | p:last-child                                               | 选择属于其父元素最后一个子元素每个 <p> 元素。                | 3    |
-| :nth-child(*n*)🔥       | p:nth-child(2)；<br/>n也可以是关键字；<br/>n也可以是公式； | 选择属于其父元素的第二个子元素的每个 <p> 元素。<br/>隔行换色：even偶数、odd奇数。<br/>2n，2n+1等等。n会从0开始。也可以是负数 | 3    |
+| :first-child           | p:first-child                                              | 选择属于父元素的第一个子元素的每个 `<p>` 元素。              | 2    |
+| :last-child            | p:last-child                                               | 选择属于其父元素最后一个子元素每个 `<p>` 元素。              | 3    |
+| :nth-child(*n*)🔥       | p:nth-child(2)；<br/>n也可以是关键字；<br/>n也可以是公式； | 选择属于其父元素的第二个子元素的每个` <p>` 元素。<br/>隔行换色：even偶数、odd奇数。<br/>2n，2n+1等等。n会从0开始。也可以是负数 | 3    |
 | :nth-last-child(*n*)   | p:nth-last-child(2)                                        | 同上，从最后一个子元素开始计数。                             | 3    |
 |                        |                                                            |                                                              |      |
-| :first-of-type         | p:first-of-type                                            | 选择属于其父元素的首个 <p> 元素的每个 <p> 元素。             | 3    |
-| :last-of-type          | p:last-of-type                                             | 选择属于其父元素的最后 <p> 元素的每个 <p> 元素。             | 3    |
-| :nth-of-type(*n*)      | p:nth-of-type(2)                                           | 选择属于其父元素第二个 <p> 元素的每个 <p> 元素。             | 3    |
+| :first-of-type         | p:first-of-type                                            | 选择属于其父元素的首个 `<p>` 元素的每个` <p> `元素。         | 3    |
+| :last-of-type          | p:last-of-type                                             | 选择属于其父元素的最后` <p>` 元素的每个 `<p>` 元素。         | 3    |
+| :nth-of-type(*n*)      | p:nth-of-type(2)                                           | 选择属于其父元素第二个 `<p>` 元素的每个 `<p>` 元素。         | 3    |
 | :nth-last-of-type(*n*) | p:nth-last-of-type(2)                                      | 同上，但是从最后一个子元素开始计数。                         | 3    |
 
 > ⚠️ :nth-child(*n*) 与 :nth-of-type(*n*) 区别在于
@@ -207,20 +207,129 @@
 
 ### 伪元素选择器 `::`
 
+#### 介绍
+
 伪元素选择器可以帮助我们**利用CSS创建新标签元素**，而不需要HTML标签，从而简化HTML结构。
 
-| 选择器  | 例子     | 例子描述                            | CSS  |
-| :------ | :------- | :---------------------------------- | :--- |
-| :before | p:before | 在每个 <p> 元素的内容之前插入内容。 | 2    |
-| :after  | p:after  | 在每个 <p> 元素的内容之后插入内容。 | 2    |
+| 选择器  | 例子     | 例子描述                              | CSS  |
+| :------ | :------- | :------------------------------------ | :--- |
+| :before | p:before | 在每个 `<p>` 元素的内容之前插入内容。 | 2    |
+| :after  | p:after  | 在每个 `<p>` 元素的内容之后插入内容。 | 2    |
 
-⚠️
+注意 ⚠️
 
 * before 和 after 创建一个元素，但是属于**行内元素**
 * 新创建的这个元素在**文档树中是找不到的**，所以我们称为伪元素
 * before 和 after **必须有 content 属性**
-* before 在**父元素内容的前面创建元素**，after 在**父元素内容的后面插入元素**
+* before 在**父元素里面内容的前面创建元素**，after 在**父元素里面内容的后面插入元素**
 * 伪元素选择器和标签选择器一样，权重为 1
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+        }
+
+        div::before {
+            content: "111";
+        }
+
+        div::after {
+            content: "999";
+        }
+    </style>
+</head>
+
+<body>
+    <div>666</div>
+</body>
+
+</html>
+```
+
+效果如下：
+
+<img src="./images/image-20200101142722750.png" alt="image-20200101142722750" style="zoom:50%;" />
+
+#### 伪元素字体图标
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+      div {
+        position: relative;
+        width: 200px;
+        height: 35px;
+        border: 1px solid skyblue;
+      }
+
+      div::after {
+        position: absolute;
+        top: 7px;
+        right: 10px;
+        /* 可以用字体图标代替 */
+        content: "x";
+      }
+    </style>
+  </head>
+
+  <body>
+    <div></div>
+  </body>
+
+</html>
+```
+
+效果如下：
+
+<img src="./images/image-20200101144553702.png" alt="image-20200101144553702" style="zoom:50%;" />
+
+#### 仿视频遮罩功能
+
+取代之前写的mask类
+
+```css
+/* mask遮罩 */
+.box .box-body ul li::before {
+    /* 必须加content */
+    content: "";
+    /* 隐藏遮罩 */
+    display: none;
+    position: absolute;
+    width: 228px;
+    height: 270px;
+    background: rgba(0, 0, 0, .4) url(./images/arr.png) no-repeat 100px 60px;
+}
+
+/* 鼠标经过li盒子时，才让其中的伪元素显示，和以往不同的写法，注意 */
+.box .box-body ul li:hover::before {
+    display: block;
+}
+```
+
+
+
+#### 清除浮动
+
+看float中代码
 
 
 
@@ -749,7 +858,7 @@ list-style: list-style-type list-style-position list-style-image
 
 
 
-### 溢出的文字省略号显示
+### 溢出的文字省略号显示🔥
 
 #### 单行文本溢出显示省略号
 
@@ -782,6 +891,63 @@ display: -webkit-box;
 ```
 
 更推荐让后台人员来做这个效果，因为后台人员可以设置显示多少个字，操作更简单。
+
+
+
+### `transation` 过渡
+
+过渡 transition 是 CSS3 中具有颠覆性的特征之一，我们可以在不使用 Flash 动画或 JavaScript 的情况下，当元素从一种样式变换为另一种样式时为元素添加效果。虽然低版本浏览器不支持（IE9 以下版本）但是不影响页面布局。经常和 `:hover` 搭配使用。**谁做过渡给谁加**，控制多个元素可以在`,`后继续写，不能写多个`transation`
+
+```css
+transition: 要过渡的属性 花费时间 运动曲线 何时开始,要过渡的属性 花费时间 运动曲线 何时开始;
+```
+
+* 属性：想要变化的 CSS 属性， 宽度高度、背景颜色、内外边距都可以。如果想要所有的属性都变化过渡， 写all 即可。
+
+* 花费时间：单位是秒（必须写单位），比如 0.5s
+
+* 运动曲线：默认是 `ease`（可以省略）
+
+  | 值                            | 描述                                                         |
+  | :---------------------------- | :----------------------------------------------------------- |
+  | linear                        | 规定以相同速度开始至结束的过渡效果（等于 cubic-bezier(0,0,1,1)）。 |
+  | ease                          | 规定慢速开始，然后变快，然后慢速结束的过渡效果（cubic-bezier(0.25,0.1,0.25,1)）。 |
+  | ease-in                       | 规定以慢速开始的过渡效果（等于 cubic-bezier(0.42,0,1,1)）。  |
+  | ease-out                      | 规定以慢速结束的过渡效果（等于 cubic-bezier(0,0,0.58,1)）。  |
+  | ease-in-out                   | 规定以慢速开始和结束的过渡效果（等于 cubic-bezier(0.42,0,0.58,1)）。 |
+  | cubic-bezier(*n*,*n*,*n*,*n*) | 在 cubic-bezier 函数中定义自己的值。可能的值是 0 至 1 之间的数值。 |
+
+* 何时开始：单位是秒（必须写单位），可以设置**延迟触发时间**，默认是 0s（可以省略）
+
+
+
+
+
+### `filter` 滤镜🔥
+
+> CSS3
+
+filter CSS属性将**模糊**或**颜色偏移**等图形效果应用于元素。
+
+```css
+filter: 函数();
+```
+
+* `blur` 模糊处理，数值越大越模糊，如`blur(5px)`
+
+
+
+## 函数
+
+### `calc` 计算
+
+此CSS函数让你在声明CSS属性值时执行一些计算
+
+```css
+width: calc(100% - 80px);
+```
+
+括号里面可以使用 + - * / 来进行计算
 
 
 
