@@ -175,10 +175,10 @@ Spring WebFlux 同时支持使用旧的 Spring MVC 注解声明 `Reactive Contro
 
 ### resources
 
-*   `resources`文件夹中目录结构
+目录结构
 
 - `static`：保存所有的静态资源； js、css、images等
-- `templates`：保存所有的模板页面；（Spring Boot默认jar包使用嵌入式的Tomcat，默认不支持JSP页面）；可以使用模板引擎如freemarker、thymeleaf
+- `templates`：保存所有的模板页面；（Spring Boot默认jar包使用嵌入式的Tomcat，默认不支持JSP页面）；可以使用模板引擎如`freemarker`、`thymeleaf`
 - `application.properties`：Spring Boot应用的配置文件，可以修改一些默认设置
 - 可以手动新建目录，如`mapper`
 

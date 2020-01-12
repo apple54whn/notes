@@ -1037,7 +1037,7 @@ public class StaticProxyTest {
 
 *   这种动态代理在AOP中被称为AOP代理，AOP代理可代替目标对象，AOP代理包含了目标对象的全部方法。但AOP代理中的方法与目标对象的方法存在差异 : AOP代理里的方法可以在执行目标方法之前、之后插入一些通用处理
 
-    <img src="images/image-20191105004811049.png" style="zoom:50%;" />
+    <img src="./images/image-20191105004811049.png" style="zoom:50%;" />
 
 ```java
 interface Human{

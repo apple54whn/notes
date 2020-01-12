@@ -200,6 +200,55 @@ export SDKMAN_DIR="/Users/conanan/.sdkman"
 
 
 
+### 自定义安装目录 🔥
+
+>   ⚠️ 需要直接执行该命令而不是先执行安装命令
+>
+>   For this to work it is vital that your user has full access rights to this folder.It is also important that the folder does not exist as SDKMAN! will attempt to create it.
+>
+>   苹果从 OS X El Capitan 10.11 系统开始使用了 Rootless 机制，系统默认将会锁定 /system、/sbin、/usr 这三个目录。用户要获取这三个目录的写权限，需要关闭Rootless。
+>
+>   *   重启 Mac
+>
+>   *   开机时后按下 Command+R，进入恢复模式。
+>
+>   *   在上面的菜单实用工具中找到并打开 Terminal
+>
+>   *   输入如下命令：
+>
+>       ```bash
+>       csrutil disable
+>       ```
+>
+>   *   重启MAC，正常进入系统，此时已经可以给/system、/sbin、/usr 者几个目录进行权限更改
+>
+>       ```bash
+>       sudo chown -R $(whoami) /usr/local
+>       ```
+>
+>   
+>
+>   作者：蜂子阁先生
+>   链接：https://www.jianshu.com/p/a32224a38195
+>   来源：简书
+>   著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+```bash
+export SDKMAN_DIR="/usr/local/sdkman" && curl -s "https://get.sdkman.io" | bash
+```
+
+Please open a new terminal, or run the following in the existing one:
+
+```bash
+source "/usr/local/sdkman/bin/sdkman-init.sh"
+```
+
+
+
+
+
+
+
 ### 查看可以安装的 SDK
 
 ```shell
@@ -330,3 +379,13 @@ brew install node # 会安装最新版，不一定是稳定版哦
 ### VSCode
 
 安装后`command + shift + p` ，输入`shell command`，选择安装 Code 到 PATH 中，之后就可以在命令行中输入 s`code [path]` 打开文件夹
+
+
+
+
+
+## 常用操作
+
+### Finder 中选择系统目录
+
+Finder 中选择系统目录如：`/usr/local`，可以按下 `Command + Shift + G` 即可输入。

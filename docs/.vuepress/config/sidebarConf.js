@@ -63,6 +63,26 @@ module.exports = {
   ],
 
 
+  // ---------------------Design start---------------------------
+  '/Design/Design Pattern/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    }
+  ],
+  '/Design/MicroServer/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Intro',
+      ]
+    }
+  ],
+  // ---------------------Design end-----------------------------
 
 
   // ---------------------Core Java start-----------------------
@@ -106,8 +126,31 @@ module.exports = {
   // ---------------------Core Java end-------------------------
 
 
+  // ---------------------Jakarta EE start----------------------
+  '/Java/Jakarta EE/': [
+    {
+      title: 'Jakarta EE',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Servlet',
+        '1 Filter',
+        '2 Listener',
+        '3 JSP',
+
+
+
+
+
+      ]
+    },
+  ],
+  // ---------------------Jakarta EE end------------------------
+
+
+
   // -----------------Service Framwork start--------------------
-  '/Java/Framwork/Service/Spring Boot/': [
+  '/Java/Service/Spring Boot/': [
     {
       title: 'Spring Boot',
       collapsable: false, // 控制 组 的 close
@@ -116,6 +159,7 @@ module.exports = {
         '0 Primer',
         '1 Conf',
         '2 DB',
+        '3 Log'
 
       ]
     },
@@ -124,7 +168,7 @@ module.exports = {
 
 
   // -----------------Persistence Framwork start--------------------
-  '/Java/Framwork/Persistence/Mybatis/': [
+  '/Java/Persistence/Mybatis/': [
     {
       title: 'Mybatis',
       collapsable: false, // 控制 组 的 close
@@ -135,7 +179,7 @@ module.exports = {
       ]
     },
   ],
-  '/Java/Framwork/Persistence/Mybatis Plus/': [
+  '/Java/Persistence/Mybatis Plus/': [
     {
       title: 'Mybatis Plus 3.3.0',
       collapsable: false, // 控制 组 的 close
@@ -157,28 +201,21 @@ module.exports = {
 
 
 
-
-
-  // ---------------------Design start---------------------------
-  '/Design/Design Pattern/': [
+  // ---------------------Server start---------------------------
+  '/Server/Tomcat/': [
     {
+      title: 'Tomcat',
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        '0 Intro',
+        '0 Primer',
+
+
+
       ]
-    }
+    },
   ],
-  '/Design/MicroServer/': [
-    {
-      collapsable: false, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: [
-        '0 Intro',
-      ]
-    }
-  ],
-  // ---------------------Design end-----------------------------
+  // ---------------------Server end---------------------------
 
 
 
@@ -280,6 +317,7 @@ module.exports = {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
+        'IDEA',
         'Software',
       ]
     }

@@ -20,7 +20,7 @@ module.exports = [
         text: 'DataBase', items: [
           { text: 'MySQL', link: '/Basic/DataBase/MySQL/0 Intro' },
           { text: 'Oralce', link: '/Basic/DataBase/Oralce/0 Intro' },
-          
+
           { text: 'Redis', link: '/Basic/DataBase/Redis/0 Intro' },
           { text: 'Mongo', link: '/Basic/DataBase/Mongo/0 Intro' },
           { text: 'Lucene', link: '/Basic/DataBase/Lucene/0 Intro' },
@@ -32,29 +32,7 @@ module.exports = [
 
     ]
   },
-  {
-    text: 'Java',
-    ariaLabel: 'Java Study',
-    items: [
-      { text: 'Core', link: '/Java/Core/0 Basic' },
-      {
-        text: 'Persistence', items: [
-          { text: 'Mybatis', link: '/Java/Framwork/Persistence/Mybatis/0 Primer' },
-          { text: 'Mybatis Plus', link: '/Java/Framwork/Persistence/Mybatis Plus/0 Primer' },
-          { text: 'JPA', link: '/language/japanese/' }
-        ]
-      },
-      {
-        text: 'Service', items: [
-          { text: 'Spring Boot', link: '/Java/Framwork/Service/Spring Boot/0 Primer' },
-          { text: 'Dubbo', link: '/language/chinese/' },
-          { text: 'Spring Cloud Netflix', link: '/language/japanese/' },
-          { text: 'Spring Cloud Alibaba', link: '/language/japanese/' }
 
-        ]
-      },
-    ]
-  },
   {
     text: 'Design',
     items: [
@@ -63,6 +41,45 @@ module.exports = [
       { text: 'MicroServer', link: '/Design/MicroServer/0 Intro' },
     ]
   },
+
+  {
+    text: 'Java',
+    ariaLabel: 'Java Study',
+    items: [
+      { text: 'Core', link: '/Java/Core/0 Basic' },
+      {
+        text: 'Jakarta EE', items: [
+          { text: 'Servlet', link: '/Java/Jakarta EE/0 Servlet' }
+        ]
+      },
+      {
+        text: 'Service', items: [
+          { text: 'Spring Boot', link: '/Java/Service/Spring Boot/0 Primer' },
+          { text: 'Dubbo', link: '/language/chinese/' },
+          { text: 'Spring Cloud Netflix', link: '/language/japanese/' },
+          { text: 'Spring Cloud Alibaba', link: '/language/japanese/' }
+
+        ]
+      },
+      {
+        text: 'Persistence', items: [
+          { text: 'Mybatis', link: '/Java/Persistence/Mybatis/0 Primer' },
+          { text: 'Mybatis Plus', link: '/Java/Persistence/Mybatis Plus/0 Primer' },
+          { text: 'JPA', link: '/language/japanese/' }
+        ]
+      },
+
+    ]
+  },
+  {
+    text: 'Server',
+    items: [
+      { text: 'Tomcat', link: '/Server/Tomcat/0 Primer' },
+      { text: 'Nginx', link: '/Server/Nginx/0 Primer' },
+
+    ]
+  },
+
   {
     text: 'Devops',
     items: [
