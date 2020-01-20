@@ -156,14 +156,20 @@
 
         `int compareTo(String str)/compareIgnoreCase(String str)`
 
-    - **切片**：根据给定**正则表达式regex**的匹配切片，返回字符串数组，**不包括regex字符串**。**最多不超过limit个**，如果超过了，剩下的全部都放到最后一个元素中。若要用英文句点`.`切分，必须写`\\.`（两个反斜杠）
+    - **切片**：根据给定**正则表达式regex**的匹配切片，返回字符串数组，**不包括regex字符串**。**最多不超过limit个**，如果超过了，剩下的全部都放到最后一个元素中。若要用英文句点`.`切分，必须写`\\.`。
 
         `String[] split(String regex [,int limit])`
 
+        ```java
+    String fbIds = "4542,4540,";
+        String[] split = fbIds.split(",");
+    System.out.println(split.length);// 2
+        ```
+    
     - 若常量池中包括了一个等于此String对象的字符串（由equals确定），则返回池中字符串；否则将此字符串添加到池中，并返回其引用
-
+    
         `inter()`
-
+    
     - **String 与 基本类型或包装类型之间转换**（见<a href="#baozhuanglei">基本语法中包装类</a>）
 
 * 练习题
