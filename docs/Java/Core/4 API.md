@@ -161,9 +161,9 @@
         `String[] split(String regex [,int limit])`
 
         ```java
-    String fbIds = "4542,4540,";
+        String fbIds = "4542,4540,";
         String[] split = fbIds.split(",");
-    System.out.println(split.length);// 2
+        System.out.println(split.length);// 2
         ```
     
     - 若常量池中包括了一个等于此String对象的字符串（由equals确定），则返回池中字符串；否则将此字符串添加到池中，并返回其引用

@@ -167,9 +167,11 @@ public interface UserMapper extends BaseMapper<User> {
 
 #### mapper-locations
 
+配置要扫描 mapper 的 xml 文件地址。默认扫描 `classpath*:/mapper/**/*Mapper.xml`
+
 ```yaml
 mybatis-plus:
-  # 默认扫描 classpath*:/mapper/**/*.mapper
+  # 默认扫描 classpath*:/mapper/**/*.xml
   # mapper-locations:
 ```
 
