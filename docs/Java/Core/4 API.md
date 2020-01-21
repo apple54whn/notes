@@ -309,7 +309,46 @@
 
 
 
+### StringJoiner（java.util）
 
+> Java8 新增工具类，低层使用`StringBuilder`实现
+
+`StringJoiner` 用于构造由 `delimiter`（界定符） 分隔的字符序列，并可选地以提供的`prefix`开头和以提供的`suffix`结尾。
+
+在将某些内容添加到`StringJoiner`之前，其`sj.toString()`方法默认情况下将返回前缀 + 后缀。但是，如果调用`setEmptyValue()`方法，则将返回提供的 emptyValue 。例如，在使用集合符号创建表示空集合的字符串（即`{}`，前缀为`{`，后缀为`}`且未向 `StringJoiner` 添加任何内容）时，可以使用此方法。
+
+* 例子：字符串`[George:Sally:Fred]`可能是由如下如下方式构造的：
+
+  ```java
+  StringJoiner sj = new StringJoiner(":", "[", "]");
+  sj.add("George").add("Sally").add("Fred");
+  String desiredString = sj.toString();
+  ```
+
+  
+
+
+
+### Stream（java.util）
+
+> 底层使用`StringJoiner`实现
+
+* 语法
+
+  ```java
+  java.util.stream.Collectors.joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix)
+  ```
+
+* 例子（效果同`StringJoiner`一样）
+
+  ```java
+  List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
+  String commaSeparatedNumbers = numbers.stream()
+      .map(i -> i.toString())
+      .collect(Collectors.joining(", "));
+  ```
+
+  
 
 
 
