@@ -109,4 +109,14 @@ module.exports = [
     ]
   },
 
+  {
+    text: 'Project',
+    items: [
+      { text: '电商', link: '/Project/电商/简介' },
+      { text: 'Linux', link: '/Environment/Linux/Linux' },
+      { text: 'Windows', link: '/Environment/Windows/Windows' },
+      { text: 'Software', link: '/Environment/Software/Software' },
+    ]
+  },
+
 ]

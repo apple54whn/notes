@@ -328,4 +328,26 @@ module.exports = {
   ],
   // ---------------------Environment end-----------------------------
 
+
+  // ---------------------Project start---------------------------
+  '/Project/电商/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '简介',
+      ]
+    }
+  ],
+  '/Project/十次方/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '简介',
+      ]
+    }
+  ],
+  // ---------------------Project end-----------------------------
+
 }
