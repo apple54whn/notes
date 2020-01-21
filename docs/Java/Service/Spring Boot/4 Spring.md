@@ -1500,7 +1500,7 @@ public class AccountServiceImpl implements IAccountService{
 
 ### StopWatch
 
-Spring 提供的计时工具类，使用如下
+Spring 提供的计时工具类，线程不安全，仅用作开发阶段测试。使用如下
 
 ```java
 StopWatch stopWatch = new StopWatch("计时1");
