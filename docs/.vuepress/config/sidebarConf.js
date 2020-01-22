@@ -161,7 +161,9 @@ module.exports = {
         '2 DB',
         '3 Log',
         '4 Spring',
-        '5 SpringMVC'
+        '5 SpringMVC',
+        '6 Test'
+
 
 
 
