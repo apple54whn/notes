@@ -162,7 +162,8 @@ module.exports = {
         '3 Log',
         '4 Spring',
         '5 SpringMVC',
-        '6 Test'
+        '6 Jackson',
+        '7 Test'
 
 
 
