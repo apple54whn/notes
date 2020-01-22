@@ -151,7 +151,7 @@ public void whenSerializingUsingJsonGetter_thenCorrect() throws JsonProcessingEx
 
 
 
-### @JsonValue🔥
+### @JsonValue 🔥
 
  @JsonValue表示该库将用于序列化整个实例的单个方法。 
 
@@ -197,3 +197,38 @@ public void whenSerializingUsingJsonValue_thenCorrect() throws IOException {
 
 
 ## 属性包含注解
+
+### @JsonIgnoreProperties 🔥
+
+ 标记Jackson将忽略的属性或属性列表。可用在类、方法、构造器、字段上
+
+ 设置@JsonIgnoreProperties注释的`ignoreUnknown=true`。 定义可以在**反序列化**期间仅忽略任何无法识别的属性的属性。如果为true，则所有无法识别的属性（即没有setter或builder接受它们）都将在没有警告的情况下被忽略（尽管仍会调用未知属性的处理程序）。**对序列化没有任何影响**。即常用于`RequesBody`
+
+```java
+@JsonIgnoreProperties({ "id" })
+public class BeanWithIgnore {
+    public int id;
+    public String name;
+}
+```
+
+```json
+{"name":"My bean"}
+```
+
+示例
+
+```java
+@Test
+public void whenSerializingUsingJsonIgnoreProperties_thenCorrect()
+    throws JsonProcessingException {
+
+    BeanWithIgnore bean = new BeanWithIgnore(1, "My bean");
+
+    String result = new ObjectMapper().writeValueAsString(bean);
+    System.out.println(result);
+}
+```
+
+
+
