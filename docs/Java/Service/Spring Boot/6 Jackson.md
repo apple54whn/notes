@@ -2,6 +2,41 @@
 
 > 参考这篇[博客](https://www.baeldung.com/jackson-annotations)
 
+## 通用注解
+
+> 序列化和反序列化都生效
+
+### @JsonProperty 🔥
+
+ 添加@JsonProperty注释来表示JSON中的属性名。 
+
+```java
+public class MyBean {
+    public int id;
+    private String name;
+ 
+    @JsonProperty("name1")
+    public void setTheName(String name) {
+        this.name = name;
+    }
+ 
+    @JsonProperty("name1")
+    public String getTheName() {
+        return name;
+    }
+}
+```
+
+```json
+{"id":1,"name1":"My bean"}
+```
+
+
+
+
+
+
+
 ## 序列化注解
 
 > 将 Java 对象转为与平台无关的二进制字节流
@@ -56,7 +91,7 @@ public void whenSerializingUsingJsonAnyGetter_thenCorrect() throws JsonProcessin
 
 
 
-### @JsonGetter
+### @JsonGetter 🔥
 
  @JsonGetter注释是@JsonProperty注释的替代方法，用于将方法标记为getter方法，替代原样getter。 
 
@@ -65,7 +100,7 @@ public class MyBean {
     public int id;
     private String name;
  
-    @JsonGetter("name")
+    @JsonGetter("name1")
     public String getTheName() {
         return name;
     }
@@ -73,7 +108,7 @@ public class MyBean {
 ```
 
 ```json
-{"id":1,"name":"My bean"}
+{"id":1,"name1":"My bean"}
 ```
 
 示例
@@ -191,6 +226,42 @@ public void whenSerializingUsingJsonValue_thenCorrect() throws IOException {
 
 
 
+
+## 反序列化注解
+
+### @JsonSetter 🔥
+
+ @JsonSetter 注释是@JsonProperty注释的替代方法，用于将方法标记为setter方法，替代原样setter。
+
+```json
+{"id":1,"name1":"My bean"}
+```
+
+```java
+public class MyBean {
+    public int id;
+    private String name;
+ 
+    @JsonSetter("name1")
+    public String getTheName() {
+        return name;
+    }
+}
+```
+
+示例
+
+```java
+@Test
+public void whenSerializingUsingJsonGetter_thenCorrect() throws JsonProcessingException {
+
+    MyBean bean = new MyBean(1, "My bean");
+
+    String result = new ObjectMapper().writeValueAsString(bean);
+    System.out.println(result);
+
+}
+```
 
 
 
