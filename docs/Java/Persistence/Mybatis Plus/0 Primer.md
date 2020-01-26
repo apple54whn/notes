@@ -72,6 +72,14 @@ spring:
     hikari:
       # driver-class-name: com.mysql.cj.jdbc.Driver # 可省略，Spring Boot 会自动检测。且上面选项也可以指定。
       # HikariCP 连接池配置
+      minimum-idle: 5
+      idle-timeout: 600000
+      maximum-pool-size: 10
+      auto-commit: true
+      pool-name: MyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
       
   	# H2
     # driver-class-name: org.h2.Driver # 可省略，Spring Boot 会自动检测
@@ -80,6 +88,24 @@ spring:
     # url: jdbc:h2:mem:test
     # username: root
     # password: test
+
+mybatis-plus:
+  # mapper-locations: # 默认扫描 classpath*:/mapper/**/*.mapper
+  global-config:
+    db-config:
+      id-type: assign_id # 雪花算法ID，可为String或Long
+      logic-delete-field: isDeleted  #全局逻辑删除字段值 3.3.0开始支持，详情看下面。
+      #logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      #logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      # insert-strategy: not_null # 插入数据时只插入不为 null 的，默认值为 not_null
+      # update-strategy: not_null # 插入数据时只插入不为 null 的，默认值为 not_null。若是 ignore 则遇到 null 会更新为 null。
+      # select-strategy: not_null # 插入数据时只插入不为 null 的，默认值为 not_null
+  type-aliases-package: com.tensquare.article.domain # MyBaits 别名包扫描路径，通过该属性可以给包中的 domain 类注册别名
+  type-enums-package: com.tensquare.article.enum # 枚举类扫描路径
+  configuration:
+     lazy-loading-enabled: true # 延时加载的开关
+    # map-underscore-to-camel-case: true # 下划线转驼峰，默认为 true
+    # cache-enabled: true # 配置的缓存的全局开关，M和MP默认为 true
     
 # Log Config
 logging:

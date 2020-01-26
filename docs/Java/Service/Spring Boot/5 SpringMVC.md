@@ -166,7 +166,7 @@ public @interface RequestMapping {
 属性：
 
 * **`value`**：用于指定**请求的 URL**。它和 **path** 属性的作用是一样的。**大小写敏感**
-* **`method`**：用于指定**请求的方式**，值为`RequestMethod`枚举类
+* **`method`**：用于指定**请求的方式**，值为`RequestMethod`枚举类**数组**，可以有**多个请求方式映射一个方法**，下面的简写注解不可以在同一个方法中使用多个，否则**只有最先写的起作用**！
 * `params`：用于指定限制请求参数的条件。它支持简单的表达式。要求请求参数的key和value必须和配置的一模一样。如：
     * `params = {"accountName"}`，表示请求参数必须有 accountName 
     * `params = {"moeny!100"}`，表示请求参数中 money 不能是 100

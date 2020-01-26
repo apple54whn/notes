@@ -76,7 +76,7 @@ Linux的版本分为两种：
 
     
 
-#### IP
+#### IP—Ubuntu
 
 需要配置固定 IP，步骤如下（暂时测试是 OK 的）：
 
@@ -110,6 +110,12 @@ Linux的版本分为两种：
     ```
 
 4.  有可能需要关闭防火墙，具体命令查看后续章节
+
+
+
+#### IP—CentOS
+
+使用VMWare的桥接模式，详细查看该[博客](https://www.cnblogs.com/tyindon/p/10416769.html)
 
 
 

@@ -59,6 +59,9 @@ module.exports = [
       serviceWorker: true,
       updatePopup: true
     }
+  ],
+  [
+    // "vuepress-plugin-auto-sidebar", {}
   ]
 
 ]
