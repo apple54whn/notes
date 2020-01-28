@@ -150,26 +150,59 @@ module.exports = {
 
 
   // -----------------Service Framwork start--------------------
-  '/Java/Service/Spring Boot/': [
+  '/Java/Service/Spring/': [
     {
-      title: 'Spring Boot',
+      title: 'Primer',
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '0 Primer',
         '1 Conf',
         '2 DB',
-        '3 Log',
-        '4 Spring',
-        '5 SpringMVC',
-        '6 Jackson',
-        '7 Test'
-
-
-
+        '3 Log'
+      ]
+    },
+    {
+      title: 'Spring',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '4 Spring-1 概述',
+        '4 Spring-2 IoC',
+        '4 Spring-3 AOP',
+        '4 Spring-4 声明式事务',
+        '4 Spring-5 工具类',
+      ]
+    },
+    {
+      title: 'SpringMVC',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '5 SpringMVC-1 概述',
+        '5 SpringMVC-2 RESTful',
+        '5 SpringMVC-3 Controller&Mapping',
+        '5 SpringMVC-4 请求参数的绑定',
+        '5 SpringMVC-5 响应结果',
+        '5 SpringMVC-6 Multipart',
+        '5 SpringMVC-7 ExceptionHandler',
+        '5 SpringMVC-8 Interceptor',
+        '5 SpringMVC-9 Servlet 3.0',
+        '5 SpringMVC-10 Thymeleaf',
 
       ]
     },
+    {
+      title: 'Other',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '6 Jackson',
+        '7 Test'
+      ]
+    },
+
+
   ],
   // -----------------Service Framwork end----------------------
 

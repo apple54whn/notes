@@ -1,4 +1,4 @@
-# 1 配置
+# 1 Conf
 
 SpringBoot是基于约定的，所以很多配置都有默认值，但如果想使用自己的配置替换默认配置的话就可以使用配置文件配置，SpringBoot默认会从Resources目录下加载`application*.properties`或`application*.yml`（`application*.yaml`）文件
 

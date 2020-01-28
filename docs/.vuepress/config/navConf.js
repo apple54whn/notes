@@ -54,7 +54,7 @@ module.exports = [
       },
       {
         text: 'Service', items: [
-          { text: 'Spring Boot', link: '/Java/Service/Spring Boot/0 Primer' },
+          { text: 'Spring', link: '/Java/Service/Spring/0 Primer' },
           { text: 'Dubbo', link: '/language/chinese/' },
           { text: 'Spring Cloud Netflix', link: '/language/japanese/' },
           { text: 'Spring Cloud Alibaba', link: '/language/japanese/' }
