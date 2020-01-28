@@ -198,7 +198,10 @@ module.exports = {
       sidebarDepth: 2,
       children: [
         '6 Jackson',
-        '7 Test'
+        '7 Test',
+        'Thymeleaf',
+        'Servlet 3.0',
+
       ]
     },
 
