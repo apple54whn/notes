@@ -29,7 +29,7 @@
 
 安装前可先搜索下
 
-```shell
+```bash
 ~ ❯ brew search iterm2
 ==> Casks
 iterm2 ✔                                 homebrew/cask-versions/iterm2-legacy
@@ -44,11 +44,156 @@ homebrew/cask-versions/iterm2-beta       homebrew/cask-versions/iterm2-nightly
 
 
 
+### 配色
+
+[iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)仓库里有 iTerm2、Windows Terminal 甚至其他编辑器的配色方案，`schemes`下的是 iTerm2 的。下载并在设置中导入即可。
+
+*   推荐 **Solarized Dark Higher Contrast** 和 **manta**
+
+*   Set "Tab bar height (points) for minimal theme" to 22, under "Preference - Advanced".
+
+
+
+### Profiles
+
+配置文件如下：
+
+```
+#!/usr/bin/expect -f
+  set user conanan
+  set host 111.111.111.111
+  set password 'caicaiwoshishui'
+  set timeout -1
+ 
+  spawn ssh $user@$host
+  expect "*assword:*"
+  send "$password\r"
+  interact
+  expect eof
+```
+
+配置如下：
+
+![image-20200209174903796](./images/image-20200209174903796.png)
+
+
+
 ## Oh My ZSH
 
-> [官方文档](https://ohmyz.sh/)，需要先安装ZSH（macOS Catalina 默认），文档里有详细步骤，包括主题配置等等。
+> [官方文档](https://github.com/ohmyzsh/ohmyzsh/wiki)，需要先安装ZSH（macOS Catalina 默认），文档里有详细步骤，包括主题配置、插件配置等等。
 
 
+
+
+
+### plugin-git
+
+自带，简写git命令
+
+```
+git add --all ===> gaa
+git commit -m ===> gcmsg
+```
+
+查看所有 `git` 命令缩写
+
+```
+cat ~/.oh-my-zsh/plugins/git/git.plugin.zsh
+```
+
+
+
+
+
+### plugin-autojump
+
+[plugin-autojump](https://github.com/wting/autojump)。目录间快速跳转
+
+*   brew安装
+
+    ```bash
+    brew install autojump
+    ```
+
+*   在 `~/.zshrc` 中配置
+
+    ```
+    plugins=(其他的插件 autojump)
+    ```
+
+*   使配置生效
+
+    ```bash
+    source ~/.zshrc
+    ```
+
+使用方法：
+
+*   `cd` 命令进入 `/usr/local/docker` 目录
+
+*   下次若还想进入该目录输入`j docker`回车即可，甚至可以只输入`cd`后的任意部分，但是要唯一。
+
+    可多个参数空格分开，`j l d`
+
+*   删除无效路径，`j --purge 无效路径`
+
+*   
+
+
+
+### plugin-zsh-syntax-highlighting
+
+[zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)。输入正确命令会绿色高亮显示，输入错误会显示其他的颜色。
+
+*   克隆项目
+
+    ```bash
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    ```
+
+*   在 `~/.zshrc` 中配置
+
+    ```
+    plugins=(其他的插件 zsh-syntax-highlighting)
+    ```
+
+*   使配置生效
+
+    ```bash
+    source ~/.zshrc
+    ```
+
+
+
+
+
+### plugin-zsh-autosuggestions
+
+[plugin-zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)。输入命令时，会给出建议的命令（灰色部分）按键盘 → 补全。如果感觉 → 补全不方便，还可以自定义补全的快捷键，在 `.zshrc` 文件添加这句话即可，`,`可替换为其他按键
+
+```
+bindkey ',' autosuggest-accept
+```
+
+*   克隆项目
+
+    ```bash
+    git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+    ```
+
+*   在 `~/.zshrc` 中配置
+
+    ```
+    plugins=(其他的插件 zsh-autosuggestions)
+    ```
+
+*   使配置生效
+
+    ```bash
+    source ~/.zshrc
+    ```
+
+    
 
 
 
@@ -299,11 +444,18 @@ java: 11.0.5.j9-adpt
 
 ### 切换当前 SDK 版本
 
-```shell
-~ ❯ sdk u <Candidate> <Identifier> # use
-~ ❯ sdk u java 11.0.5.hs-adpt # use
+```bash
+sdk u <Candidate> <Identifier> # use
+sdk u java 11.0.5.hs-adpt # use
 
 Using java version 11.0.5.hs-adpt in this shell.
+```
+
+```bash
+sdk d <Candidate> <Identifier> # default
+sdk d java 8.0.232.hs-adpt # default
+
+Default java version set to 8.0.232.hs-adpt
 ```
 
 
@@ -369,18 +521,6 @@ sdk ls maven [version]
 ```shell
 brew install node # 会安装最新版，不一定是稳定版哦
 ```
-
-
-
-
-
-## 常用软件
-
-### VSCode
-
-安装后`command + shift + p` ，输入`shell command`，选择安装 Code 到 PATH 中，之后就可以在命令行中输入 s`code [path]` 打开文件夹
-
-
 
 
 

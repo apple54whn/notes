@@ -88,38 +88,137 @@ module.exports = {
   // ---------------------Core Java start-----------------------
   '/Java/Core/': [
     {
-      title: 'Core',
+      title: 'Basic Syntax',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '0 Basic',
         '1 Basic Syntax',
-        '2 Object Orientation',
-        '3 Error & Exception',
-        '4 API',
-        '5 Generic',
-        '6 Container',
-        '7 Thread',
-        '7 Thread2',
-        '8 IO',
-        '9 NIO',
-        '10 AIO',
-        '11 Network',
-        '12 Reflect',
-        '13 Lambda',
-        '14 Stream API',
-        '15 Optional',
-        '16 9,10,11新特性',
-        '17 Test',
-        '18 设计原则&设计模式',
       ]
     },
     {
-      title: 'Code',
+      title: 'Object Orientation',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
+        '2 Object Orientation-1 面向对象',
+        '2 Object Orientation-2 抽象类&接口',
+        '2 Object Orientation-3 枚举',
+        '2 Object Orientation-4 注解',
+        '2 Object Orientation-5 范型',
+        '2 Object Orientation-6 访问控制',
+        '2 Object Orientation-习题',
 
+      ]
+    },
+    {
+      title: 'Error & Exception',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '3 Error & Exception'
+      ]
+    },
+    {
+      title: 'API',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '4 API-1 字符串',
+        '4 API-2 时间',
+        '4 API-3 时间-old',
+        '4 API-4 比较器',
+        '4 API-5 精确数据类型',
+        '4 API-6 Math',
+        '4 API-7 Random',
+        '4 API-8 System',
+        '4 API-9 Object',
+        '4 API-习题'
+      ]
+    },
+    {
+      title: 'Container',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '6 Container-1 数据结构',
+        '6 Container-2 Collection',
+        '6 Container-3 List',
+        '6 Container-4 Set',
+        '6 Container-5 Queue',
+        '6 Container-6 Map',
+        '6 Container-7 Collections',
+        '6 Container-9 新API',
+        '6 Container-习题',
+      ]
+    },
+    {
+      title: 'Thread',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '7 Thread',
+        '7 Thread2'
+      ]
+    },
+    {
+      title: 'IO',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '8 IO',
+        '9 NIO',
+        '10 AIO'
+      ]
+    },
+    {
+      title: 'Network',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '11 Network'
+      ]
+    },
+    {
+      title: 'Lambda',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '13 Lambda'
+      ]
+    },
+    {
+      title: 'Stream',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '14 Stream API'
+      ]
+    },
+    {
+      title: 'Optional',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '15 Optional'
+      ]
+    },
+    {
+      title: '类加载器与反射',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '12 Reflect'
+      ]
+    },
+    {
+      title: 'Other',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '16 9,10,11新特性',
+        '17 Test',
+        '18 设计原则&设计模式',
       ]
     },
   ],
@@ -136,12 +235,7 @@ module.exports = {
         '0 Servlet',
         '1 Filter',
         '2 Listener',
-        '3 JSP',
-
-
-
-
-
+        '3 JSP'
       ]
     },
   ],
@@ -153,7 +247,7 @@ module.exports = {
   '/Java/Service/Spring/': [
     {
       title: 'Primer',
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '0 Primer',
@@ -164,7 +258,7 @@ module.exports = {
     },
     {
       title: 'Spring',
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '4 Spring-1 概述',
@@ -176,7 +270,7 @@ module.exports = {
     },
     {
       title: 'SpringMVC',
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '5 SpringMVC-1 概述',
@@ -187,14 +281,14 @@ module.exports = {
         '5 SpringMVC-6 Multipart',
         '5 SpringMVC-7 ExceptionHandler',
         '5 SpringMVC-8 Interceptor',
-        '5 SpringMVC-9 Servlet 3.0',
-        '5 SpringMVC-10 Thymeleaf',
+        '5 SpringMVC-9 CORS',
+
 
       ]
     },
     {
       title: 'Other',
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         '6 Jackson',
@@ -361,6 +455,7 @@ module.exports = {
       sidebarDepth: 2,
       children: [
         'IDEA',
+        'VSC',
         'Software',
       ]
     }

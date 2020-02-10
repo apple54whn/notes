@@ -61,6 +61,11 @@ module.exports = [
     }
   ],
   [
+    'vuepress-plugin-code-copy', {
+      align: 'bottom'
+    }
+  ],
+  [
     // "vuepress-plugin-auto-sidebar", {}
   ]
 

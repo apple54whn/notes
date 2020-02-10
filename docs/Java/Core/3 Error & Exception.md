@@ -1,10 +1,10 @@
-# 3 Error & Exception
+# Error & Exception
 
 [[toc]]
 
 -   程序执行中发生的不正常情况称为异常。
 
-## 3.1 异常的体系
+## 异常的体系
 
 -   异常的根类是`java.lang.Throwable`，其下有两个子类：
 
@@ -26,7 +26,7 @@
 
     -   `public String getMessage()`获取发生异常的**原因**。提示**给用户**的时候,就提示错误原因。
 
-## 3.2 异常的分类
+## 异常的分类
 
 我们平常说的异常就是指Exception，因为这类异常一旦出现，我们就要对代码进行更正，修复程序。对于这些错误，一般有两种解决方法：一是遇到错误就终止程序 的运行。另一种方法是由程序员在编写程序时，就考虑到错误的 检测、错误消息的提示，以及错误的处理。
 
@@ -45,7 +45,7 @@
 
 ​	
 
-## 3.3 异常的处理
+## 异常的处理
 
 关于异常对象的产生：
 
@@ -59,7 +59,7 @@ Java提供的是异常处理的**抓抛模型**。
 
 
 
-### 3.3.1 抓—捕获异常 try-catch-finally
+### 抓—捕获异常 try-catch-finally
 
 **捕获异常**：Java中对异常有针对性的语句进行捕获，可以对出现的异常进行指定方式的处理。
 
@@ -124,7 +124,7 @@ catch (异常类名 变量名) {
 
 
 
-### 3.3.2 抓—声明异常 throws
+### 抓—声明异常 throws
 
 关键字**throws**运用于**方法声明之上**，用于**表示当前方法不处理异常**，而是**提醒**该方法的**调用者来处理异常**。
 
@@ -160,7 +160,7 @@ catch (异常类名 变量名) {
 
 
 
-### 3.3.3 抛—抛出异常throw
+### 抛—抛出异常throw
 
 在编写程序时，我们必须要考虑程序出现问题的情况。比如，在**定义方法**时，方法需要**接受参数**。那么，当调用方法使用接受到的参数时，首先需要**先对参数数据进行合法的判断**，数据若**不合法**，就应该**告诉调用者**，传递合法的数据进来。这时需要使用**抛出异常**的方式来告诉调用者。
 
@@ -186,7 +186,7 @@ catch (异常类名 变量名) {
 
 
 
-### 3.3.6 子父类异常注意事项
+### 子父类异常注意事项
 
 -   父类的方法**抛出或不抛出**异常，子类重写的方法抛出的异常必须**小于等于父类抛出的异常**（多态）
 
@@ -198,13 +198,7 @@ catch (异常类名 变量名) {
 
 
 
-## 3.4 Objects非空判断
-
-Objects工具类提供的判断对象是否合法`Objects.requireNonNull`，为空则抛异常，否则返回该对象。<a href="#Objects">详见此</a>
-
-
-
-## 3.5 自定义异常
+## 自定义异常
 
 -   自定义的异常类**继承`Exception`或`RuntimeException`（尽量继承这个，对代码没有侵入性）**
 
@@ -214,7 +208,7 @@ Objects工具类提供的判断对象是否合法`Objects.requireNonNull`，为�
 
     ```java
     public class MyException extends Exception/*RuntimeException*/ {
-        static final long serialVersionUID = -7034897190745766939L;
+        static final long serialVersionUID = 1L;
         
         public MyException() {
         }
@@ -229,123 +223,127 @@ Objects工具类提供的判断对象是否合法`Objects.requireNonNull`，为�
 
 ## 习题
 
-*   常见的异常，举例说明
+### 常见的异常，举例说明
 
-    *   RuntimeException（unchecked）
+*   RuntimeException（unchecked）
 
-        *   NullPointerException
+    *   NullPointerException
 
-        *   ArithmeticException
+    *   ArithmeticException
 
-            ```java
-            int a = 10;
-            int b = 0;
-            System.out.println(a / b);
-            ```
+        ```java
+        int a = 10;
+        int b = 0;
+        System.out.println(a / b);
+        ```
 
-        *   ArrayIndexOutOfBoundsException
+    *   ArrayIndexOutOfBoundsException
 
-        *   NumberFormatException
+    *   NumberFormatException
 
-            ```java
-            String str = "123";
-            str = "abc";
-            int num = Integer.parseInt(str);
-            ```
+        ```java
+        String str = "123";
+        str = "abc";
+        int num = Integer.parseInt(str);
+        ```
 
-        *   InputMismatchException
+    *   InputMismatchException
 
-            ```java
-            Scanner scanner = new Scanner(System.in);
-            int score = scanner.nextInt();
-            System.out.println(score);
-            scanner.close();
-            ```
+        ```java
+        Scanner scanner = new Scanner(System.in);
+        int score = scanner.nextInt();
+        System.out.println(score);
+        scanner.close();
+        ```
 
-        *   ClassCastException
+    *   ClassCastException
 
-            ```java
-            Object obj = new Date();
-            String str = (String)obj;
-            ```
+        ```java
+        Object obj = new Date();
+        String str = (String)obj;
+        ```
 
-        *   ……
+    *   ……
 
-    *   java.io.IOException
+*   java.io.IOException
 
-        *   java.io.FileNotFoundException
+    *   java.io.FileNotFoundException
 
-    *   java.lang.ClassNotFoundException
+*   java.lang.ClassNotFoundException
 
-    *   java.sql.SQLException
+*   java.sql.SQLException
 
-    *   java.lang.InterruptedException
+*   java.lang.InterruptedException
 
-*   `throw`和`throws`区别
+### `throw`和`throws`区别
 
-    *   throw：在方法体中，并且抛出一个异常对象。程序执行到t此时立即停止，它后面的语句都不执行。
+*   throw：在方法体中，并且抛出一个异常对象。程序执行到t此时立即停止，它后面的语句都不执行。
 
-        抛出的是**异常对象** ，说明这里**肯定有异常**产生。一般用于自定义异常，体现在选择语句中
+    抛出的是**异常对象** ，说明这里**肯定有异常**产生。一般用于自定义异常，体现在选择语句中
 
-    *   throws：在方法声明上，后面跟异常的类名，可以是多个，调用者处理
+*   throws：在方法声明上，后面跟异常的类名，可以是多个，调用者处理
 
-        **声明方法有异常**，是一种**可能性**，这个异常不一定会产生
+    **声明方法有异常**，是一种**可能性**，这个异常不一定会产生
 
-*   `final`,`finally`,`finallize`区别
+### `final`,`finally`,`finallize`区别
 
-    *   `final`：最终意思，可以修饰类、成员变量、成员方法。<a href="#final">详见此</a>
-    *   `finally`：异常处理，用于释放资源，finally中的代码一定会被执行，除非执行之前jvm退出
-    *   `finalize`：Object类的一个方法，用于垃圾回收
+*   `final`：最终意思，可以修饰类、成员变量、成员方法。<a href="#final">详见此</a>
+*   `finally`：异常处理，用于释放资源，finally中的代码一定会被执行，除非执行之前jvm退出
+*   `finalize`：Object类的一个方法，用于垃圾回收
 
-*   throw语句后不能跟其他代码，否则永远执行不到，编译错误
+### `throw` 后代码
 
-    ```java
-    try {
-        throw new Exception();
-        System.out.println("怎么也执行不到，编译失败");
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    ```
+throw语句后不能跟其他代码，否则永远执行不到，编译错误
 
-*   习题
+```java
+try {
+    throw new Exception();
+    System.out.println("怎么也执行不到，编译失败");
+} catch (Exception e) {
+    e.printStackTrace();
+}
+```
 
-    ```java
-    public class ReturnExceptionDemo {
-        static void methodA() {
-            try {
-                System.out.println("进入方法A");
-                throw new RuntimeException("制造异常");
-            } finally {
-                System.out.println("用A方法的finally");
-            }
-        }
-    
-        static void methodB() {
-            try {
-                System.out.println("进入方法B");
-                return;
-            } finally {
-                System.out.println("调用B方法的finally");
-            }
-        }
-    
-        public static void main(String[] args) {
-            try {
-                methodA();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            methodB();
-            
-            // 进入方法A
-            // 用A方法的finally
-            // 制造异常
-            // 进入方法B
-            // 调用B方法的finally
+
+
+### 习题1
+
+```java
+public class ReturnExceptionDemo {
+    static void methodA() {
+        try {
+            System.out.println("进入方法A");
+            throw new RuntimeException("制造异常");
+        } finally {
+            System.out.println("用A方法的finally");
         }
     }
-    ```
 
-    
+    static void methodB() {
+        try {
+            System.out.println("进入方法B");
+            return;
+        } finally {
+            System.out.println("调用B方法的finally");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            methodA();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        methodB();
+        
+        // 进入方法A
+        // 用A方法的finally
+        // 制造异常
+        // 进入方法B
+        // 调用B方法的finally
+    }
+}
+```
+
+
 

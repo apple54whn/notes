@@ -72,15 +72,6 @@ module.exports = [
     ]
   },
   {
-    text: 'Server',
-    items: [
-      { text: 'Tomcat', link: '/Server/Tomcat/0 Primer' },
-      { text: 'Nginx', link: '/Server/Nginx/0 Primer' },
-
-    ]
-  },
-
-  {
     text: 'Devops',
     items: [
       { text: 'Vim', link: '/Devops/Vim/Vim' },
@@ -88,6 +79,14 @@ module.exports = [
       { text: 'Maven', link: '/Devops/Maven/Maven' },
       { text: 'Docker', link: '/Devops/Docker/0 Docker' },
       { text: 'K8', link: '/Devops/K8/K8' },
+
+    ]
+  },
+  {
+    text: 'Server',
+    items: [
+      { text: 'Tomcat', link: '/Server/Tomcat/0 Primer' },
+      { text: 'Nginx', link: '/Server/Nginx/0 Primer' },
 
     ]
   },
@@ -102,10 +101,10 @@ module.exports = [
   {
     text: 'Environment',
     items: [
-      { text: 'macOS', link: '/Environment/macOS/macOs' },
+      { text: 'macOS', link: '/Environment/macOS/macOS' },
       { text: 'Linux', link: '/Environment/Linux/Linux' },
       { text: 'Windows', link: '/Environment/Windows/Windows' },
-      { text: 'Software', link: '/Environment/Software/Software' },
+      { text: 'Software', link: '/Environment/Software/IDEA' },
     ]
   },
 

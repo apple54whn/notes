@@ -1,4 +1,4 @@
-# 6 Jackson
+# Jackson
 
 > 参考这篇[博客](https://www.baeldung.com/jackson-annotations)
 
