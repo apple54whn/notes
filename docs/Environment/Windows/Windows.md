@@ -17,10 +17,84 @@ iwr -useb get.scoop.sh | iex
 
 
 
+### 开启代理
+
+没用过，只设置了 Git 代理速度即可跑满
+
+```bash
+scoop config proxy
+```
+
+
+
+### 开启其他库
+
+extras 库可以下载其他软件，如vscode，typora等等
+
+```bash
+scoop bucket add extras
+```
+其他库添加类似，如 java, nerd-fonts 库
+```bash
+scoop bucket add java
+```
+
+
+
 ### 使用`aria2`多线程下载
+
+有时使用后更慢
 
 ```bash
 scoop install aria2
+```
+
+
+
+### sudo
+
+省去切换管理员打开的烦恼
+
+```powershell
+scoop install sudo
+```
+
+
+
+### 导出软件
+
+```bash
+scoop export > scoop.txt
+```
+
+用 VSCode 打开 `scoop.txt` 文件，以正则表达式`(.*?) .*`替换为`$1`，之后的文件如下：
+
+```
+7zip
+adopt11-hotspot
+adopt8-hotspot
+conemu
+git
+innounp
+maven
+motrix
+sudo
+typora
+vim
+vscode
+```
+
+```bash
+# git 先安装，配置好代理
+scoop install git
+scoop install sudo
+scoop install vim
+scoop install adopt11-hotspot
+scoop install adopt8-hotspot
+scoop install maven
+scoop install vscode
+scoop install typora
+scoop install motrix
 ```
 
 
@@ -54,4 +128,14 @@ git config --global https.proxy https://127.0.0.1:1080
 git config --global --unset http.proxy
 git config --global --unset https.proxy
 ```
+
+
+
+
+
+## PowerShell
+
+参考该[仓库](https://github.com/spencerwooo/dotfiles)，他还写了篇少数派文章
+
+在选择 powerline 字体时我只找到 source code pro 和 ubuntu 可以使用，其他没测完
 
