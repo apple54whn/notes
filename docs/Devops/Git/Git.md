@@ -40,12 +40,78 @@
 
 若要显示config的配置，只需加上`--list`即可
 
+
+
+### 姓名和邮箱
+
 一般安装后需要配置name和email，配置完成后可以使用上述命令查看
 
 ```bash
 git config --global user.name 'conanan'
 git config --global user.email '54whn54@gmail.com'
 ```
+
+
+
+### 代理
+
+::: tip 注意
+
+根据自己 SSR 的 Socks5 本地监听端口修改
+
+:::
+
+*   HTTP 和 HTTPS 代理
+
+    ```bash
+    git config --global http.proxy socks5://127.0.0.1:1086
+    git config --global https.proxy socks5://127.0.0.1:1086
+    
+    # 如下配置在 Windows10 中起效，macOS中无效
+    git config --global http.proxy http://127.0.0.1:1086
+    git config --global https.proxy https://127.0.0.1:1086
+    ```
+
+*   SSH 代理
+
+    在ssh的配置文件~/.ssh/config（没有则新建，有则添加后续）使用ProxyCommand配置：
+
+    macOS 如下
+
+    ```
+    Host *
+      AddKeysToAgent yes
+      UseKeychain yes
+      IdentityFile ~/.ssh/id_rsa
+    Host github.com
+      User git
+      Port 22
+      Hostname github.com
+      ProxyCommand nc -x 127.0.0.1:1086 %h %p
+    ```
+
+    Windows10 如下
+
+    ```
+    Host github.com
+    	User git
+    	Port 22
+    	Hostname github.com
+    	ProxyCommand connect -S 127.0.0.1:1080 -a none %h %p
+    ```
+
+    说明：`-a none`是NO-AUTH模式，不用输密码
+
+*   取消代理
+
+    ```bash
+    git config --global --unset http.proxy
+    git config --global --unset https.proxy
+    ```
+
+    
+
+
 
 
 

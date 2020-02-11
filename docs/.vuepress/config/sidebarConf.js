@@ -449,6 +449,15 @@ module.exports = {
       ]
     }
   ],
+  '/Environment/Windows/': [
+    {
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        'Windows',
+      ]
+    }
+  ],
   '/Environment/Software/': [
     {
       collapsable: false, // 控制 组 的 close
