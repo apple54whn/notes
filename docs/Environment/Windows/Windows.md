@@ -29,15 +29,46 @@ scoop config proxy
 
 ### 开启其他库
 
-extras 库可以下载其他软件，如vscode，typora等等
+`extras` 库可以下载其他软件，如vscode，typora等等
 
 ```bash
 scoop bucket add extras
 ```
-其他库添加类似，如 java, nerd-fonts 库
+`java` 库
+
 ```bash
 scoop bucket add java
 ```
+
+`JetBrains` 库
+
+```
+scoop bucket add JetBrains
+```
+
+::: tip 版本区别
+
+不推荐使用 Tools
+
+例如 IDEA Ultimate 目前有如下版本
+
+* IntelliJ-IDEA-Ultimate-EAP-portable (2020.1-201.4865.12)
+* IntelliJ-IDEA-Ultimate-EAP (2020.1-201.4865.12)
+* IntelliJ-IDEA-Ultimate-portable (2019.3.3-193.6494.35)
+* IntelliJ-IDEA-Ultimate-RC-portable (2019.3.3-193.6494.9)
+* IntelliJ-IDEA-Ultimate-RC (2019.3.3-193.6494.9)
+* IntelliJ-IDEA-Ultimate (2019.3.3-193.6494.35)
+
+区别取下：
+
+* EAP 为 Early Access Program，即为开发版本
+* RC 为 Release Candidate，即发行候选版
+* GA 为 General Availability，即发行版
+* portable 为便携版，可用 U 盘
+
+:::
+
+
 
 
 
@@ -96,10 +127,6 @@ scoop install vscode
 scoop install typora
 scoop install motrix
 ```
-
-
-
-
 
 
 
