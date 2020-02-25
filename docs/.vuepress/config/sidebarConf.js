@@ -433,6 +433,31 @@ module.exports = {
       ]
     }
   ],
+  '/Front End/JS/': [
+    {
+      title: '入门',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 作用域和闭包',
+        '0 Primer',
+
+      ]
+    },
+  ],
+  '/Front End/Vue/': [
+    {
+      title: '入门',
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '0 Primer',
+        '1 指令',
+        '2 计算属性和侦听器',
+
+      ]
+    },
+  ],
 
   // ---------------------Front End end---------------------------
 

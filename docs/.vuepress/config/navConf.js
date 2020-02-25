@@ -18,8 +18,7 @@ module.exports = [
       },
       {
         text: 'DataBase', items: [
-          { text: 'MySQL', link: '/Basic/DataBase/MySQL/0 Intro' },
-          { text: 'Oralce', link: '/Basic/DataBase/Oralce/0 Intro' },
+          { text: 'SQL', link: '/Basic/DataBase/SQL/0 Primer' },
 
           { text: 'Redis', link: '/Basic/DataBase/Redis/0 Intro' },
           { text: 'Mongo', link: '/Basic/DataBase/Mongo/0 Intro' },
@@ -94,6 +93,8 @@ module.exports = [
     text: 'Front End',
     items: [
       { text: 'Web', link: '/Front End/Web/1 HTML' },
+      { text: 'JS', link: '/Front End/JS/0 Primer' },
+      { text: 'Vue', link: '/Front End/Vue/0 Primer' },
       { text: 'Android', link: '/Front End/Android/0 Intro' },
       { text: 'Flutter', link: '/Front End/Flutter/0 Intro' },
     ]
