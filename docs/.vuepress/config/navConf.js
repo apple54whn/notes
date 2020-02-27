@@ -18,7 +18,7 @@ module.exports = [
       },
       {
         text: 'DataBase', items: [
-          { text: 'SQL', link: '/Basic/DataBase/SQL/0 Primer' },
+          { text: 'RDBMS', link: '/Basic/DataBase/RDBMS/0 Primer' },
 
           { text: 'Redis', link: '/Basic/DataBase/Redis/0 Intro' },
           { text: 'Mongo', link: '/Basic/DataBase/Mongo/0 Intro' },

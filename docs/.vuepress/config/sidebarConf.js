@@ -35,31 +35,15 @@ module.exports = {
     }
   ],
 
-  '/Basic/DataBase/': [
+  '/Basic/DataBase/RDBMS/': [
     {
-      title: 'MySQL',
+      title: 'RDBMS',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        '0 Intro',
+        '0 Primer',
       ]
     },
-    {
-      title: 'Redis',
-      collapsable: true, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: [
-        '0 Intro',
-      ]
-    },
-    {
-      title: 'Mongo',
-      collapsable: true, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: [
-        '0 Intro',
-      ]
-    }
   ],
 
 
