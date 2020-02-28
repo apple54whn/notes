@@ -96,6 +96,123 @@
 
 
 
+### 运行时权限问题
+
+当使用`-v`数据卷时，有可能容器里用户对映射的路径没有写权限，会导致运行时报错，启动不了
+
+```
+ORACLE PASSWORD FOR SYS, SYSTEM AND PDBADMIN: eTsinj4LADk=1
+
+LSNRCTL for Linux: Version 12.2.0.1.0 - Production on 27-FEB-2020 18:27:12
+
+Copyright (c) 1991, 2016, Oracle.  All rights reserved.
+
+Starting /opt/oracle/product/12.2.0.1/dbhome_1/bin/tnslsnr: please wait...
+
+TNSLSNR for Linux: Version 12.2.0.1.0 - Production
+System parameter file is /opt/oracle/product/12.2.0.1/dbhome_1/network/admin/listener.ora
+Log messages written to /opt/oracle/diag/tnslsnr/1d786d0a6d23/listener/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=0.0.0.0)(PORT=1521)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC1)))
+STATUS of the LISTENER
+\------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.2.0.1.0 - Production
+Start Date                27-FEB-2020 18:27:13
+Uptime                    0 days 0 hr. 0 min. 1 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /opt/oracle/product/12.2.0.1/dbhome_1/network/admin/listener.ora
+Listener Log File         /opt/oracle/diag/tnslsnr/1d786d0a6d23/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=0.0.0.0)(PORT=1521)))
+The listener supports no services
+The command completed successfully
+[WARNING] [DBT-10102] The listener configuration is not selected for the database. EM DB Express URL will not be accessible.
+   CAUSE: The database should be registered with a listener in order to access the EM DB Express URL.
+   ACTION: Select a listener to be registered or created with the database.
+Look at the log file "/opt/oracle/cfgtoollogs/dbca/ORCLCDB.log" for further details.
+cat: /opt/oracle/cfgtoollogs/dbca/ORCLCDB/ORCLCDB.log: No such file or directory
+[ 2020-02-27 18:27:23.443 UTC ] Cannot create directory "/opt/oracle/oradata/ORCLCDB".
+
+SQL*Plus: Release 12.2.0.1.0 Production on Thu Feb 27 18:27:23 2020
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL>    ALTER SYSTEM SET control_files='/opt/oracle/oradata/ORCLCDB/control01.ctl' scope=spfile
+*
+ERROR at line 1:
+ORA-01034: ORACLE not available
+Process ID: 0
+Session ID: 0 Serial number: 0
+
+
+SQL>    ALTER PLUGGABLE DATABASE ORCLPDB1 SAVE STATE
+*
+ERROR at line 1:
+ORA-01034: ORACLE not available
+Process ID: 0
+Session ID: 0 Serial number: 0
+
+
+SQL> BEGIN DBMS_XDB_CONFIG.SETGLOBALPORTENABLED (TRUE); END;
+
+*
+ERROR at line 1:
+ORA-01034: ORACLE not available
+Process ID: 0
+Session ID: 0 Serial number: 0
+
+
+SQL> Disconnected
+mkdir: cannot create directory '/opt/oracle/oradata/dbconfig': Permission denied
+mv: cannot stat '/opt/oracle/product/12.2.0.1/dbhome_1/dbs/spfileORCLCDB.ora': No such file or directory
+mv: cannot stat '/opt/oracle/product/12.2.0.1/dbhome_1/dbs/orapwORCLCDB': No such file or directory
+mv: cannot move '/opt/oracle/product/12.2.0.1/dbhome_1/network/admin/sqlnet.ora' to '/opt/oracle/oradata/dbconfig/ORCLCDB/': No such file or directory
+mv: cannot move '/opt/oracle/product/12.2.0.1/dbhome_1/network/admin/listener.ora' to '/opt/oracle/oradata/dbconfig/ORCLCDB/': No such file or directory
+mv: cannot move '/opt/oracle/product/12.2.0.1/dbhome_1/network/admin/tnsnames.ora' to '/opt/oracle/oradata/dbconfig/ORCLCDB/': No such file or directory
+cp: cannot create regular file '/opt/oracle/oradata/dbconfig/ORCLCDB/': No such file or directory
+ln: failed to create symbolic link '/opt/oracle/product/12.2.0.1/dbhome_1/network/admin/sqlnet.ora': File exists
+ln: failed to create symbolic link '/opt/oracle/product/12.2.0.1/dbhome_1/network/admin/listener.ora': File exists
+ln: failed to create symbolic link '/opt/oracle/product/12.2.0.1/dbhome_1/network/admin/tnsnames.ora': File exists
+cp: cannot stat '/opt/oracle/oradata/dbconfig/ORCLCDB/oratab': No such file or directory
+ORACLE_HOME = [/home/oracle] ? ORACLE_BASE environment variable is not being set since this
+information is not available for the current user ID .
+You can set ORACLE_BASE manually if it is required.
+Resetting ORACLE_BASE to its previous value or ORACLE_HOME
+The Oracle base remains unchanged with value /opt/oracle
+/opt/oracle/checkDBStatus.sh: line 26: sqlplus: command not found
+\#####################################
+\########### E R R O R ###############
+DATABASE SETUP WAS NOT SUCCESSFUL!
+Please check output for further info!
+\########### E R R O R ###############
+\#####################################
+The following output is now a tail of the alert.log:
+tail: cannot open '/opt/oracle/diag/rdbms/*/*/trace/alert*.log' for reading: No such file or directory
+tail: no files remaining
+```
+
+根据这条 [issue](https://github.com/oracle/docker-images/issues/227)，无论您将卷安装在哪个位置，请确保Docker容器内的用户在该位置具有写访问权限。请记住，在Linux中唯一重要的是 UID。因此，仅仅因为您在容器内有一个用户 oracle 并不意味着它是容器外的同一用户oracle。您必须确保 UID 匹配或提供正确的权限。
+
+例如，如果您拥有一个`/home/data`，请确保它是由 UID 54321 的用户即 oracle 拥有的，或者请确保您向其他用户授予了写权限。也可以添加上组名 dba，GID 为 54322。
+
+```bash
+sudo chown -R 54321:54322 /usr/local/docker/oracle12c
+```
+
+
+
+
+
+
+
 ### 设置 SID 环境变量
 
 如果是docker，在**进入容器**后需确定是否当前为 oracle 用户

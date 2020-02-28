@@ -15,19 +15,18 @@ module.exports = [
           { text: 'TCP/IP', link: '/Basic/Network/TCP/IP/0 Intro' },
           { text: 'HTTP', link: '/Basic/Network/HTTP/0 Intro' }
         ]
-      },
-      {
-        text: 'DataBase', items: [
-          { text: 'RDBMS', link: '/Basic/DataBase/RDBMS/0 Primer' },
-
-          { text: 'Redis', link: '/Basic/DataBase/Redis/0 Intro' },
-          { text: 'Mongo', link: '/Basic/DataBase/Mongo/0 Intro' },
-          { text: 'Lucene', link: '/Basic/DataBase/Lucene/0 Intro' },
-          { text: 'Solr', link: '/Basic/DataBase/Solr/0 Intro' },
-          { text: 'Elasticsearch', link: '/Basic/DataBase/Elasticsearch/0 Intro' },
-
-        ]
-      },
+      }
+    ]
+  },
+  {
+    text: 'DataBase',
+    items: [
+      { text: 'RDBMS', link: '/Basic/DataBase/RDBMS/0 Primer' },
+      { text: 'Redis', link: '/Basic/DataBase/Redis/0 Intro' },
+      { text: 'Mongo', link: '/Basic/DataBase/Mongo/0 Intro' },
+      { text: 'Lucene', link: '/Basic/DataBase/Lucene/0 Intro' },
+      { text: 'Solr', link: '/Basic/DataBase/Solr/0 Intro' },
+      { text: 'Elasticsearch', link: '/Basic/DataBase/Elasticsearch/0 Intro' },
 
     ]
   },

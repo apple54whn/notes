@@ -37,7 +37,7 @@ module.exports = {
 
   '/Basic/DataBase/RDBMS/': [
     {
-      title: 'RDBMS',
+      title: '运维',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
