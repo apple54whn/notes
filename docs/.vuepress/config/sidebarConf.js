@@ -282,6 +282,15 @@ module.exports = {
 
       ]
     },
+    {
+      title: 'Shiro',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        '9 Shiro'
+
+      ]
+    },
 
 
   ],

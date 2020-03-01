@@ -6,8 +6,6 @@
 
 此处仅记录 Oracle12c 的 Docker image 构建及使用过程，其他版本如 19c 也类似（run 了半天没启动起来算逑了）。
 
-注意我在 Windows 中没有构建成功，WSL 中未尝试。
-
 构建：
 
 1.  Clone Oracle 准备的镜像构建[仓库](https://github.com/oracle/docker-images)（有该公司许多产品）
@@ -63,7 +61,7 @@
 
     数据库设置和数据将持久化到`/oradata`文件夹，端口将公开给 localhost 或 boot2docker 容器（Mac 和 Win）
 
-2.  此时的数据库没有密码，需设置（此时容器必须运行正常，用`ps`查看）。此处设置为 oracle 
+2.  此时的日志会显示一个随机密码，可以重新设置（此时容器必须运行正常，用`ps`查看）。此处设置为 oracle 
 
     ```bash
     docker exec b0 ./setPassword.sh oracle
@@ -92,7 +90,7 @@
     SQL> Disconnected from Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
     ```
 
-3.  默认的 SID 为 `orclcdb`，使用 `system`（dba）或`sys`（sysdba）连接即可
+3.  默认的 SID 为 `orclcdb`，Server Name 为`orclpdb1`，使用 `system`（dba）或`sys`（sysdba）连接即可
 
 
 
@@ -199,7 +197,7 @@ tail: cannot open '/opt/oracle/diag/rdbms/*/*/trace/alert*.log' for reading: No 
 tail: no files remaining
 ```
 
-根据这条 [issue](https://github.com/oracle/docker-images/issues/227)，无论您将卷安装在哪个位置，请确保Docker容器内的用户在该位置具有写访问权限。请记住，在Linux中唯一重要的是 UID。因此，仅仅因为您在容器内有一个用户 oracle 并不意味着它是容器外的同一用户oracle。您必须确保 UID 匹配或提供正确的权限。
+根据这条 [issue](https://github.com/oracle/docker-images/issues/227)，无论您将卷安装在哪个位置，请确保Docker容器内的用户在该位置具有写访问权限。请记住，在Linux中唯一重要的是 UID。因此，仅仅因为您在容器内有一个用户 oracle 并不意味着它是容器外的同一用户oracle。您必须确保 UID 匹配或提供正确的权限。这个博客的[评论区](https://sqlmaria.com/2017/04/27/oracle-database-12c-now-available-on-docker/#comment-855)也有介绍到。
 
 例如，如果您拥有一个`/home/data`，请确保它是由 UID 54321 的用户即 oracle 拥有的，或者请确保您向其他用户授予了写权限。也可以添加上组名 dba，GID 为 54322。
 
@@ -358,6 +356,22 @@ CDB$ROOT
 alter session set container=ORCLPDB1; 
 ```
 
+使用JDBC连接 PDB 时需要设置如下的URL
+
+```
+jdbc:oracle:thin:@192.168.214.101:1521/orclpdb1
+```
+
+连接 CDB 设置如下
+
+```
+jdbc:oracle:thin:192.168.214.101:1521:orclcdb
+```
+
+
+
+
+
 
 
 ### 表空间
@@ -391,7 +405,8 @@ MAXSIZE UNLIMITED;
 删除表空间
 
 ```sql
-DROP tablespace HTDMS3;
+DROP tablespace HTDMS3;-- 可能没把文件删除，可以采用下面命令
+DROP tablespace HTDMS3 INCLUDING CONTENTS AND DATAFILES;
 ```
 
 
