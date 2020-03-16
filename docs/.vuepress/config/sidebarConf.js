@@ -322,8 +322,8 @@ module.exports = {
       children: [
         "4 CSS-盒子模型",
         "5 CSS-标准流",
-        "6 CSS-定位",
-        "7 CSS-浮动",
+        "6 CSS-浮动",
+        "7 CSS-定位",
 
         "3 CSS-传统布局",
         "5 CSS-高级技巧",
