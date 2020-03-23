@@ -26,9 +26,25 @@ module.exports = {
     }
   ],
 
-  "/Basic/DataBase/RDBMS/": [
+  "/DataBase/RDBMS/": [
     {
       title: "运维",
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["0 Primer"]
+    }
+  ],
+  "/DataBase/Lucene/": [
+    {
+      title: "Primer",
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["0 Primer"]
+    }
+  ],
+  "/DataBase/Elasticsearch/": [
+    {
+      title: "Primer",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: ["0 Primer"]
@@ -313,7 +329,7 @@ module.exports = {
       title: "CSS基础",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["2 CSS-基础", "3 CSS-属性"]
+      children: ["2 CSS-基础", "3 CSS-属性", "3 CSS3-属性"]
     },
     {
       title: "CSS布局",
@@ -324,12 +340,17 @@ module.exports = {
         "5 CSS-标准流",
         "6 CSS-浮动",
         "7 CSS-定位",
+        "8 CSS-传统布局总结",
 
-        "3 CSS-传统布局",
-        "5 CSS-高级技巧",
         "6 代码规范",
-        "7 项目案例"
+        "5 CSS-高级技巧"
       ]
+    },
+    {
+      title: "CSS布局案例",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["99 CSS项目案例——京东", "99 CSS项目案例——考拉"]
     }
   ],
   "/Front End/JS/": [

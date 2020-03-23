@@ -23,12 +23,12 @@ module.exports = [
   {
     text: "DataBase",
     items: [
-      { text: "RDBMS", link: "/Basic/DataBase/RDBMS/0 Primer" },
-      { text: "Redis", link: "/Basic/DataBase/Redis/0 Intro" },
-      { text: "Mongo", link: "/Basic/DataBase/Mongo/0 Intro" },
-      { text: "Lucene", link: "/Basic/DataBase/Lucene/0 Intro" },
-      { text: "Solr", link: "/Basic/DataBase/Solr/0 Intro" },
-      { text: "Elasticsearch", link: "/Basic/DataBase/Elasticsearch/0 Intro" }
+      { text: "RDBMS", link: "/DataBase/RDBMS/0 Primer" },
+      { text: "Redis", link: "/DataBase/Redis/0 Intro" },
+      { text: "Mongo", link: "/DataBase/Mongo/0 Intro" },
+      { text: "Lucene", link: "/DataBase/Lucene/0 Primer" },
+      { text: "Solr", link: "/DataBase/Solr/0 Intro" },
+      { text: "Elasticsearch", link: "/DataBase/Elasticsearch/0 Primer" }
     ]
   },
 

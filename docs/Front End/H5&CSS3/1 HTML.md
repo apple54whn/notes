@@ -167,9 +167,9 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-## 常用标签
+## 常用元素
 
-### 文本格式化标签
+### 文本格式化元素
 
 `<b>`**粗体**`</b>` ；`<strong>`**强调文本**`</strong>` ，推荐使用带语义化的
 
@@ -195,7 +195,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-### 排版标签
+### 排版元素
 
 `<h1>标题</h1>`    **标题**，取值1~6从大到小。是**块级标签**，自动在其前后加空行，其实是段间距。有助于 SEO
 
@@ -211,7 +211,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-### 列表标签
+### 列表元素
 
 ::: tip
 
@@ -234,7 +234,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-### 表格标签
+### 表格元素
 
 ::: tip
 
@@ -348,7 +348,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-### 超链接标签
+### 超链接元素
 
 ```html
 <a href='https://www.qq.com' target='_blank'>新窗口打开QQ</a>
@@ -395,21 +395,32 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
     只写`href="#"`则跳回页面顶部
 
-- 去掉`input`或`a`（tab选中）或`textraea`的 focus 轮廓蓝线，如下方法
-
-    ```html
-    <!-- tableindex 调整tab选择顺序，负数则不会被选择 -->
-    <a tableindex="-1"></a>
-    ```
+- 去掉`input`或`a`或`button`或`select`或`textraea`的 focus 轮廓蓝线
 
     ```css
-    /* 看不到蓝色边框线我们就当作去掉了😄*/
+    /* 看不到 outline 蓝色边框线。button 和 a 只有使用 tab 才可以看到 */
+    input,
+    select,
+    textarea,
+    button,
     a {
       outline: none;
     }
     ```
 
-- 去掉 a 的下划线
+    ```html
+    <!-- tableindex 调整tab选择顺序，负数则不会被选择。也可以不设置 -->
+    <input type="text" />111<br />
+    <select name="" id="">
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
+    <textarea name="aa" id="" cols="30" rows="10">222</textarea>
+    <button>111</button>
+    <a href="#">222</a>
+    ```
+
+- 去掉 `a` 的下划线
 
     ```css
     a {
@@ -421,7 +432,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-### 图片标签 
+### 图片元素
 
 > image 的缩写。**行内块元素**
 >
@@ -456,7 +467,7 @@ Web 中常见的图片格式：
 
 
 
-### 音频标签radio
+### 音频元素radio
 
 > HTML5，支持IE9+
 
@@ -484,7 +495,7 @@ Web 中常见的图片格式：
 
 
 
-### 视频标签video
+### 视频元素video
 
 > HTML5，支持IE9+
 
@@ -522,7 +533,7 @@ HTML 5 + `<object>` + `<embed>`
 
 
 
-## 表单标签
+## 表单元素
 
 ### `form` 表单域
 
@@ -627,6 +638,7 @@ $.ajax({
 - **text**：文本，默认宽度size为20个字符。使用 action 提交后台需指定 **name** 属性
 - **password**：密码，字符被掩码，使用 action 提交后台需指定 **name** 属性
 - **radio**：单选，使用 action 提交后台需指定**相同 name **属性，**value**
+  
   * checked，判断时可以通过 true 或 false
 - **checkbox**：多选，使用 action 提交后台需指定**相同 name **属性，**value**
   - checked，判断时可以通过 true 或 false

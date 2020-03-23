@@ -1,38 +1,133 @@
-# 传统布局
+# 传统布局总结
 
-页面布局要学习三大核心：**盒子模型、浮动、定位**
+## 布局方案
 
-网页布局过程：
+*   标准流：**垂直**布局
+*   浮动：**水平**布局（利用标准流约束浮动元素位置）
+*   定位（绝对定位、固定定位）：**层叠**布局
 
-1. 先准备好相关的网页元素，网页元素基本都是盒子 Box
-2. 利用 CSS 设置好盒子样式，然后摆放到相应位置
-3. 往盒子里面装内容
+::: tip 注意
 
- 网页布局的核心本质：就是利用 CSS 摆盒子。
+*   般**先设置盒子的大小，之后设置盒子的位置**
+*   一个元素浮动了，理论上其余的兄弟元素也要浮动，以防止引起问题（**浮动的盒子只会影响浮动盒子后面的标准流，不会影响前面的标准流（前面的标准流占一行，无论在浮动盒子的上面还是下面）**
+*   遇到header和footer需要和显示器等宽的，不需要设置width，自动就是等宽的
+
+:::
+
+
+
+
+
+## 常见布局技巧
+
+### margin负值的运用 
+
+盒子细线边框加粗问题
+
+* 让每个盒子margin 往**左侧移动 -1px 正好压住相邻盒子边框**（浏览器渲染时是分别渲染的，所以可以实现）
+
+hover 时右侧边框被右边盒子覆盖掉问题
+
+* 鼠标经过某个盒子的时候，**提高当前盒子的层级即可**。
+
+    如果父盒子**没有有定位**，则加相对定位（保留位置）；**如果父盒子有定位**，则加`z-index`
+
+
+
+### 文字围绕浮动元素 
+
+父盒子中有**左侧图片和右侧文字**，此时可以**利用float的文字环绕来解决**，不用再定义2个盒子
+
+
+
+### 行内块的巧妙运用 
+
+利用行内块元素中间有缝隙，且可以使用`text-align`来居中，可以指定width、height
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>行内块的巧妙运用</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .box {
+        text-align: center;
+      }
+      .box a {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        background-color: #f7f7f7;
+        border: 1px solid #ccc;
+        text-align: center;
+        line-height: 36px;
+        text-decoration: none;
+        color: #333;
+        font-size: 14px;
+      }
+      .box .prev,
+      .box .next {
+        width: 85px;
+      }
+      .box .current,
+      .box .elp {
+        background-color: #fff;
+        border: none;
+      }
+      .box input {
+        height: 36px;
+        width: 45px;
+        border: 1px solid #ccc;
+        outline: none;
+      }
+      .box button {
+        width: 60px;
+        height: 36px;
+        background-color: #f7f7f7;
+        border: 1px solid #ccc;
+
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <a href="#" class="prev">&lt;&lt;上一页</a>
+      <a href="#" class="current">2</a>
+      <a href="#">3</a>
+      <a href="#">4</a>
+      <a href="#">5</a>
+      <a href="#">6</a>
+      <a href="#" class="elp">...</a>
+      <a href="#" class="next">&gt;&gt;下一页</a>
+      到第 
+      <input type="text">
+      页
+      <button>确定</button>
+    </div>
+  </body>
+</html>
+```
+
+效果如下：
+
+![image-20191229234856364](./images/image-20191229234856364.png)
+
+
+
+
+
+
 
 
 
 ## 传统布局总结及案例🔥
-
-### 总结
-
-一个完整的网页，是标准流、浮动、定位一起完成布局的，每个都有自己的专门用法。
-
-* 标准流：可以让盒子上下排列或者左右排列，垂直的块级盒子显示就用标准流布局。
-* 浮动：可以让多个块级元素一行显示或者左右对齐盒子，多个块级盒子水平显示就用浮动布局。
-* 定位：定位最大的特点是有层叠的概念，就是可以让多个盒子前后叠压来显示。如果元素自由在某个盒子内移动就 用定位布局。
-
-即
-
-* **多个块级元素纵向排列找标准流，多个块级元素横向排列找浮动（利用标准流约束浮动元素位置）**
-
-* **先设置盒子的大小，之后设置盒子的位置**
-
-* 一个元素浮动了，理论上其余的兄弟元素也要浮动，以防止引起问题
-
-  **浮动的盒子只会影响浮动盒子后面的标准流，不会影响前面的标准流（前面的标准流占一行，无论在浮动盒子的上面还是下面）**
-
-* 遇到header和footer需要和显示器等宽的，不需要设置width，自动就是等宽的
 
 
 
@@ -179,109 +274,6 @@ body {
 
 
 
-## 常见布局技巧
-
-### margin负值的运用 
-
-盒子细线边框加粗问题
-
-* 让每个盒子margin 往**左侧移动 -1px 正好压住相邻盒子边框**（浏览器渲染时是分别渲染的，所以可以实现）
-
-hover 时右侧边框被右边盒子覆盖掉问题
-
-* 鼠标经过某个盒子的时候，**提高当前盒子的层级即可**。
-
-  如果父盒子**没有有定位**，则加相对定位（保留位置）；**如果父盒子有定位**，则加`z-index`
-
-
-
-### 文字围绕浮动元素 
-
-父盒子中有**左侧图片和右侧文字**，此时可以**利用float的文字环绕来解决**，不用再定义2个盒子
-
-
-
-### 行内块的巧妙运用 
-
-利用行内块元素中间有缝隙，且可以使用`text-align`来居中，可以指定width、height
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>行内块的巧妙运用</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-      .box {
-        text-align: center;
-      }
-      .box a {
-        display: inline-block;
-        width: 36px;
-        height: 36px;
-        background-color: #f7f7f7;
-        border: 1px solid #ccc;
-        text-align: center;
-        line-height: 36px;
-        text-decoration: none;
-        color: #333;
-        font-size: 14px;
-      }
-      .box .prev,
-      .box .next {
-        width: 85px;
-      }
-      .box .current,
-      .box .elp {
-        background-color: #fff;
-        border: none;
-      }
-      .box input {
-        height: 36px;
-        width: 45px;
-        border: 1px solid #ccc;
-        outline: none;
-      }
-      .box button {
-        width: 60px;
-        height: 36px;
-        background-color: #f7f7f7;
-        border: 1px solid #ccc;
-
-      }
-    </style>
-  </head>
-  <body>
-    <div class="box">
-      <a href="#" class="prev">&lt;&lt;上一页</a>
-      <a href="#" class="current">2</a>
-      <a href="#">3</a>
-      <a href="#">4</a>
-      <a href="#">5</a>
-      <a href="#">6</a>
-      <a href="#" class="elp">...</a>
-      <a href="#" class="next">&gt;&gt;下一页</a>
-      到第 
-      <input type="text">
-      页
-      <button>确定</button>
-    </div>
-  </body>
-</html>
-```
-
-效果如下：
-
-![image-20191229234856364](./images/image-20191229234856364.png)
-
-
-
 
 
 
@@ -295,6 +287,8 @@ hover 时右侧边框被右边盒子覆盖掉问题
 
 
 ## bootstrap
+
+### 入门
 
 > 详细内容访问[Bootstrap中文网](http://www.bootcss.com/)
 
@@ -325,13 +319,13 @@ hover 时右侧边框被右边盒子覆盖掉问题
   2. 定义行：`row`
   3. 定义列：`col-xs-*`、`col-sm-*`、`col-md-*`、`col-lg-*`、`hidden-**`（可以让元素在某个屏幕大小设备**不显示**）
 
-#### 1.1 布局容器
+### 布局容器
 
 - Bootstrap 需要为页面内容和栅格系统包裹一个容器
   - `.container` **类**用于固定宽度（根据不同设备左右有固定留白，但xs没有留白）并支持响应式布局的容器
   - `.container-fluid` **类**用于 100% 宽度，占据全部视口（viewport）的容器
 
-#### 1.2 栅格系统
+### 栅格系统
 
 Bootstrap提供了一套响应式、移动设备优先的流式栅格系统，随着屏幕或视口(viewport)尺寸的增加，系统会自动分为最多**12列**
 
@@ -346,7 +340,7 @@ Bootstrap提供了一套响应式、移动设备优先的流式栅格系统，�
   - 如果一“行（row）”中包含了的“列（column）”大于 12，多余的“列（column）”所在的元素将被作为一个整体**另起一行排列**。
   - **向上兼容且不向下兼容**：**栅格类适用于与屏幕宽度大于或等于分界点大小的设备** ， 并且**针对小屏幕设备覆盖栅格类（可能每个列占一行）**。 因此，在元素上应用任何 `.col-md-*`栅格类适用于与屏幕宽度大于或等于分界点大小的设备 ， 并且针对小屏幕设备覆盖栅格类。 因此，在元素上应用任何 `.col-lg-*`不存在， 也影响大屏幕设备。
 
-#### 1.3 全局CSS样式、组件、插件
+### 全局CSS样式、组件、插件
 
 **全局CSS样式**
 
@@ -364,4 +358,4 @@ Bootstrap提供了一套响应式、移动设备优先的流式栅格系统，�
 
 - 轮播图
 
-#### 1.4 其他详细的看文档去吧！
+### 其他详细的看文档去吧！

@@ -234,7 +234,35 @@ margin 清除周围的（外边框）元素区域。margin 没有背景颜色，
 
 
 
-### 块级盒子水平居中
+### `margin` 负值 🔥
+
+问题1：**有间隙的格子布局**时一行中最后一个元素的`margin-right`总会多余
+
+解决：
+
+*   选择一行最后一个元素，添加`class`，去除`margin-right`
+
+*   使用伪类选择器（IE8不支持）
+
+*   **增大包含块的宽度**。`.container`固定宽度> `.wrap`>很多`item`。`.wrap`一般是`ul`
+
+    给`.wrap`+负`margin`即可增大`.wrap`宽度；或直接给`.wrap`宽度增大
+
+::: tip 参考
+
+[W3文档](https://www.w3.org/TR/CSS2/visudet.html)
+
+'margin-left' + 'border-left-width' + 'padding-left' + 'width' + 'padding-right' + 'border-right-width' + 'margin-right' = width of containing block。即width of containing block一定时，'margin-right'为负值且其他值不变，则'width'变大。
+
+:::
+
+问题2：**无间隙的格子布局**，需要对变粗的边界进行合并，可以使用负`margin`
+
+
+
+
+
+### 块级盒子水平居中 🔥
 
 **margin 典型应用**——让**块级盒子水平居中**，但需满足两个条件
 
@@ -382,6 +410,8 @@ BFC：block fromat context。类似结界。如何触发呢：
 -   即使某一外边距为0，这些规则仍然适用。因此就算父元素的外边距是0，第一个或最后一个子元素的外边距仍然会“溢出”到父元素的外面。
 -   如果参与折叠的外边距中包含负值，折叠后的外边距的值为最大的正边距与最小的负边距（即绝对值最大的负边距）的和,；也就是说如果有-13px 8px 100px叠在一起，边界范围的技术就是 100px -13px的87px。
 -   如果所有参与折叠的外边距都为负，折叠后的外边距的值为最小的负边距的值。这一规则适用于相邻元素和嵌套元素。
+
+
 
 
 

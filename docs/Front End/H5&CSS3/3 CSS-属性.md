@@ -347,30 +347,96 @@ text-shadow: h-shadow v-shadow blur color;
 
 
 
-## `vertical-align` 垂直对齐🔥
+## `vertical-align` 与文字垂直对齐
 
-用于设置一个元素的垂直对齐方式，但是它只针对于**行内元素**或者**行内块元素**有效。经常用于**设置图片或者表单**（行内块元素）和**文字**垂直对齐（对象是图片或表单）
+### 介绍
+
+实际使用不多，但是用于**重置元素**。
+
+其会影响**行内元素**在一个**行盒**`line-box`中垂直方向的位置。经常用于**设置图片或者表单**（行内块元素）和**文字**垂直对齐。
+
+思考：一个div没有设置`height`时，会不会有`height`？
+
+*   没有内容，则没有`height`
+
+*   有内容，则有内容撑起来的`height`
+
+    内容撑起来的高度的本质是？内容有`line-height`，撑起来 div 的`height`
+
+`line-height`为什么可以撑起`div`的高度？
+
+*   这是因为`line-box`的存在，且`line-box`有一个特性，包裹每行的`inline-level`元素
+*   而其中的文字是有`line-height`的，必须将整个`line-height`包裹进去，才算包裹这个`inline-leve`元素
 
 | 值          | 描述                                                         |
 | :---------- | :----------------------------------------------------------- |
-| baseline    | 默认。元素放置在父元素的**基线**上。                         |
+| baseline🔥   | 默认。元素放置在父元素的**基线**上。                         |
 | sub         | 垂直对齐文本的下标。                                         |
 | super       | 垂直对齐文本的上标                                           |
-| top         | 把元素的顶端与行中最高元素的顶端对齐                         |
+| top🔥        | 把元素的顶端与行中最高元素的顶端对齐                         |
 | text-top    | 把元素的顶端与父元素字体的顶端对齐                           |
-| middle🔥     | 把此元素放置在父元素的**中部**。                             |
-| bottom      | 把元素的顶端与行中最低的元素的顶端对齐。                     |
+| middle🔥     | 行内盒子的中心点与父盒子基线加上`x`height 一半的线对齐（文字下沉，不一定是中线） |
+| bottom🔥     | 把元素的顶端与行中最低的元素的顶端对齐。                     |
 | text-bottom | 把元素的底端与父元素字体的底端对齐。                         |
 | length      |                                                              |
 | %           | 使用 "line-height" 属性的百分比值来排列此元素。允许使用负值。 |
 | inherit     | 规定应该从父元素继承 vertical-align 属性的值。               |
+
+### 案例1：图片底部默认空白缝隙
 
 **解决图片底部默认空白缝隙问题**
 
 bug：div（不指定height）包裹图片时底侧会有一个**空白缝隙**，原因是**行内块元素会和文字的基线对齐**，解决方法如下：
 
 * 给图片添加 `vertical-align: middle | top| bottom` 等，**推荐**
-* 把图片转换为块级元素`display: block;`
+* 或把图片转换为块级元素`display: block;`不推荐
+
+
+
+### 图片在盒子中垂直居中对齐
+
+```html
+<style>
+  div {
+    height: 600px;
+    background-color: skyblue;
+    line-height: 600px;
+    font-size: 0;
+  }
+
+  img {
+    vertical-align: middle;
+  }
+</style>
+<div>
+  <img src="./images/beauty.jpg" alt="" srcset="" />
+</div>
+```
+
+
+
+### 盒子中有文字
+
+则不能这样做，因为`font-size: 0;`，需使用定位
+
+```html
+<style>
+  div {
+    height: 600px;
+    background-color: skyblue;
+  }
+
+  img {
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+</style>
+<div>
+  <img src="./images/beauty.jpg" alt="" srcset="" />
+  <span>XxsfsfsfsfSFsF</span>
+</div>
+```
 
 
 
@@ -819,49 +885,6 @@ display: -webkit-box;
 防止拖拽 textarea（textarea标签放在同一行即可没有类似padding的空白距离）
 
 * `none`：禁止拖拽，右下角那个功能也就没有了
-
-
-
-## `transation` 过渡
-
-过渡 transition 是 CSS3 中具有颠覆性的特征之一，我们可以在不使用 Flash 动画或 JavaScript 的情况下，当元素从一种样式变换为另一种样式时为元素添加效果。虽然低版本浏览器不支持（IE9 以下版本）但是不影响页面布局。经常和 `:hover` 搭配使用。**谁做过渡给谁加**，控制多个元素可以在`,`后继续写，不能写多个`transation`
-
-```css
-transition: 要过渡的属性 花费时间 运动曲线 何时开始,要过渡的属性 花费时间 运动曲线 何时开始;
-```
-
-* 属性：想要变化的 CSS 属性， 宽度高度、背景颜色、内外边距都可以。如果想要所有的属性都变化过渡， 写all 即可。
-
-* 花费时间：单位是秒（必须写单位），比如 0.5s
-
-* 运动曲线：默认是 `ease`（可以省略）
-
-    | 值                            | 描述                                                         |
-    | :---------------------------- | :----------------------------------------------------------- |
-    | linear                        | 规定以相同速度开始至结束的过渡效果（等于 cubic-bezier(0,0,1,1)）。 |
-    | ease                          | 规定慢速开始，然后变快，然后慢速结束的过渡效果（cubic-bezier(0.25,0.1,0.25,1)）。 |
-    | ease-in                       | 规定以慢速开始的过渡效果（等于 cubic-bezier(0.42,0,1,1)）。  |
-    | ease-out                      | 规定以慢速结束的过渡效果（等于 cubic-bezier(0,0,0.58,1)）。  |
-    | ease-in-out                   | 规定以慢速开始和结束的过渡效果（等于 cubic-bezier(0.42,0,0.58,1)）。 |
-    | cubic-bezier(*n*,*n*,*n*,*n*) | 在 cubic-bezier 函数中定义自己的值。可能的值是 0 至 1 之间的数值。 |
-
-* 何时开始：单位是秒（必须写单位），可以设置**延迟触发时间**，默认是 0s（可以省略）
-
-
-
-
-
-## `filter` 滤镜🔥
-
-> CSS3
-
-filter CSS属性将**模糊**或**颜色偏移**等图形效果应用于元素。
-
-```css
-filter: 函数();
-```
-
-* `blur` 模糊处理，数值越大越模糊，如`blur(5px)`
 
 
 
