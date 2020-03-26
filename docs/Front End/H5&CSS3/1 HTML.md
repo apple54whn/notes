@@ -134,9 +134,9 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-### 语义化标签
+### 语义化元素
 
-根据标签的语义，在合适的地方给一个最为合理的标签，让结构更清晰。一般先写语义化 HTML，之后才写 CSS
+根据元素的语义，在合适的地方给一个最为合理的元素，让结构更清晰。一般先写语义化 HTML，之后才写 CSS
 
 * 方便代码的阅读和维护
 * 同时让浏览器或是网络爬虫可以很好地解析，从而更好分析其中的内容 
@@ -149,18 +149,19 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 | 标签            | 描述                                               |
 | :-------------- | :------------------------------------------------- |
-| `<article>`     | 定义文章。                                         |
-| `<aside>`       | 定义页面内容以外的内容。                           |
-| `<details>`     | 定义用户能够查看或隐藏的额外细节。                 |
+| `<header>`🔥     | 规定文档或节的**页眉**。                           |
+| `<nav>`🔥        | 定义**导航**链接。                                 |
+| `<section>`🔥    | 定义文档中的节，区域。                             |
+| `<article>`🔥    | 定义**内容**。                                     |
+| `<aside>`🔥      | 定义页面内容以外的内容。**侧边栏**。               |
+| `<footer>`🔥     | 定义文档或节的页脚。                               |
+|                 |                                                    |
+| `<main>`        | 规定文档的主内容。                                 |
 | `<figcaption>`🔥 | 定义` <figure> `元素的标题。                       |
 | `<figure>`🔥     | 规定自包含内容，比如图示、图表、照片、代码清单等。 |
-| `<footer>`🔥     | 定义文档或节的页脚。                               |
-| `<header>`🔥     | 规定文档或节的页眉。                               |
-| `<main>`        | 规定文档的主内容。                                 |
 | `<mark>`        | 定义重要的或强调的文本。                           |
-| `<nav>`🔥        | 定义导航链接。                                     |
-| `<section>`🔥    | 定义文档中的节，区域。                             |
 | `<summary>`     | 定义` <details> `元素的可见标题。                  |
+| `<details>`     | 定义用户能够查看或隐藏的额外细节。                 |
 | `<time>`        | 定义日期/时间。                                    |
 
 
@@ -501,8 +502,8 @@ Web 中常见的图片格式：
 
 | 属性                                                         | 值       | 描述                                                         |
 | :----------------------------------------------------------- | :------- | :----------------------------------------------------------- |
-| [autoplay](https://www.w3school.com.cn/tags/att_video_autoplay.asp) | autoplay | 如果出现该属性，则视频在就绪后马上播放。                     |
 | [controls](https://www.w3school.com.cn/tags/att_video_controls.asp) | controls | 如果出现该属性，则向用户显示控件，比如播放按钮。             |
+| [autoplay](https://www.w3school.com.cn/tags/att_video_autoplay.asp) | autoplay | 如果出现该属性，则视频在就绪后马上播放。兼容性不好，一般不会自动播放，除非muted |
 | [height](https://www.w3school.com.cn/tags/att_video_height.asp) | *pixels* | 设置视频播放器的高度。                                       |
 | [loop](https://www.w3school.com.cn/tags/att_video_loop.asp)  | loop     | 如果出现该属性，则当媒介文件完成播放后再次开始播放。         |
 | [muted](https://www.w3school.com.cn/tags/att_video_muted.asp) | muted    | 规定视频的音频输出应该被静音。                               |
@@ -690,8 +691,6 @@ HTML5新添加的type类型
 其他属性
 
 *   name：提交数据到服务器时，用于**区分不同字段**
-*   name：提交数据到服务器时不同字段的取值
-
 *   placeholder：**占位符**
 *   maxlength：允许输入的**最大字符数**，正整数
 *   size：以字符数计的可见**宽度**，正整数
@@ -734,17 +733,15 @@ HTML5新添加的type类型
 
 
 
-### `fieldset`
-
-表单元素组
-
-
-
 ### `legend`
 
 `fieldset`的标题
 
 
+
+### `fieldset`
+
+表单元素组
 
 
 
@@ -781,20 +778,6 @@ textarea {
 ```
 
 
-
-
-
-
-
-### 去掉 input 和 textarea 的 outline
-
-去掉`input`或`a`（tab选中）或`textraea`的 focus 轮廓蓝线
-
-```css
-input,textarea {
-  outline: none;
-}
-```
 
 
 

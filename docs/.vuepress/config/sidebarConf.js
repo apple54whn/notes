@@ -341,16 +341,25 @@ module.exports = {
         "6 CSS-浮动",
         "7 CSS-定位",
         "8 CSS-传统布局总结",
-
-        "6 代码规范",
-        "5 CSS-高级技巧"
+        "9 CSS-Flexible"
       ]
+    },
+    {
+      title: "CSS其他",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["10 CSS-字体"]
     },
     {
       title: "CSS布局案例",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["99 CSS项目案例——京东", "99 CSS项目案例——考拉"]
+      children: [
+        "99 CSS项目案例——京东",
+        "99 CSS项目案例——考拉",
+        "88 代码规范",
+        "5 CSS-高级技巧"
+      ]
     }
   ],
   "/Front End/JS/": [
