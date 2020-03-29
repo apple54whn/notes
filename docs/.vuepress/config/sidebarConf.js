@@ -326,29 +326,24 @@ module.exports = {
       children: ["1 HTML"]
     },
     {
-      title: "CSS基础",
+      title: "CSS",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["2 CSS-基础", "3 CSS-属性", "3 CSS3-属性"]
+      children: ["2 CSS-1 基础", "2 CSS-2 属性", "2 CSS-3 字体", "2 CSS-4 动画"]
     },
     {
       title: "CSS布局",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        "4 CSS-盒子模型",
-        "5 CSS-标准流",
-        "6 CSS-浮动",
-        "7 CSS-定位",
-        "8 CSS-传统布局总结",
-        "9 CSS-Flexible"
+        "3 CSS-1 盒子模型",
+        "3 CSS-2 标准流",
+        "3 CSS-3 浮动",
+        "3 CSS-4 定位",
+        "3 CSS-5 传统布局总结",
+        "3 CSS-6 Flexible",
+        "3 CSS-99 移动端适配"
       ]
-    },
-    {
-      title: "CSS其他",
-      collapsable: false, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: ["10 CSS-字体"]
     },
     {
       title: "CSS布局案例",

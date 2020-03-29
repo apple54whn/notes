@@ -824,41 +824,88 @@ overflow 属性指定了**内容溢出**一个元素的框（超过其指定高�
 
 ## `word-break` 单词换行
 
-*   `break-all`强制换行。默认单词（或汉字）就会换行，但是若是遇到`aaaaa...`这种可使用该属性解决
+*   `break-all`强制换行。默认单词（或一个汉字）就会换行，但是若是遇到`aaaaa...`这种可使用该属性解决
 
 
 
-## 溢出的文字省略号显示🔥
+## 溢出文字隐藏🔥
+
+### `white-space`
+
+用于设置**空白处理**和**换行规则**
+
+*   `normal`：合并所有连续的空白，允许单词超屏时自动换行
+*   `mowrap`：合并所有连续的空白，不允许单词超屏时自动换行
+
+
+
+### `text-overflow`
+
+用来设置文字溢出时的行为（处理那部分不可见的内容）。生效的前提是`overflow`不为`visible`
+
+*   `clip`：溢出的内容直接裁剪掉（字符可能显示不完整）
+*   `ellipsis`：溢出的那行的结尾用省略号表示
+
+
 
 ### 单行文本溢出显示省略号
 
 必须满足三个条件
 
-```css
-/*1. 先强制一行内显示文本，默认 normal 自动换行*/
-white-space: nowrap;
-/*2. 超出的部分隐藏*/ 
-overflow: hidden;
-/*3. 文字用省略号替代超出的部分*/ 
-text-overflow: ellipsis;
+```html
+<style>
+  p {
+    width: 100px;
+    margin: 0 auto;
+    background-color: skyblue;
+
+    /*1. 先强制一行内显示文本，默认 normal 自动换行*/
+    white-space: nowrap;
+    /*2. 超出的部分隐藏*/
+    overflow: hidden;
+    /*3. 文字用省略号替代超出的部分*/
+    text-overflow: ellipsis;
+  }
+</style>
+<p>
+  哈哈哈哈哈段落哈哈哈哈哈段落哈哈哈哈哈段落
+</p>
 ```
+
+![image-20200329174822420](./images/image-20200329174822420.png)
 
 
 
 ### 多行文本溢出显示省略号
 
-多行文本溢出显示省略号，有较大兼容性问题， 适合于webKit浏览器或移动端（移动端大部分是webkit内核）
+多行文本溢出显示省略号，有较大兼容性问题
 
-```css
-overflow: hidden;
-text-overflow: ellipsis;
-/* 弹性伸缩盒子模型显示 */
-display: -webkit-box;
-/* 限制在一个块元素显示的文本的行数 */ 
--webkit-line-clamp: 2;
-/* 设置或检索伸缩盒对象的子元素的排列方式 */ 
--webkit-box-orient: vertical;
+```html
+<style>
+  p {
+    width: 100px;
+    /* 不能指定高度，否则虽然第二行末尾省略号显示，但是之后的行还是会显示所有文字 */
+    margin: 0 auto;
+    background-color: skyblue;
+
+    /* 1. 弹性伸缩盒子模型显示 */
+    display: -webkit-box;
+    /* 2. 超出的部分隐藏*/
+    overflow: hidden;
+    /* 3. 文字用省略号替代超出的部分*/
+    text-overflow: ellipsis;
+    /* 4. 限制在一个块元素显示的文本的行数 */
+    -webkit-line-clamp: 2;
+    /* 5. 设置或检索伸缩盒对象的子元素的排列方式 */
+    -webkit-box-orient: vertical;
+  }
+</style>
+<p>
+  哈哈哈哈哈段落哈哈哈哈哈段落哈哈哈哈哈段落哈哈哈哈哈段落哈哈哈哈哈段落哈哈哈哈哈段落
+</p>
 ```
+
+![image-20200329174937783](./images/image-20200329174937783.png)
 
 更推荐让后台人员来做这个效果，因为后台人员可以设置显示多少个字，操作更简单。
 
@@ -889,4 +936,8 @@ display: -webkit-box;
 
 
 
+
+## 浏览器私有前缀
+
+模块化打包工具如 Webpack 会自动添加前缀，不使用则需要自己查看文档添加
 
