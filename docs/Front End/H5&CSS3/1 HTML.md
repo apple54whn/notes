@@ -1,5 +1,7 @@
 # HTML
 
+HyperText Markup Language：超文本标记语言
+
 ## 引言
 
 ### Rendering Engine
@@ -25,9 +27,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-## HTML 结构
-
-> HyperText Markup Language：超文本标记语言
+## 文档类型声明
 
 在 VSCode 中按下 `html:5`或`!`即可出现如下代码：
 
@@ -43,7 +43,8 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
     <!--http-equiv 表示执行一个命令，下面设置 HTTP 的 content-type，适配IE-->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<!--页面的描述信息，可供搜索引擎显示-->
-    <meta name="description"content="Hello Html">
+    <meta name="Keywords" content="网上购物,网上商城,手机,笔记本,电脑,MP3,CD,VCD,DV,相机,数码,配件,手表,存储卡,京东"/>
+    <meta name="description" content="京东JD.COM-专业的综合网上购物商城...便捷、诚信的服务，为您提供愉悦的网上购物体验!">
     <title>Document</title>
   </head>
   <body>
@@ -106,13 +107,52 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 #### `charset`属性
 
-规定 HTML 文档应该使用哪种字符集。让浏览器根据编码去解码对应的 HTML 内容，文件不一定是这个编码。字符集 (Character set)是多个字符的集合。以便计算机能够识别和存储各种文字。统一使用 `UTF-8`，**必须写**
+规定 HTML 文档应该使用哪种字符集。让浏览器根据编码去解码对应的 HTML 内容，文件不一定是这个编码。字符集 (Character set)是多个字符的集合。以便计算机能够识别和存储各种文字。统一使用 `UTF-8`，**必须写**。
+
+```html
+<!-- In HTML5 -->
+<meta charset="utf-8">
+```
+
+
+
+
+
+#### `name` `content`属性
+
+name 常用值有：
+
+*   `keywords`
+*   `description`
+
+```html
+<!--viewport 为可视区域，它的宽度为设备的宽度-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--页面的描述信息，可供搜索引擎显示-->
+<meta name="Keywords" content="网上购物,网上商城,手机,笔记本,电脑,MP3,CD,VCD,DV,相机,数码,配件,手表,存储卡,京东"/>
+<meta name="description" content="京东JD.COM-专业的综合网上购物商城...便捷、诚信的服务，为您提供愉悦的网上购物体验!">
+```
+
+
+
+
+
+#### `http-equiv` `content` 属性
+
+```html
+<!--http-equiv 表示执行一个命令，下面设置 HTTP 的 content-type，适配IE-->
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!-- Redirect page after 3 seconds -->
+<meta http-equiv="refresh" content="3;url=http://www.mozilla.org/">
+```
+
+
 
 
 
 ### `<title>`
 
- 该元素定义文档的**标题**，显示在浏览器的标题栏或标签页上。它只可以包含文本，若是包含有标签，则包含的任何标签都不会被解释。
+该元素定义文档的**标题**，显示在浏览器的标题栏，标签页及超链接上。它只可以包含文本，若是包含有标签，则包含的任何标签都不会被解释。搜索引擎会根据 title 中的内容来判断网页的主要内容。
 
 ### `<link>`
 
@@ -126,7 +166,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 ## 分区根元素`<body>`
 
-* `<body>`：该元素表示文档的内容。`document.body`属性提供了可以轻松访问文档的 body 元素的脚本。
+`<body>`：该元素表示文档的内容。`document.body`属性提供了可以轻松访问文档的 body 元素的脚本。
 
 ### 内容分区（逻辑分区）
 
@@ -134,7 +174,31 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 
 
-### 语义化元素
+
+
+
+
+## 常用元素
+
+### 排版元素
+
+`<hgroup>`    用来为**标题分组**，可以将一组相关的标题同时放入到 hgroup，H5标签，注意兼容性
+
+`<h1>标题</h1>`    **标题**，取值1~6从大到小。是**块元素**，自动在其前后加空行，其实是段间距。有助于 SEO，**H1重要性仅次于 title 标签，建议只有一个**
+
+`<p>html</p>`   **段落**，paragraph缩写，是**块元素**，自动在其前后加空行，其实是段间距。**不能包含任何块元素**
+
+`<blockquote>我周树人从没说过这话</blockquote>`  长引用，有缩进，块元素，知乎常用
+
+`<q>子曰：学而时习之</q>`  短引用，引号引用起来，行内元素，无法被选中（可以使用伪元素实现）
+
+`<hr/>`   **横线**，horizontal缩写
+
+`<br/>`   **换行**，break缩写
+
+`<div></div>`   **块元素**，division缩写，自动**换行**。独占一行（即使宽度比较小）
+
+`<span></span>`   **行内元素**
 
 根据元素的语义，在合适的地方给一个最为合理的元素，让结构更清晰。一般先写语义化 HTML，之后才写 CSS
 
@@ -147,28 +211,39 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 标签如下：
 
-| 标签            | 描述                                               |
-| :-------------- | :------------------------------------------------- |
-| `<header>`🔥     | 规定文档或节的**页眉**。                           |
-| `<nav>`🔥        | 定义**导航**链接。                                 |
-| `<section>`🔥    | 定义文档中的节，区域。                             |
-| `<article>`🔥    | 定义**内容**。                                     |
-| `<aside>`🔥      | 定义页面内容以外的内容。**侧边栏**。               |
-| `<footer>`🔥     | 定义文档或节的页脚。                               |
-|                 |                                                    |
-| `<main>`        | 规定文档的主内容。                                 |
-| `<figcaption>`🔥 | 定义` <figure> `元素的标题。                       |
-| `<figure>`🔥     | 规定自包含内容，比如图示、图表、照片、代码清单等。 |
-| `<mark>`        | 定义重要的或强调的文本。                           |
-| `<summary>`     | 定义` <details> `元素的可见标题。                  |
-| `<details>`     | 定义用户能够查看或隐藏的额外细节。                 |
-| `<time>`        | 定义日期/时间。                                    |
+```html
+<header>表示网页的头部</header>
+<nav>导航栏</nav>
+<aside>侧边栏</aside>
+
+<main>
+  表示网页的主体部分(一个页面中只会有一个main)
+  <article>
+    <h2>
+      标题
+    </h2>
+    <p>
+      内容
+    </p>
+  </article>
+  <figure>
+    <figcaption>figure 元素的标题</figcaption>
+    figure 元素的内容，比如图示、图表、照片、代码清单等。
+  </figure>
+  <section>
+    定义文档中的节，区域，表示一个独立的区块，上面标签都不能表示时使用section
+  </section>
+</main>
+<footer>表示网页的底部</footer>
+```
 
 
 
 
 
-## 常用元素
+
+
+
 
 ### 文本格式化元素
 
@@ -192,23 +267,13 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 `<sub>`**下标**`</sub>`
 
-**字符实体**：`&lt;`、`&gt;`、`&nbsp;`、`&amp;`、`&copy;`、`&reg;`  分别为：**<**、**>**、 **空格**、 &amp;、 &copy;、 &reg;  
 
 
+### 字符实体
 
-### 排版元素
+`&lt;`、`&gt;`、`&nbsp;`、`&amp;`、`&copy;`、`&reg;`  分别为：**<**、**>**、 **空格**、 &amp;、 &copy;、 &reg;  
 
-`<h1>标题</h1>`    **标题**，取值1~6从大到小。是**块级标签**，自动在其前后加空行，其实是段间距。有助于 SEO
-
-`<p>html</p>`   **段落**，paragraph缩写，是**块级标签**，自动在其前后加空行，其实是段间距。**不能**包含`div`
-
-`<hr/>`   **横线**，horizontal缩写
-
-`<br/>`   **换行**，break缩写
-
-`<div></div>`   **块级标签**，division缩写，自动**换行**
-
-`<span></span>`   **内联标签**，独占一行（即使宽度比较小）
+其他参考[文档](https://developer.mozilla.org/zh-CN/docs/Glossary/Entity)
 
 
 
@@ -232,6 +297,7 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 `<dl>` `<dt>` `<dd>`   **定义列表（常用）**带有**术语或名词**和**描述**。**常见于页面下面帮助部分**。
 
 * 定义列表的列表项前没有任何项目符号
+* dd 元素会有缩进
 
 
 
@@ -351,16 +417,22 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 ### 超链接元素
 
+::: tip 
+
+anchor [ˈæŋkə(r)] 的缩写，含义为：锚、铁锚。**行内元素**
+
+:::
+
 ```html
 <a href='https://www.qq.com' target='_blank'>新窗口打开QQ</a>
 ```
 
-> anchor [ˈæŋkə(r)] 的缩写，含义为：锚、铁锚。**行内元素**
-
 | 属性   | 作用                                                         |
 | ------ | :----------------------------------------------------------- |
 | href   | 用于指定链接目标的url地址，（必须属性）当为标签应用href属性时，它就具有了超链接的功能 |
-| target | 用于指定链接页面的打开方式，取值：其中`_self`为默认值，`_blank`为在新窗口中打开方式，`_parent`加载到当前的HTML5浏览上下文的父浏览上下文，`_top`加载响应进入顶层浏览上下文。可在`<head>`的`<base>`标签中设置全局`href`和`target` |
+| target | 用于指定链接页面的打开方式，取值：其中`_self`为当前页面打开，默认值，`_blank`为在新窗口中打开，`_parent`加载到当前的HTML5浏览上下文的父浏览上下文，`_top`加载响应进入顶层浏览上下文。 |
+
+可在`<head>`的`<base>`标签中设置全局`href`和`target`
 
 - 外部链接： `http:// www.baidu.com`，需要协议开头
 
@@ -435,32 +507,74 @@ Rendering Engine：排版引擎、解释引擎、渲染引擎，现在流行称�
 
 ### 图片元素
 
-> image 的缩写。**行内块元素**
->
-> 相对路径：以`.`开头，如`./`代表当前目录；`../`代表上级目录。属性如下：
+::: tip
+
+image 的缩写。**替换元素**，有块元素和行内元素的特点
+
+:::
 
 ```html
 <img src = 'test.jpg' width='400' alt='无法显示'/>
 <!--可嵌套在 a 标签里-->
 ```
 
-|    属性    |             属性值             |                   描述                   |
-| :--------: | :----------------------------: | :--------------------------------------: |
-|    src     |              URL               |                 图像路径                 |
-|    alt     |              文本              | H5推荐必加属性，图像不能显示时的替换文本 |
-|   title    |              文本              |           鼠标悬停时显示的内容           |
-|   width    | 像素（XHTML不支持%页面百分比） |  设置图像宽度，一般只改一个（等比缩放）  |
-|   height   | 像素（XHTML不支持%页面百分比） |  设置图像高度，一般只改一个（等比缩放）  |
-| ~~border~~ |              数字              | 设置图像边框的宽度，**后续使用CSS完成**  |
+|    属性    |             属性值             |                             描述                             |
+| :--------: | :----------------------------: | :----------------------------------------------------------: |
+|    src     |              URL               |                           图像路径                           |
+|    alt     |              文本              |   H5推荐必加属性，图像不能显示时的替换文本，**有利于SEO**    |
+|   title    |              文本              |                     鼠标悬停时显示的内容                     |
+|   width    | 像素（XHTML不支持%页面百分比） | 设置图像宽度，一般只改一个（等比缩放），**不带单位默认为px** |
+|   height   | 像素（XHTML不支持%页面百分比） | 设置图像高度，一般只改一个（等比缩放），**不带单位默认为px** |
+| ~~border~~ |              数字              |           设置图像边框的宽度，**后续使用CSS完成**            |
 
 Web 中常见的图片格式：
 
-*   PNG：静态，支持透明
-*   JPG/JPEG：静态，不支持透明
-*   GIF：动态，静态，支持透明
-*   Webp：比JPG压缩率更高，但质量相同
+*   PNG：静态，支持复杂透明。支持的颜色丰富，网页使用最多！
+*   JPG/JPEG：静态，不支持透明。支持的颜色比较丰富。
+*   GIF：动态，静态，支持简单透明，支持的颜色比较少。
+*   Webp：谷歌的，比JPG压缩率更高，但质量比PNG还好，还支持动态。**优势非常明显！**但是兼容性不好。
+*   Base64：将图片进行Base64编码，转换为字符引入，一般用于**需要和网页一起加载**的图片。但是字符太长。
 
 
+
+### 内联框架 iframe
+
+类似img，但是iframe是用于网页中嵌套网页，不利于SEO，且每次都要重新渲染
+
+``` html
+<iframe
+        src="https://news.qq.com/"
+        width="1000"
+        height="800"
+        frameborder="0">
+</iframe>
+```
+
+`src`可以是外部或内部网页， `frameborder`只有0或1，0代表没有边框，默认值为1
+
+当iframe中网页的`a`标签的`target=_parent`时，将从当前页面打开，而不是在iframe中打开，`_top`在多层 iframe 中适用
+
+也可以指定`target="a"`，即在指定`name="a"`的 iframe 中打开
+
+
+
+框架标签，不赞成使用
+
+```html
+<frameset rows="80,*">                        //把页面划分成上下两部分 
+<frame name="top" src="a.html">             //上面页面
+<frameset cols="150,*">                     //把下面部分划分成左右两部分
+		<frame name="lower_left" src="b.html">  //左边的页面
+		<frame name="lower_right" src="c.html"> //右边的页面
+	</frameset> 
+</frameset>
+```
+
+点击左边的页面超链接，内容显示在右边的页面中
+
+```html
+<a href="01-hello.html" target="right">超链接1</a>
+```
 
 
 
@@ -470,11 +584,15 @@ Web 中常见的图片格式：
 
 ### 音频元素radio
 
-> HTML5，支持IE9+
+::: tip
+
+HTML5元素，支持IE9及以上
+
+:::
 
 | 属性                                                         | 值       | 描述                                                         |
 | :----------------------------------------------------------- | :------- | :----------------------------------------------------------- |
-| [autoplay](https://www.w3school.com.cn/tags/att_audio_autoplay.asp) | autoplay | 如果出现该属性，则音频在就绪后马上播放。                     |
+| [autoplay](https://www.w3school.com.cn/tags/att_audio_autoplay.asp) | autoplay | 如果出现该属性，则音频在就绪后马上播放。但是目前来讲大部分浏览器都不会自动对音乐进行播放。 |
 | [controls](https://www.w3school.com.cn/tags/att_audio_controls.asp) | controls | 如果出现该属性，则向用户显示控件，比如播放按钮。             |
 | [loop](https://www.w3school.com.cn/tags/att_audio_loop.asp)  | loop     | 如果出现该属性，则每当音频结束时重新开始播放。               |
 | [muted](https://www.w3school.com.cn/tags/att_audio_muted.asp) | muted    | 规定视频输出应该被静音。                                     |
@@ -485,12 +603,13 @@ Web 中常见的图片格式：
 <audio controls="controls" height="100" width="100">
   <source src="song.mp3" type="audio/mp3" />
   <source src="song.ogg" type="audio/ogg" />
-  <embed height="100" width="100" src="song.mp3" />
+  <!-- embed标签必须指定width和height，且主要用来兼容旧浏览器，不推荐使用 -->
+  <embed src="song.mp3"  height="100" width="100" type="audio/mp3"/>
   您的浏览器不支持
 </audio>
 ```
 
-
+一般会使用 CSS 统一样式，且使用 JS 添加控制功能！
 
 
 
@@ -498,7 +617,11 @@ Web 中常见的图片格式：
 
 ### 视频元素video
 
-> HTML5，支持IE9+
+::: tip
+
+HTML5元素，支持IE9及以上
+
+:::
 
 | 属性                                                         | 值       | 描述                                                         |
 | :----------------------------------------------------------- | :------- | :----------------------------------------------------------- |
@@ -519,6 +642,7 @@ HTML 5 + `<object>` + `<embed>`
   <source src="movie.mp4" type="video/mp4" />
   <source src="movie.ogg" type="video/ogg" />
   <source src="movie.webm" type="video/webm" />
+  <!-- 兼容旧浏览器 -->
   <object data="movie.mp4" width="320" height="240">
     <embed src="movie.swf" width="320" height="240" />
   </object>
@@ -528,9 +652,9 @@ HTML 5 + `<object>` + `<embed>`
 
 上例中使用了 4 中不同的视频格式。HTML 5 `<video>` 元素会尝试播放以 mp4、ogg 或 webm 格式中的一种来播放视频。如果均失败，则回退到 `<embed> `元素。
 
-但是由于每个浏览器的样式不一样，通常会使用 JS 来自定义
+一般会使用 CSS 统一样式，且使用 JS 添加控制功能！
 
-
+也可以使用`iframe`来插入视频网站的通用代码，省下服务器钱
 
 
 
@@ -877,49 +1001,6 @@ textarea {
     </form>
   </body>
 </html>
-```
-
-
-
-
-
-## iframe
-
-用于网页中嵌套网页
-
-``` html
-<iframe
-        src="https://news.qq.com/"
-        width="1000"
-        height="800"
-        frameborder="0">
-</iframe>
-```
-
-`src`可以是外部或内部网页， `frameborder`只有0或1，0代表没有边框
-
-当iframe中网页的`a`标签的`target=_parent`时，将从当前页面打开，而不是在iframe中打开，`_top`在多层 iframe 中适用
-
-也可以指定`target="a"`，即在指定`name="a"`的 iframe 中打开
-
-
-
-框架标签，不赞成使用
-
-```html
-<frameset rows="80,*">                        //把页面划分成上下两部分 
-<frame name="top" src="a.html">             //上面页面
-<frameset cols="150,*">                     //把下面部分划分成左右两部分
-		<frame name="lower_left" src="b.html">  //左边的页面
-		<frame name="lower_right" src="c.html"> //右边的页面
-	</frameset> 
-</frameset>
-```
-
-点击左边的页面超链接，内容显示在右边的页面中
-
-```html
-<a href="01-hello.html" target="right">超链接1</a>
 ```
 
 

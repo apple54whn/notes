@@ -1,48 +1,5 @@
 # 属性
 
-## `color` 颜色
-
-其实是**前景色**，包括`border`的颜色。很多元素都可以使用
-
-### 颜色关键字
-
-如`red`、`green`、`blue`、`black`、`white`、`yellow`、`purple`、`skyblue`等
-
-
-
-### RGB
-
-*   十进制：`rgb(red,green,blue)`
-
-    *   red：0~255
-    *   green：0~255
-    *   blue：0~255
-
-    每个颜色使用一个字节表示，所以为0~255
-
-*   **十六进制**：`#rrggbb`或`#rgb`
-
-    每个颜色使用`0~F`表示，比十进制表示多些，**推荐使用**
-
-
-
-### RGBA
-
-`rgba(red,green,blue,alpha)`
-
-*   alpha表示**透明度**，值范围为0～1，0即完全透明，1即完全不透明
-
-*   **transparent**：如下两种表示方式结果一样
-
-    ```css
-    div {
-      background-color: rgba(0,0,0,0);
-      background-color: transparent;
-    }
-    ```
-
-    
-
 ## `font` 字体🔥
 
 用于定义字体系列、大小、粗细、和文字样式(如斜体)
@@ -345,13 +302,86 @@ text-shadow: h-shadow v-shadow blur color;
 
 
 
+## 长度单位 🔥
+
+*   px：像素（不是物理像素，是逻辑像素）
+*   em：相对于父元素`font-size`的倍数
+    *   `font-size`：相对于父元素的`font-size`
+    *   `width`：相对于自己的`font-size`，自己没有则继承父元素的
+*   rem：相对于**根元素**，具体哪个元素参考上面 em
+*   %：不同场景相对的不同！太多了需查文档！举例如下两个：
+    *   `width`：相对于父元素的`width`
+    *   `margin-top`：相对于父元素的`width`！
+
+
+
+## `color` 颜色单位 🔥
+
+其实是**前景色**，包括`border`的颜色。很多元素都可以使用。
+
+### 颜色关键字
+
+如`red`、`green`、`blue`、`black`、`white`、`yellow`、`purple`、`skyblue`等
+
+
+
+### RGB
+
+*   十进制：`rgb(red,green,blue)`
+
+    *   red：0~255
+    *   green：0~255
+    *   blue：0~255
+
+    每个颜色使用一个字节表示，所以为0~255
+
+*   **十六进制**：`#rrggbb`或`#rgb`
+
+    每个颜色使用`0~F`表示，比十进制表示多些，**推荐使用**
+
+
+
+### RGBA
+
+`rgba(red,green,blue,alpha)`
+
+*   alpha表示**透明度**，值范围为0～1，0即完全透明，1即完全不透明
+
+*   **transparent**：如下两种表示方式结果一样
+
+    ```css
+    div {
+      background-color: rgba(0,0,0,0);
+      background-color: transparent;
+    }
+    ```
+
+
+
+
+### HSL & HSLA
+
+*   H 色相(0 - 360)*
+
+*   S 饱和度，颜色的浓度 0% - 100%
+
+*   L 亮度，颜色的亮度 0% - 100%
+
+    ```css
+    background-color: hsla(98, 48%, 40%, 0.658);
+    ```
+
+    
+
+
+
 
 
 ## `vertical-align` 与文字垂直对齐
 
 ### 介绍
 
-实际使用不多，但是用于**重置元素**。
+一般**重置元素**时使用，实际使用不多。
 
 其会影响**行内元素**在一个**行盒**`line-box`中垂直方向的位置。经常用于**设置图片或者表单**（行内块元素）和**文字**垂直对齐。
 
@@ -704,7 +734,7 @@ list-style: list-style-type list-style-position list-style-image
 
 `display`属性有两个作用：
 
-*   **一是定义元素的类型**（块级元素或行内元素），规定元素的[流式布局](https://wiki.developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flow_Layout)。此处只介绍该作用
+*   **一是定义元素的类型**（块元素或行内元素，只改变显示角色，不改变固有性质），规定元素的[流式布局](https://wiki.developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flow_Layout)。此处只介绍该作用
 *   二是控制其**子元素的布局**（[Flex](https://wiki.developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flexible_Box_Layout) 或 [Grid](https://wiki.developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Grid_Layout)）
 
 **常见属性值**有：

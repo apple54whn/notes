@@ -99,6 +99,15 @@ display: inline-block;
 
 
 
+## 设置
+
+### Auto Save
+
+*   可选 afterDelay，可设置秒数
+*   可选 onFocusChange
+
+
+
 ## Extensions
 
 ### open in broswer
@@ -110,6 +119,10 @@ display: inline-block;
 ### Live Server
 
 不多解释
+
+
+
+
 
 
 
