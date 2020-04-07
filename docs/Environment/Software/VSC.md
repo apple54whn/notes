@@ -122,10 +122,6 @@ display: inline-block;
 
 
 
-
-
-
-
 ### pretty—自动格式化代码
 
 在设置中（可用 command + shift + p 或 ctrl + shift + p 打开），可选择 UI 模式，搜索 format，保证如下选项都为 true 即可
@@ -137,3 +133,9 @@ display: inline-block;
 ```
 
 可以安装 pretty 插件后选择 Default Formatter，推荐！
+
+
+
+### JS & CSS Minifier（测试）
+
+一般不使用它，有 NPM 配合其他

@@ -53,7 +53,7 @@ CSS3 中可以通过 `box-sizing` 来指定盒模型，这样我们计算盒子�
 
 ### Horizontal Formatting🔥
 
-标准流水平布局中的七个属性中必须包含以下约束：
+标准流水平布局中的七个属性中必须包含以下约束（绝对/固定定位的公式需要添加 left 和 right，其余规则类似）：
 
 ```
 margin-left + border-left-width + padding-left + width + padding-right + border-right-width + margin-right 
@@ -61,7 +61,7 @@ margin-left + border-left-width + padding-left + width + padding-right + border-
 width of containing block
 ```
 
-*   🔥上述值中只有 'width'， 'margin-left' 和 'margin-right' 可以设置为 'auto'。且 'width' 默认就是 'auto'（可设置为非负值），其余几个属性必须设置为特定的值或默认宽度为 0。只有 'margin' 可以为负值。
+*   🔥上述值中只有 'width'， 'margin-left' 和 'margin-right' 可以设置为 'auto'，且 'width' 默认就是 'auto'（只可设置为非负值）。其余几个属性必须设置为特定的值或默认值为 0。且只有 'margin' 可以为负值。
 
 *   🔥如果恰好有一个值指定为“ auto”，其余俩值有特定值，则 'auto' 值根据等式计算得出。
 

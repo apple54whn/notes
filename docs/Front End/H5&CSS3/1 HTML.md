@@ -313,7 +313,7 @@ name 常用值有：
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -322,8 +322,10 @@ name 常用值有：
       table {
         /* 合并细线边框 */
         border-collapse: collapse;
+        /* 单元格之间水平、垂直距离，与 border-collapse 冲突，不常用 */
+        /*border-spacing: 10px 20px;*/
         /* 表格居中 */
-        margin: 30px auto;
+        margin: 100px auto;
       }
       th,
       td {
@@ -333,6 +335,8 @@ name 常用值有：
         padding: 20px;
         /* 让td居中，th本来就是居中的 */
         text-align: center;
+        /* 默认情况下元素在th,td中是垂直居中的，也可以通过 vertical-align 来修改*/
+        /* 由此可得，对一个父元素设置 display: table-cell，可以直接使用 vertical-align 来垂直居中*/
       }
       /* 标题 */
       caption {
@@ -341,40 +345,40 @@ name 常用值有：
         margin-bottom: 20px;
       }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <table> 
-        <caption>表格测试</caption>
-        <thead>
-          <tr>
-            <th>班级</th>
-            <th>姓名</th>
-            <th>性别</th>
-            <th colspan="2">操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td rowspan="2">一 班</td>
-            <td>张三</td>
-            <td>男</td>
-            <td>修改</td>
-            <td>删除</td>
-          </tr>
-          <tr>
-            <td>李四</td>
-            <td>男</td>
-            <td>修改</td>
-            <td>删除</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="5">备注</td>
-          </tr>
-        </tfoot>
-      </table>
-</body>
+      <caption>表格测试</caption>
+      <thead>
+        <tr>
+          <th>班级</th>
+          <th>姓名</th>
+          <th>性别</th>
+          <th colspan="2">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">一 班</td>
+          <td>张三</td>
+          <td>男</td>
+          <td>修改</td>
+          <td>删除</td>
+        </tr>
+        <tr>
+          <td>李四</td>
+          <td>男</td>
+          <td>修改</td>
+          <td>删除</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5">备注</td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
 </html>
 ```
 
@@ -395,7 +399,7 @@ name 常用值有：
     /* 单元格之间水平、垂直距离，与 border-collapse 冲突，不常用 */
     /*border-spacing: 10px 20px;*/
     /* 表格居中 */
-    margin: 30px auto;
+    margin: 100px auto;
   }
   th,
   td {
@@ -403,6 +407,8 @@ name 常用值有：
     border: 1px solid skyblue;
     /* 内边距 */
     padding: 30px;
+    /* 默认情况下元素在th,td中是垂直居中的，也可以通过 vertical-align 来修改*/
+    /* 由此可得，对一个父元素设置 display: table-cell，可以直接使用 vertical-align 来垂直居中*/
   }
   caption {
     font-weight: 700;
@@ -412,6 +418,34 @@ name 常用值有：
   ```
 
 
+
+::: tip th, td自然垂直居中的提示（了解）
+
+默认情况下元素在th,td中是垂直居中的。由此可得，对一个父元素设置`display: table-cell`，可以直接使用 `vertical-align` 来使子元素垂直居中
+
+```html
+<style>
+  .box1 {
+    display: table-cell;
+    vertical-align: middle;
+    width: 400px;
+    height: 400px;
+    background-color: skyblue;
+  }
+
+  .box2 {
+    width: 100px;
+    height: 100px;
+    background-color: pink;
+    margin: 0 auto;
+  }
+</style>
+<div class="box1">
+  <div class="box2"></div>
+</div>
+```
+
+:::
 
 
 
@@ -783,7 +817,7 @@ $.ajax({
 
   * 可以使用form的`onsubmit`事件，如`onsubmit = "return checkForm()"`，必须加return，并且方法返回boolean类型，true提交，false不提交
 
-  * 可以使用**普通button**，配合JS来使用Ajax提交表单。**type需指定为button**，否则会将 form 中该值设置为 **submit**
+  * 可使用**普通button**，配合JS来使用Ajax提交表单。**type需指定为button**，否则在`<form>`中type会被设置为 **submit**
   
     ```html
     <input type="submit"/> <!--默认为提交（中文环境）、submit（英文环境）-->
@@ -818,8 +852,8 @@ HTML5新添加的type类型
 *   placeholder：**占位符**
 *   maxlength：允许输入的**最大字符数**，正整数
 *   size：以字符数计的可见**宽度**，正整数
-*   readonly：**只读**
-*   disabled：**禁用**，**表单提交时不会提交**
+*   readonly：**只读，表单提交时会提交该数据**
+*   disabled：**禁用**，**表单提交时不会提交该数据**
 *   required：**必填**
 *   checked：**默认选中**
 *   selected：**默认选择**

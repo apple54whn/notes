@@ -19,19 +19,33 @@
 - **定位 = 定位模式 + 边偏移**
 - **定位模式**决定元素的**定位方式** ，它通过 CSS 的 position 属性来设置
 
-## `static`
+## `static` 静态定位
 
 默认值，静态定位，元素出现在**标准流**中（忽略 top, bottom, left, right 或者 z-index 声明，即**没有边偏移**）很少用到。
 
-## `relative`🔥
+## `relative` 相对定位 🔥
 
-**相对定位**，**相对于其自己原来位置进行定位**。
+### 简介
 
-**没有脱标**。**原来在标准流的位置继续占有**，后面的盒子仍**以标准流的方式对待它，不能使用该位置**。且**不影响其他元素布局即新的位置不会占用其他元素空间**。
+*   **相对定位**，**相对于元素在文档流中的原来位置进行定位**
+
+*   元素开启相对定位以后，如果**不设置偏移量元素不会发生任何的变化**
+
+*   **会提升元素的层级。可能会覆盖在其他元素之上，所以不影响其他元素布局即新的位置不会占用其他元素空间**。
+
+*   **没有脱标**。**原来在标准流的位置继续占有**，后面的盒子仍**以标准流的方式对待它，不能使用该位置**。灵魂出窍😂
+
+    相对定位**不会改变元素的性质**，块还是块，行内还是行内
+
+
+
+### 应用
 
 最典型的应用是**给绝对定位当爹的（限制绝对定位）**，以及对**元素位置进行微调**。
 
-### 首页大图案例
+
+
+### 首页大图居中案例
 
 - 显示大图主内容（居中）
 - 不能出现 x 轴滚动条
@@ -48,7 +62,7 @@
   /* 向左移动img一半 */
   position: relative;
 
-  /* 硬编码不好，但是不能写%，因为此处%是相对于包含块即父元素，而我们需要的是相对于元素本身 */
+  /* 硬编码不好，但是不能写%，因为此处%是相对于包含块即父元素，而我们需要的是相对于元素本身。可以选择translate百分比 */
   /* left: -960px; */
   transform: translate(-50%);
 
@@ -57,11 +71,21 @@
 }
 ```
 
-## `absolute`🔥
 
-**绝对定位，相对于非 static 定位的第一个父元素进行定位**。最终还没找到，则相对于浏览器视口即 viewport 来定位。
 
-**脱标**。**不再占有原先的位置**，其他盒子可以使用原先位置。
+## `absolute` 绝对定位 🔥
+
+### 简介
+
+*   **绝对定位，相对于非 static 定位的最近祖先元素进行定位**。最终还没找到，则相对于浏览器视口即 viewport 来定位
+*   开启绝对定位后，如果**不设置偏移量元素的位置不会发生变化**。偏移量（非z-index）赋值为0后位置可能会改变
+*   绝对定位会**使元素提升一个层级**
+
+*   **脱标**。**不再占有原先的位置**，其他盒子可以使用原先位置
+
+    会**改变元素的性质（脱标特点）**，行内变成块，块的宽高被内容撑开
+
+
 
 ### 子绝父相的由来
 
@@ -74,73 +98,170 @@
 
 - 当然，子绝父相**不是永远不变的**，如果父元素不需要占有位置，子绝父绝也会遇到。
 
-### 绝对定位的公式应用
 
-绝对定位元素：position 为 absolute 或 fixed 的元素。对于绝对定位元素来说：
 
-定位参照对象（父）的宽度 = left + right + margin-left + margin-right + 绝对定位元素的实际占用宽度
+## `fixed` 固定定位 🔥
 
-定位参照对象（父）的高度 = top + bottom + margin-top + margin-bottom + 绝对定位元素的实际占用高度
+*   **固定定位**，**相对于浏览器视口即 viewport 进行定位**，跟父元素没有任何关系。可以看做是一种**特殊的绝对定位**。即使画布滚动元素位置也不会改变。
 
-- margin-left 和 margin-right 默认为 0
-- left 和 right 默认为 auto。**浏览器默认不会给等分！**
+*   **脱标**。**不再占有原先的位置**。其他盒子可以使用原先位置
 
-所以：
+    会**改变元素的性质（脱标特点）**，行内变成块，块的宽高被内容撑开
+
+
+
+右侧固定按键案例（这个其实是配合 JS 实现的粘性定位）：
+
+- 先不使用固定定位
+- 当画布移动到某个位置时，添加固定定位。配合 JS 实现
+
+
+
+
+
+## Horizontal / Vertical Formatting
+
+参考 [W3C](https://www.w3.org/TR/CSS2/visuren.html#propdef-position) 文档和 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/position) 文档
+
+### Horizontal
+
+对于绝对定位元素即 position 为 absolute 或 fixed 的元素来说。需要满足如下约束：
+
+```
+left + margin-left + border-left-width + padding-left + width + padding-right + border-right-width + margin-right + right
+= 
+width of containing block
+```
+
+*   🔥上述值中只有 'width'， 'margin-left' 和 'margin-right'，'left' 和 'right' 可以设置为 'auto'，且 'width'，'left' 和 'right' 默认就是 'auto'。其余几个属性必须设置为特定的值或默认值为 0。width 只可设置为非负值，只有 'margin'，'left' 和 'right'可以为负值。
+*   🔥大多数情况下，height和width 被设定为auto的绝对定位元素，按其内容大小调整尺寸。但是，被绝对定位的元素可以通过指定top和bottom ，保留height未指定（即auto），来填充可用的垂直空间。它们同样可以通过指定left 和 right并将width 指定为auto来填充可用的水平空间。
+*   其他的文档中看不懂😓
+
+水平方向同理！
+
+
+
+### 案例
 
 - 若希望**绝对定位元素的宽高和定位参考对象一样**，可以给绝对定位元素设置如下属性
 
-  若只是宽或高一样，可以根据需要修改
+    ```html
+    <style>
+      .box1 {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        background-color: skyblue;
+      }
+    
+      .box2 {
+        position: absolute;
+        background-color: orange;
+        
+        /* 绝对定位元素的宽高和定位参考对象一样 */
+        /* left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0; */
+    
+        /* 绝对定位元素的宽和定位参考对象一样 */
+        /* left: 0;
+        right: 0;
+        height: 100px; */
+    
+        /* 绝对定位元素的高和定位参考对象一样 */
+        /* top: 0;
+        bottom: 0;
+        width: 100px; */
+      }
+    </style>
+    <div class="box1">
+      <div class="box2"></div>
+    </div>
+    ```
 
-  ```css
-  div {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: 0;
-  }
-  ```
+- 若希望**绝对定位元素在定位参考对象中居中（垂直 / 水平）显示（宽高确定！）**，可以给绝对定位元素设置如下属性
 
-- 若希望**绝对定位元素在定位参考对象中居中（垂直水平）显示**，可以给绝对定位元素设置如下属性
+    ```css
+    <style>
+    .box1 {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      background-color: skyblue;
+    }
+    
+    .box2 {
+      position: absolute;
+      background-color: orange;
+      width: 100px;
+      height: 100px;
+    
+      /* 水平且垂直居中 */
+      /* left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto; */
+    
+      /* 水平居中，margin 二选一*/
+      /* left: 0;
+      right: 0;
+      margin: 0 auto;
+      margin: auto */
+    
+      /* 垂直居中，margin 二选一 */
+      /* top: 0;
+      bottom: 0;
+      margin: auto 0;
+      margin: auto; */
+    }
+    </style>
+    <div class="box1">
+    	<div class="box2"></div>
+    </div>
+    ```
 
-  若只是水平或垂直居中，可根据需要修改
+- 当然也可以使用`transform`实现，特别适用于宽高不确定
 
-  ```css
-  div {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-  }
-  ```
+    ```html
+    <style>
+      .box1 {
+        background-color: skyblue;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(50%, 50%);
+      }
+    </style>
+    <div class="box1">666</div>
+    ```
 
-- 当然也可以使用`transform`实现
+    
 
-## `fixed`🔥
 
-**固定定位**，**相对于浏览器视口即 viewport 进行定位**，跟父元素没有任何关系。可以看做是一种特殊的绝对定位。即使画布滚动元素位置也不会改变。
 
-**脱标**。**不再占有原先的位置**。
 
-右侧固定按键案例：
 
-- 先不使用固定定位
-- 当画布移动到某个位置时，添加固定定位
+## `sticky` 粘性定位 🔥
 
-## `sticky`🔥
+*   **粘性定位**可以被认为是**相对定位 relative**和**固定定位 fixed**的混合
 
-**粘性定位**可以被认为是**相对定位 relative**和**固定定位 fixed**的混合
+*   以浏览器的**可视窗口为参照点**移动元素（固定定位特点）
 
-以浏览器的**可视窗口为参照点**移动元素（固定定位特点）
+*   粘性定位**占有原先的位置**（相对定位特点）
 
-粘性定位**占有原先的位置**（相对定位特点）
+*   **必须添加** top 、left、right、bottom 其中一个才有效
 
-**必须添加** top 、left、right、bottom 其中一个才有效
+::: warning
 
-> **跟页面滚动搭配使用**。 兼容性较差，IE 不支持，目前大部分使用 js 实现
+**跟页面滚动搭配使用**。 兼容性较差，IE 不支持，目前大部分使用 JS 实现
 
-## `inherit`
+:::
+
+
+
+## `inherit` 继承
 
 规定应该从父元素继承 position 属性的值。
 
@@ -152,7 +273,9 @@
 |  fixed 固定定位   | 是                | 浏览器可视区       | 常用       |
 |  sticky 粘性定位  | 否 (占有原来位置) | 浏览器可视区       | 当前阶段少 |
 
-## 边偏移
+
+
+## 偏移量 offset
 
 **边偏移**就是**定位的元素**移动到**最终位置**，非定位元素使用无效
 
@@ -167,19 +290,27 @@
 | vertical-align | 设置元素的垂直对齐方式。                                                                                                                                  |
 | **z-index**    | 设置元素的堆叠顺序，z 轴距离，默认为 auto，可负数，数字后面**不能加单位**。**定位盒子才有该属性**，如果属性值相同，则按照 HTML 元素的书写顺序，后来居上。 |
 
-> 若一个盒子既有 left 也有 right，则 left 优先级高；同理 top 比 bottom 优先级高
-
-### `z-index` 元素的层叠
+::: tip 元素的层叠
 
 - 父子关系
 
-  子元素会层叠在父元素上
+    子元素会层叠在父元素上，**无法通过`z-index`来控制**
 
 - 非父子关系
 
-  - 都是非定位元素（即 static）：在标准流中一般不存在层叠现象
-  - 1 个是定位、1 个是非定位：定位元素会层叠在非定位元素上
-  - 都是**定位元素**：默认后写的 HTML 元素层叠在先写的上面，可以使用`z-index`来控制
+    - 都是非定位元素（即 static）：在标准流中一般不存在层叠现象
+    - 1 个是定位、1 个是非定位：定位元素会层叠在非定位元素上
+    - 都是**定位元素**：默认后写的 HTML 元素层叠在先写的上面，**可以使用`z-index`来控制**
+
+:::
+
+::: tip
+
+若一个盒子既有 left 也有 right，则 left 优先级高；同理 top 比 bottom 优先级高
+
+:::
+
+
 
 ## 脱离标准流元素特点—重复 🔥
 

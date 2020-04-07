@@ -1,5 +1,77 @@
 # 属性
 
+## 长度单位 🔥
+
+*   px：像素（不是物理像素，是逻辑像素）
+*   em：相对于自己元素`font-size`的倍数
+    *   `font-size`：相对于自己元素`font-size`的倍数
+    *   `width`：相对于自己元素`font-size`的倍数，自己没有则继承父元素的
+*   rem：相对于**根元素**，具体哪个元素参考上面 em
+*   %：不同场景相对的不同！太多了需查文档！举例如下两个：
+    *   `width`：相对于父元素的`width`
+    *   `margin-top`：相对于父元素的`width`！
+
+
+
+## `color` 颜色单位 🔥
+
+其实是**前景色**，包括`border`的颜色。很多元素都可以使用。
+
+### 颜色关键字
+
+如`red`、`green`、`blue`、`black`、`white`、`yellow`、`purple`、`skyblue`等
+
+
+
+### RGB
+
+*   十进制：`rgb(red,green,blue)`
+
+    *   red：0~255
+    *   green：0~255
+    *   blue：0~255
+
+    每个颜色使用一个字节表示，所以为0~255
+
+*   **十六进制**：`#rrggbb`或`#rgb`
+
+    每个颜色使用`0~F`表示，比十进制表示多些，**推荐使用**
+
+
+
+### RGBA
+
+`rgba(red,green,blue,alpha)`
+
+*   alpha表示**透明度**，值范围为0～1，0即完全透明，1即完全不透明
+
+*   **transparent**：如下两种表示方式结果一样
+
+    ```css
+    div {
+      background-color: rgba(0,0,0,0);
+      background-color: transparent;
+    }
+    ```
+
+
+
+### HSL & HSLA
+
+*   H 色相(0 - 360)*
+
+*   S 饱和度，颜色的浓度 0% - 100%
+
+*   L 亮度，颜色的亮度 0% - 100%
+
+    ```css
+    background-color: hsla(98, 48%, 40%, 0.658);
+    ```
+
+    
+
+
+
 ## `font` 字体🔥
 
 用于定义字体系列、大小、粗细、和文字样式(如斜体)
@@ -45,10 +117,9 @@
 ### `font-weight` 粗细
 
 * `normal` 400，默认值
-
 * `bold` 700
-
-* 指定 `100~900`，平时更喜欢用数字来表示加粗和不加粗
+* `100~900`
+* 一般使用单词表示
 
 
 
@@ -65,7 +136,7 @@
 | 长度单位名称 | 说明                                                         |
 | ------------ | ------------------------------------------------------------ |
 | **px**       | 相对长度单位，像素，推荐使用                                 |
-| **em**       | 相对长度单位，相对于父元素的`font-size`大小*em               |
+| **em**       | 相对长度单位，相对于自己元素的`font-size`大小*em             |
 | **rem**      | 相对长度单位，相对于root元素的`font-size`大小*em，浏览器中为`html`元素 |
 | in           | 绝对长度单位，英寸                                           |
 | cm           | 绝对长度单位，厘米                                           |
@@ -112,6 +183,109 @@ Chrome默认最小`font-size`是12px，注意使用`em`、`rem`和`%`时的字�
 | 新细明体    | PMingLiU        | \65B0\7EC6\660E\4F53 |
 
 :::
+
+
+
+## `@font-face` 网络字体
+
+@font-face 可以让网页支持网络字体（Web Font），不再局限于系统自带的字体
+
+```css
+@font-face {
+  font-family: "conanan";
+  src: url("./font/conanan.ttf"),url("./font/conanan.otf");
+}
+
+p {
+	font-family: "conanan"
+}
+```
+
+常见的字体种类：
+
+*   TrueType：.ttf
+*   OpenType：.ttf、.otf，建立在 TrueType 之上
+*   Embedded OpenType：.eot，OpenType 字体的压缩版
+*   SVG：.svg、.svgz
+*   web 开放字体：.woff，建立在 TrueType 字体之上
+
+注意加载速度和版权问题！	
+
+根据浏览器的支持，准备多种字体
+
+Google Fonts 下载：https://fonts.google.com
+
+
+
+
+
+## 字体图标
+
+### 发展
+
+字体图标使用场景：主要用于显示网页中通用、常用的一些小图标。
+
+精灵图是有诸多优点的，但是缺点很明显。 
+
+* 图片文件还是比较大的。
+* 图片本身放大和缩小会失真。
+* 一旦图片制作完毕想要更换非常复杂。
+
+此时，有一种技术的出现很好的解决了以上问题，就是字体图标 iconfont。字体图标可以为前端工程师提供一种方便高效的图标使用方式，展示的是图标，本质属于字体。
+
+
+
+### 优点
+
+* 轻量级：一个图标字体要比一系列的图像要小。一旦字体加载了，图标就会马上渲染出来，减少了服务器请求 
+* 灵活性：本质其实是文字，可以很随意的改变颜色、产生阴影、透明效果、旋转等
+* 兼容性：几乎支持所有的浏览器，请放心使用
+
+注意：**字体图标不能替代精灵技术**，只是对工作中图标部分技术的提升和优化。
+
+* 如果遇到一些结构和样式比较简单的小图标，就用字体图标。
+* 如果遇到一些结构和样式复杂一点的小图片，就用精灵图。
+
+
+
+### 使用
+
+字体图标是一些网页常见的小图标，我们直接网上下载即可。 因此使用可以分为: 
+
+1. 字体图标的下载，把下载包里面的 fonts 文件夹放入**页面根目录**下
+
+    不同浏览器所支持的字体格式是不一样的，字体图标之所以兼容就是因为包含了主流浏览器支持的字体文件。
+
+    * TureType(.ttf)格式.ttf字体是Windows和Mac的最常见的字体，支持这种字体的浏览器有IE9+、Firefox3.5+、 Chrome4+、Safari3+、Opera10+、iOS Mobile、Safari4.2+;
+    * Web Open Font Format(.woff)格式woff字体，支持这种字体的浏览器有IE9+、Firefox3.5+、Chrome6+、 Safari3.6+、Opera11.1+;
+    * Embedded Open Type(.eot)格式.eot字体是IE专用字体，支持这种字体的浏览器有IE4+;
+    * SVG(.svg)格式.svg字体是基于SVG字体渲染的一种格式，支持这种字体的浏览器有Chrome4+、Safari3.1+、 Opera10.0+、iOS Mobile Safari3.2+;
+
+2. 字体图标的引入 (引入到我们html页面中)
+
+    一般下载的demo会有介绍
+
+3. 字体图标的追加 (以后添加新的小图标)
+
+
+
+### 推荐下载网站
+
+* [Font Awesome](https://fontawesome.com/) 
+
+    别进中文网站了，版本太低！
+
+* [icomoon](http://icomoon.io)
+
+    IcoMoon 成立于 2011 年，推出了第一个自定义图标字体生成器，它允许用户选择所需要的图标，使它们成
+
+    一字型。该字库内容种类繁多，非常全面，唯一的遗憾是国外服务器，打开网速较慢。
+
+* [iconfont](http://www.iconfont.cn/)
+
+    这个是阿里妈妈 M2UX 的一个 iconfont 字体图标字库，包含了淘宝图标库和阿里妈妈图标库。可以使用 AI 制作图标上传生成。 重点是，免费!
+
+
 
 
 
@@ -224,6 +398,7 @@ Chrome默认最小`font-size`是12px，注意使用`em`、`rem`和`%`时的字�
 - ` px`
 - `em`
 - `%` 不跟单位，倍数关系
+- 没有单位，表示`font-size`的**倍数**
 - `inherit`
 - ...
 
@@ -302,79 +477,6 @@ text-shadow: h-shadow v-shadow blur color;
 
 
 
-## 长度单位 🔥
-
-*   px：像素（不是物理像素，是逻辑像素）
-*   em：相对于父元素`font-size`的倍数
-    *   `font-size`：相对于父元素的`font-size`
-    *   `width`：相对于自己的`font-size`，自己没有则继承父元素的
-*   rem：相对于**根元素**，具体哪个元素参考上面 em
-*   %：不同场景相对的不同！太多了需查文档！举例如下两个：
-    *   `width`：相对于父元素的`width`
-    *   `margin-top`：相对于父元素的`width`！
-
-
-
-## `color` 颜色单位 🔥
-
-其实是**前景色**，包括`border`的颜色。很多元素都可以使用。
-
-### 颜色关键字
-
-如`red`、`green`、`blue`、`black`、`white`、`yellow`、`purple`、`skyblue`等
-
-
-
-### RGB
-
-*   十进制：`rgb(red,green,blue)`
-
-    *   red：0~255
-    *   green：0~255
-    *   blue：0~255
-
-    每个颜色使用一个字节表示，所以为0~255
-
-*   **十六进制**：`#rrggbb`或`#rgb`
-
-    每个颜色使用`0~F`表示，比十进制表示多些，**推荐使用**
-
-
-
-### RGBA
-
-`rgba(red,green,blue,alpha)`
-
-*   alpha表示**透明度**，值范围为0～1，0即完全透明，1即完全不透明
-
-*   **transparent**：如下两种表示方式结果一样
-
-    ```css
-    div {
-      background-color: rgba(0,0,0,0);
-      background-color: transparent;
-    }
-    ```
-
-
-
-
-### HSL & HSLA
-
-*   H 色相(0 - 360)*
-
-*   S 饱和度，颜色的浓度 0% - 100%
-
-*   L 亮度，颜色的亮度 0% - 100%
-
-    ```css
-    background-color: hsla(98, 48%, 40%, 0.658);
-    ```
-
-    
-
-
-
 
 
 ## `vertical-align` 与文字垂直对齐
@@ -411,6 +513,10 @@ text-shadow: h-shadow v-shadow blur color;
 | length      |                                                              |
 | %           | 使用 "line-height" 属性的百分比值来排列此元素。允许使用负值。 |
 | inherit     | 规定应该从父元素继承 vertical-align 属性的值。               |
+
+![image-20200310210030504](./images/image-20200310210030504.png)
+
+
 
 ### 案例1：图片底部默认空白缝隙
 
@@ -470,10 +576,6 @@ bug：div（不指定height）包裹图片时底侧会有一个**空白缝隙**�
 
 
 
-
-
-
-
 ## `background` 背景🔥
 
 ### `background` 缩写🔥
@@ -500,11 +602,11 @@ background 属性被指定多个背景层时，使用逗号分隔每个背景层
 
 
 
-### `background-image` 背景图片
+### `background-image` 背景图片 🔥
 
 常用于 **logo、装饰性小图片、超大背景图、精灵图**，相比img非常**便于控制位置**。
 
-会**盖在（不是覆盖，不会替换，会有多层，图片没沾满空间则后面会显示背景颜色）`background-color`上**。
+会**盖在（不是覆盖，不会替换，会有多层，图片没占满空间则后面会显示背景颜色）`background-color`上**。
 
 **元素必须有宽高**，否则背景图片显示不出来。
 
@@ -513,7 +615,7 @@ background 属性被指定多个背景层时，使用逗号分隔每个背景层
 
 
 
-### `background-position` 背景定位
+### `background-position` 背景定位 🔥
 
 #### 使用
 
@@ -627,7 +729,7 @@ background-position: x y
 
 
 
-### `background-size` 背景大小
+### `background-size` 背景大小 🔥
 
 设置背景图片大小。图片可以保有其原有的尺寸，或拉伸到新的尺寸，或在保持其原有比例的同时缩放到元素的可用空间的尺寸。
 
@@ -635,13 +737,13 @@ background-position: x y
 *   `cover`：缩放背景图片以**完全覆盖背景区**，**可能背景图片部分看不到**。和 `contain` 值相反，`cover` 值**尽可能大的缩放背景图像**并保持图像的宽高比例（图像不会被压扁）。该背景图以它的全部宽或者高覆盖所在容器。当容器和背景图大小不同时，背景图的 左/右 或者 上/下 部分会被**裁剪**。
 *   `contain`：缩放背景图片以**完全装入背景区**，**可能背景区部分空白**。`contain` 尽可能的缩放背景并**保持图像的宽高比例**（图像不会被压缩）。该背景图会填充所在的容器。当背景图和容器的大小的不同时，容器的空白区域（上/下或者左/右）会显示由 background-color 设置的背景颜色。
 *   `<percentage>`即百分比：指定背景图片相对**背景区**（background positioning area）的百分比。背景区由background-origin设置，**默认为盒模型的内容区与内边距**，也可设置为只有内容区，或者还包括边框。如果attachment 为fixed，背景区为浏览器可视区（即视口），不包括滚动条。不能为负值。若**只有一个值，则表示按宽度缩放**；有两个值，则按宽高缩放
-*   `<length>` ：指定背景图片大小，不能为负值。写一个值，则另一个默认为auto。多个值则按照值计算。
+*   `<length>` ：**指定背景图片大小**，不能为负值。写一个值，则另一个默认为auto。多个值则按照值计算。
 
 
 
 
 
-### `background-repeat` 背景平铺
+### `background-repeat` 背景平铺 🔥
 
 * `repeat` 平铺，默认值
 * `no-repeat`  不平铺，**常用**
@@ -650,7 +752,9 @@ background-position: x y
 
 
 
-### `background-attachment` 背景附着
+
+
+### `background-attachment` 背景附着 🔥
 
 决定背景图像的位置是**在视口内固定**，还是随着**包含它的区块滚动**。常用于**视差滚动效果**，如下载QQ首页。
 
@@ -661,6 +765,24 @@ background-position: x y
 - `local`：此关键字表示**背景相对于元素的内容固定**。如果一个元素拥有滚动机制，背景将会随着元素的内容滚动， 并且背景的绘制区域和定位区域是相对于可滚动的区域而不是包含他们的边框。
 
 
+
+### `background-origin`偏移原点
+
+背景图片的偏移量计算的原点，注意兼容性
+
+*   `padding-box` 默认值，background-position从内边距处开始计算
+*   `content-box` 背景图片的偏移量从内容区处计算
+*   `border-box` 背景图片的变量从边框处开始计算
+
+
+
+### `background-clip`背景范围
+
+设置背景的范围，注意兼容性
+
+*   `border-box` 默认值，背景会出现在边框的下边
+*   `padding-box` 背景不会出现在边框，只出现在内容区和内边距
+*   `content-box` 背景只会出现在内容区
 
 
 
@@ -674,19 +796,96 @@ background-position: x y
 
 
 
+
+
 ### img 和 background-image 选择
 
-|                        |       img        |     background-image     |
-| :--------------------: | :--------------: | :----------------------: |
-|          性质          |     HTML元素     |         CSS样式          |
-|    图片是否占用空间    |        ✅         |            ❌             |
-|   浏览器右键复制图片   |        ✅         |            ❌             |
-|     支持CSS Sprite     |        ❌         |            ✅             |
-| 更有可能被搜索引擎收录 | ✅（配合alt属性） |            ❌             |
-|        加载顺序        |     优先加载     | 等加载完HTML元素后再加载 |
+|                        |       img        |      background-image      |
+| :--------------------: | :--------------: | :------------------------: |
+|          性质          |     HTML元素     |          CSS样式           |
+|    图片是否占用空间    |        ✅         |             ❌              |
+|   浏览器右键复制图片   |        ✅         |             ❌              |
+|     支持CSS Sprite     |        ❌         |             ✅              |
+| 更有可能被搜索引擎收录 | ✅（配合alt属性） |             ❌              |
+|        加载顺序        |     优先加载     | 等加载完HTML元素后按需加载 |
 
 *   img：作为网页重要组成部分，如广告图片、LOGO图片、文章配图、产品图片
 *   bgi：可有可无，有使网页更美观，无也不影响用户获取完整网页内容信息
+
+
+
+
+
+### `gradient`图片渐变 🔥
+
+通过渐变可以设置一些复杂的背景颜色，可以实现从一个颜色向其他颜色过渡的效果。**渐变是图片**，通过`background-image`设置。详细看文档吧。
+
+*   `linear-gradient()` 线性渐变，颜色沿着一条直线发生变化
+
+    ```css
+    linear-gradient(red,yellow) /* 红色在开头，黄色在结尾，中间是过渡区域 */
+    ```
+
+    渐变可以同时指定多个颜色，多个颜色默认情况下平均分布，也可以手动指定渐变的分布情况
+
+    线性渐变的开头，我们可以指定一个渐变的方向：
+
+    *   to left
+    *   to right
+    *   to bottom
+    *   to top
+    *   deg deg表示度数
+    *   turn 表示圈
+
+*   `repeating-linear-gradient()` 可以平铺的线性渐变
+
+    ```html
+    <style>
+      .box1 {
+        width: 200px;
+        height: 200px;
+        /* background-image: linear-gradient(red,yellow,#bfa,orange); */
+        /* background-image: linear-gradient(red 50px,yellow 100px, green 120px, orange 200px); */
+        background-image: repeating-linear-gradient(to right, red, yellow 50px);
+      }
+    </style>
+    <div class="box1"></div>
+    ```
+
+*   `radial-gradient()` 径向渐变（**放射性**的效果）
+
+    默认情况下径向渐变的形状根据元素的形状来计算的：
+
+    *   正方形 --> 圆形
+    *   长方形 --> 椭圆形
+
+    我们也可以手动指定径向渐变的大小：
+
+    *   circle
+    *   ellipse
+
+    也可以指定渐变的位置
+
+    ```css
+    radial-gradient(大小 at 位置, 颜色 位置 ,颜色 位置 ,颜色 位置)
+    ```
+
+    大小：
+
+    *   circle 圆形
+    *   ellipse 椭圆
+    *   closest-side 近边	
+    *   closest-corner 近角
+    *   farthest-side 远边
+    *    farthest-corner 远角
+
+     位置：
+
+    *   top right left center bottom
+
+*   `repeating-radial-gradient()` 可以平铺的径向渐变
+
+
 
 ## `list-style` 列表🔥
 
@@ -747,7 +946,7 @@ list-style: list-style-type list-style-position list-style-image
 
     主要**用于行内非替换元素的宽高内外边距设置**和**块级元素同一行显示**
 
-- `none` **隐藏**元素，**不再占有原来的位置**，但是元素**还存在于 DOM 中**
+- `none` **隐藏**元素，**不再占有原来的位置**，但是元素**还存在于 DOM 中**。也可以通过设置`width`或`height`来隐藏！
 
 若`display`设置为如下值，则等同于某些 HTML 元素，但是基本不用
 
