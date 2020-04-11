@@ -329,7 +329,12 @@ module.exports = {
       title: "CSS",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["2 CSS-1 基础", "2 CSS-2 属性", "2 CSS-3 动画"],
+      children: [
+        "2 CSS-1 基础",
+        "2 CSS-2 属性",
+        "2 CSS-3 动画",
+        "2 CSS-8 Less",
+      ],
     },
     {
       title: "CSS布局",
@@ -400,6 +405,12 @@ module.exports = {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: ["7 模块化-1 ES6模块化"],
+    },
+    {
+      title: "DOM & BOM",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["DOM", "BOM"],
     },
   ],
   "/Front End/Vue/": [

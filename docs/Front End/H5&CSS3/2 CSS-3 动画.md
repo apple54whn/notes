@@ -4,7 +4,7 @@
 
 ## `transform-origin`形变原点 🔥
 
-`transform-origin`属性让你更改一个元素变形的原点。
+`transform-origin`属性让你更改一个元素变形的原点。默认值：`50% 50% 0`
 
 - 一个值
 
@@ -413,6 +413,106 @@ transition: 要过渡的属性 持续时间 运动曲线 何时开始, 要过渡
   <div class="box9"></div>
 </div>
 ```
+
+
+
+### 骰子
+
+```html
+<style>
+  html {
+    perspective: 800px;
+  }
+
+  .cube {
+    width: 200px;
+    height: 200px;
+    /* background-color: #bfa; */
+    margin: 100px auto;
+    /* 设置3d变形效果 */
+    transform-style: preserve-3d;
+    /* transform: rotateX(45deg) rotateZ(45deg); */
+    animation: rotate 20s infinite linear;
+    /* transform:rotateY(45deg) scaleZ(2); */
+  }
+
+  .cube > div {
+    width: 200px;
+    height: 200px;
+    /* 为元素设置透明效果 */
+    opacity: 0.7;
+    position: absolute;
+  }
+
+  img {
+    vertical-align: top;
+  }
+
+  .box1 {
+    /* 虽然看似都是translateZ(100px)，但是这是根据rotate后的面来说的 */
+    transform: rotateY(90deg) translateZ(100px);
+  }
+
+  .box2 {
+    transform: rotateY(-90deg) translateZ(100px);
+  }
+
+  .box3 {
+    transform: rotateX(90deg) translateZ(100px);
+  }
+
+  .box4 {
+    transform: rotateX(-90deg) translateZ(100px);
+  }
+
+  .box5 {
+    transform: rotateY(180deg) translateZ(100px);
+  }
+
+  .box6 {
+    transform: rotateY(0deg) translateZ(100px);
+  }
+
+  @keyframes rotate {
+    form {
+      transform: rotateX(0) rotateZ(0);
+    }
+
+    to {
+      transform: rotateX(1turn) rotateZ(1turn);
+    }
+  }
+</style>
+<!-- 创建一个外部的容器 -->
+<div class="cube">
+  <!-- 引入图片 -->
+  <div class="box1">
+    <img src="./img/14/1.jpg" />
+  </div>
+
+  <div class="box2">
+    <img src="./img/14/2.jpg" />
+  </div>
+
+  <div class="box3">
+    <img src="./img/14/3.jpg" />
+  </div>
+
+  <div class="box4">
+    <img src="./img/14/4.jpg" />
+  </div>
+
+  <div class="box5">
+    <img src="./img/14/5.jpg" />
+  </div>
+
+  <div class="box6">
+    <img src="./img/14/6.jpg" />
+  </div>
+</div>
+```
+
+
 
 
 
