@@ -26,107 +26,231 @@
 
 
 
+## 容器接口及其实现类
 
+### 接口及实现类
 
-## `@Configuration`配置类
-
-* **`@Configuration`**
-
-    用于**指定当前类是一个Spring配置类**，当创建容器时会从该类上加载注解。
-
-    - `value`用于指定配置类的字节码，一般不用
-    - 细节：当**配置类**作为`AnnotationConfigApplicationContext`对象创建的**参数**时，该注解可以不写
-
-    获取容器时使用 `AnnotationConfigApplicationContext(有@Configuration 注解的类.class)`来创建`ApplicationContext`对象。由于本身也是`@Component`，所以指定@ComponentScan时可以跳过此类（了解）
-
-    * `String[] getBeanDefinitionNames()`：查询这个IoC容器中所有Bean的名称
-    * `String[] getBeanNamesForType(Class c)`：查询这个IoC容器中指定类型的Bean的名称
-    * `Map<String, Class >getBeansOfType(Class c)`：查询这个IoC容器中所有Bean的名称、和Bean对象
-    * `Object getBean([String beanName ,] [Class c])`
-
-
-## `@PropertySource`
-
-用于**指定properties文件的位置**，是重复注解
-
-- `value`指定文件的**名称和路径**数组。关键字：**classpath**，表示类路径下
+* `BeanFactory`顶层容器接口。创建对象采用**延迟加载**方式（何时使用何时创建，多例适用）
+* `ApplicationContext`容器接口。创建对象采用**立即加载**方式（**读完配置文件**，**默认情况下就创建(可修改)**，单例适用）
+    * `ClassPathXmlApplicationContext`，基于xml配置的实现类。只能加载**类路径**下的配置文件
+    * `FileSystemXmlApplicationContext`，基于xml配置的实现类。可以加载**磁盘任意路径**的配置文件（需有访问权限）
+    * `AnnotationConfigApplicationContext`，基于注解配置的实现类。读取**注解**创建容器
 
 
 
+### 常用方法
 
-## `@ComponentScan`注册组件
+::: tip
 
-> 包扫描+组件标注注解（@Controller/@Service/@Repository/@Component）[自己写的类]
+获取容器时使用 `AnnotationConfigApplicationContext(有@Configuration 注解的类.class)`来创建`ApplicationContext`对象。由于本身也是`@Component`，所以指定@ComponentScan时可以跳过此类（了解）
 
-* `@ComponentScans`
+:::
 
-    用于多个`@ComponentScan`。属性有`value`数组，可以包含多个` @ComponentScan`
+* `String[] getBeanDefinitionNames()`：查询这个IoC容器中所有Bean的名称
+* `String[] getBeanNamesForType(Class c)`：查询这个IoC容器中指定类型的Bean的名称
+* `Map<String, Class >getBeansOfType(Class c)`：查询这个IoC容器中所有Bean的名称、和Bean对象
+* `Object getBean([String beanName ,] [Class c])`
 
-* **` @ComponentScan`**
 
-    指定Spring在**初始化容器**时**要扫描的包**（扫描4个注解的类），在JDK8之后是重复注解，直接写多个，不再使用上边那个
 
-    * `value`或`basePackages`都是用于指定要扫描的包，都是数组类型
 
-    * `excludeFilters`指定扫描的时候按照什么规则排除那些组件
 
-    * `includeFilters`指定扫描的时候只需要包含哪些组件
+## `@Configuration`配置类 🔥
 
-        值为`Filter[]`，使用`@Filter`注解，属性有`type`（如下）、`classes`（Class类型）
+### `@Configuration`
 
-        * `FilterType.ANNOTATION`：按照带有的**注解类型**
-        * `FilterType.ASSIGNABLE_TYPE`：按照**给定的具体类型**
-        * `FilterType.ASPECTJ`：使用ASPECTJ表达式
-        * `FilterType.REGEX`：使用正则指定
-        * `FilterType.CUSTOM`：使用自定义规则，需要自定义`TypeFilter`的实现类，重写`match`方法
+用于**指定当前类是一个Spring配置类**，当创建容器时会从该类上加载注解。当**配置类**作为`AnnotationConfigApplicationContext`构造器的**参数**时，该注解可以不写（不推荐）
 
-    * `useDefaultFilters`在使用指定的规则时需要将这个值设置为`false`
+- `value`用于指定配置类的字节码，一般不用
 
-        ```java
-        public class MyTypeFilter implements TypeFilter {
-            /**
-        	 * metadataReader：读取到的当前正在扫描的类的信息
-        	 * metadataReaderFactory:可以获取到其他任何类信息的
-        	 */
-            @Override
-            public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory)
-                throws IOException {
-                //获取当前类注解的信息
-                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
-                //获取当前正在扫描的类的类信息
-                ClassMetadata classMetadata = metadataReader.getClassMetadata();
-                //获取当前类资源（类的路径）
-                Resource resource = metadataReader.getResource();
-        
-                String className = classMetadata.getClassName();
-                System.out.println("--->"+className);
-                if(className.contains("er")){
-                    return true;
-                }
-                return false;
-            }
+
+
+### 容器 & Bean 测试步骤
+
+1.  Maven 依赖
+
+    ```xml
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>5.2.5.RELEASE</version>
+      </dependency>
+    
+      
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.12</version>
+      </dependency>
+    
+      <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.6.2</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+    ```
+
+2.  POJO
+
+    ```java
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class Person {
+    
+        private String name;
+        private Integer age;
+    
+    }
+    ```
+
+3.  配置类
+
+    ```java
+    @Configuration// 该类为 容器构造器参数时，可省略该注解（不推荐）
+    public class MainConfig {
+    
+        @Bean("person")
+        public Person getPerson(){
+            return new Person("conanan",18);
         }
-        ```
+    }
+    ```
 
-        ```java
-        @ComponentScan(value="com.atguigu",includeFilters = {
-            @Filter(type=FilterType.ANNOTATION,classes={Controller.class}),
-            @Filter(type=FilterType.ASSIGNABLE_TYPE,classes={BookService.class}),
-            @Filter(type=FilterType.CUSTOM,classes={MyTypeFilter.class})
-        },useDefaultFilters = false)	
-        ```
+4.  测试类
 
-> 作用和xml配置文件中编写`<bean>`标签实现功能一致
+    ```java
+    @Test
+    public void testBean(){
+      ApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
+      Person person = context.getBean(Person.class);
+      System.out.println(person);
+    
+      String[] beanNamesForType = context.getBeanNamesForType(Person.class);
+      System.out.println(Arrays.toString(beanNamesForType));
+    }
+    ```
 
-- **`@Component`**：用于==**把当前类对象存入Spirng容器中**==。注解在实现类上不指定value会自动指定value（删除Impl）
+    
+
+
+
+## 注册组件—包扫描 & 四大注解🔥
+
+::: tip
+
+适用于自己写的类
+
+:::
+
+### `@ComponentScans`
+
+用于多个`@ComponentScan`。属性有`value`数组，可以包含多个` @ComponentScan`。Java 8 后使用下面的
+
+
+
+### ` @ComponentScan`  🔥
+
+指定Spring在**初始化容器**时**要扫描的包**（扫描4个注解的类），在JDK8之后是重复注解，直接写多个，不再使用上边那个
+
+* `value`或`basePackages`都是用于指定要扫描的包，都是数组类型
+
+* `excludeFilters`指定扫描的时候按照什么规则排除那些组件
+
+* `includeFilters`指定扫描的时候只需要包含哪些组件
+
+    值为`Filter[]`，使用`@Filter`注解，属性有`type`（如下）、`classes`（Class类型）
+
+    * `FilterType.ANNOTATION`：按照带有的**注解类型**
+    * `FilterType.ASSIGNABLE_TYPE`：按照**给定的具体类型**
+    * `FilterType.ASPECTJ`：使用ASPECTJ表达式
+    * `FilterType.REGEX`：使用正则指定
+    * `FilterType.CUSTOM`：使用自定义规则，需要自定义`TypeFilter`的实现类，重写`match`方法
+
+* `useDefaultFilters`在**仅使用指定的规则时**需要将这个值设置为`false`。默认为`true`，即扫描上面四个注解
+
+    若该值为`true`，则扫描该四个注解并匹配上述规则。一般不会这样做（很傻逼）
+
+    若该值为`false`，则仅需匹配上述规则
+
+    注意：`@Componet`注解是上述三个注解的底层实现，若`exclude`后则四个注解都不会扫描到
+
+    
+
+### 自定义`FilterType`  🔥
+
+```java
+/**
+ * 自定义 TypeFilter
+ */
+public class MyTypeFilter implements TypeFilter {
+    /**
+     *
+     * @param metadataReader 读取到的当前正在扫描的类的信息
+     * @param metadataReaderFactory 可以获取到其他任何类信息的
+     * @return boolean
+     * @throws IOException
+     */
+    @Override
+    public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
+        //获取当前类注解的信息
+        AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+        //获取当前正在扫描的类的类信息
+        ClassMetadata classMetadata = metadataReader.getClassMetadata();
+        //获取当前类资源（类的路径）
+        Resource resource = metadataReader.getResource();
+
+        String className = classMetadata.getClassName();
+        System.out.println("--->"+className);
+        return className.contains("er");
+    }
+}
+```
+
+```java
+@Configuration
+@ComponentScan(
+        value = "conanan",
+        includeFilters = {
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class}),
+                // Student 没有添加任何注解
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {Student.class}),
+                // CUSTOM 会过滤上面过滤后的类（防止影响可以注释掉）
+                @ComponentScan.Filter(type = FilterType.CUSTOM, classes = {MyTypeFilter.class}) 
+        },
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Service.class})
+        },
+        useDefaultFilters = false
+)
+public class IOCConfig {
+
+    @Bean("person")
+    public Person getPerson(){
+        return new Person("conanan",18);
+    }
+}
+```
+
+
+
+
+
+### 四大组件注解
+
+- `@Component`：用于**把当前类对象存入Spirng容器中**。注解在实现类上不指定value会自动指定value（删除Impl）
 
     - 属性：`value`：用于指定bean的id。不写时默认为当前类名，且首字母小写
 
-- **`@Controller`**或**`@RestController`**：表现层
+- `@Controller`**或**`@RestController`：表现层
 
-- **`@Service`**：业务层
+- `@Service`：业务层
 
-- **`@Repository`**：持久层
+- `@Repository`：持久层
 
     以上三个注解的作用和属性与`@Componet`一致，是Spring提供明确的三层架构使用的注解，使三层对象更加清晰
 
@@ -134,161 +258,269 @@
 
 
 
+## 注册组件—Bean 🔥
+
+::: tip
+
+适用于第三方包
+
+:::
+
+### `@Bean`  🔥
+
+用于把当前**方法的返回值**作为bean对象**注册存入Spring容器**中。该注解**只能写在方法上**
+
+* `value`或`name`用于指定**bean的id**。没写则默认为**当前方法的名称**
+* 细节：当我们使用注解配置方法时，如果**方法有参数**，Spring框架会去容器中查找有没有可用的bean对象。查找的方式和`@Autowired`注解的作用是一样的
 
 
-## `@Bean`注册组件
 
-> 导入的第三方jar包里面的组件
+### `@Scope`  🔥
 
-* **`@Bean`**
+用于指定bean的作用范围。也可以放置注解在定义的4个组件上
 
-    用于把当前**方法的返回值**作为bean对象**注册存入Spring容器**中。该注解**只能写在方法上**
+- `value`指定范围的取值。常用有：
+    - `singleton`：**单例**【默认】，一个应用只有一个对象的实例，**IoC容器启动时则会自动创建对象并放入容器**
+        - `@Lazy`：懒加载，修改单例对象创建时间，变为获取对象时才创建（只创建一次），但还是单例
+    - `prototype`：**多例**，**只有每次获取对象时，才会重新创建对象实例**
+    - `request`：WEB 项目中，Spring 为**每个请求**创建一个bean实例
+    - `session`：WEB 项目中，Spring 为**每个会话**创建一个bean实例
+    - `global-session`：作用于**集群(Portlet)环境的全局会话范围**，当不是集群(Portlet)环境时，它就是session
 
-    * `value`或`name`用于指定**bean的id**。没写则默认为**当前方法的名称**
-    * 细节：当我们使用注解配置方法时，如果**方法有参数**，Spring框架会去容器中查找有没有可用的bean对象。查找的方式和`@Autowired`注解的作用是一样的
+```java
+@Configuration
+public class IOCConfig {
 
-* **`@Scope`**：用于指定bean的作用范围。也可以放置注解在定义的4个组件上
+    @Bean("person")
+    @Scope("singleton")
+    @Lazy
+    public Person getPerson(){
+        return new Person("conanan",18);
+    }
+}
+```
 
-    - `value`指定范围的取值。常用有：
-        - **`singleton`**：**单例**【默认】，一个应用只有一个对象的实例，IoC容器启动时则会创建对象并放入容器
-            - `@Lazy`：懒加载，修改单例对象创建时间，变为获取对象时才创建，但还是单例
-        - **`prototype`**：**多例**，每次获取对象时，都会重新创建对象实例。
-        - `request`：WEB 项目中，Spring 为**每个请求**创建一个bean实例
-        - `session`：WEB 项目中，Spring 为**每个会话**创建一个bean实例
-        - `global-session`：作用于**集群(Portlet)环境的全局会话范围**，当不是集群(Portlet)环境时，它就是session
 
-* **`@Profile`**
 
-    指定**组件**在哪个环境的情况下才能被注册到容器中，不指定，任何环境下都能注册这个组件
 
-    * 加了环境标识的**bean**，只有这个环境被激活的时候才能注册到容器中。默认不写是default环境，即没有标注环境标识的bean在任何环境下都是加载的
 
-    * 写在**配置类上**，只有是指定的环境的时候，整个配置类里面的所有配置才能开始生效
+### `@Conditional` 🔥
 
-        ```java
-        @Profile("test")
-        ```
+**条件判断**，**满足**当前条件，**这个 Bean 才能被注册到容器中**。**Spring Boot中使用非常多**
 
-    使用：
+可以标在类（满足条件则类中所有Bean才会注册）和方法（只限制这个方法的Bean）上
 
-    * 运行时使用命令行动态参数：虚拟机参数位置写上`-Dspring.profiles.active=test`
+* `value`为实现了`Condition`接口的实现类数组，实现类需重写`matches`方法
 
-    * 代码的方式激活某种环境
-
-        ```java
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-        applicationContext.getEnvironment().setActiveProfiles("dev","test");//设置需要激活的环境
-        applicationContext.register(MainConfigOfProfile.class);//注册主配置类
-        applicationContext.refresh();//启动刷新容器
-        ```
-
-* **`@Conditional`**
-
-    类中组件统一设置。**满足当前条件**，这个配置的**bean注册才能生效**。可以标在类和方法上。**Springboot中使用很多**
-
-    * `value`为实现了`Condition`接口的数组，实现类重写`matches`方法
-
-        ```java
-        //判断是否linux系统
-        public class LinuxCondition implements Condition {
-        
-            /**
-        	 * ConditionContext：判断条件能使用的上下文（环境）
-        	 * AnnotatedTypeMetadata：注释信息
-        	 */
-            @Override
-            public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-                // TODO是否linux系统
-                //1、能获取到ioc使用的beanfactory
-                ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
-                //2、获取类加载器
-                ClassLoader classLoader = context.getClassLoader();
-                //3、获取当前环境信息
-                Environment environment = context.getEnvironment();
-                //4、获取到bean定义的注册类
-                BeanDefinitionRegistry registry = context.getRegistry();
-        
-                
-                //可以判断容器中的bean注册情况，也可以给容器中注册bean
-                boolean definition = registry.containsBeanDefinition("person");
-                
-                String property = environment.getProperty("os.name");
-                if(property.contains("linux")){
-                    return true;
-                }
-                return false;
-            }
+    ```java
+    @Configuration
+    public class IOCConfig {
+    
+      @Bean("mac-person")
+        @Conditional(MacCondition.class)
+        public Person person(){
+            return new Person("conanan",18);
         }
-        ```
-
-        ```java
-        @Conditional(LinuxCondition.class)//可以标在类（满足条件则类中所有Bean才会注册）和方法（只限制这个方法的Bean）上
-        @Bean("linus")
+    
+        @Conditional(LinuxCondition.class)
+        @Bean("linus-person")
         public Person person02(){
             return new Person("linus", 48);
         }
-        ```
+    }
+    ```
+
+    ```java
+    public class LinuxCondition implements Condition {
+        /**
+         *
+         * @param context 判断条件能使用的上下文（环境）
+         * @param metadata 注释信息
+         * @return boolean
+         */
+        @Override
+        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+            //1、能获取到ioc使用的beanfactory
+            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+            //2、获取类加载器
+            ClassLoader classLoader = context.getClassLoader();
+            //3、获取当前环境信息
+            Environment environment = context.getEnvironment();
+            //4、获取到bean定义的注册类
+            BeanDefinitionRegistry registry = context.getRegistry();
+            //可以判断容器中的bean注册情况，也可以给容器中注册bean
+            boolean definition = registry.containsBeanDefinition("person");
+    
+            String property = environment.getProperty("os.name");
+            return Objects.requireNonNull(property).contains("linux");
+        }
+    }
+    ```
+
+    ```java
+    public class MacCondition implements Condition {
+        /**
+         *
+         * @param context 判断条件能使用的上下文（环境）
+         * @param metadata 注释信息
+         * @return boolean
+         */
+        @Override
+        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    
+            Environment environment = context.getEnvironment();
+    
+            String property = environment.getProperty("os.name");
+            return Objects.requireNonNull(property).contains("Mac");
+        }
+    }
+    ```
+
+    ```java
+    @Test
+    public void testBean(){
+      // 获得容器
+      ApplicationContext context = new AnnotationConfigApplicationContext(IOCConfig.class);
+      printBeansName(context);
+    
+    }
+    
+    private void printBeansName(ApplicationContext context){
+      String[] beanDefinitionNames = context.getBeanDefinitionNames();
+      for (String beanDefinitionName : beanDefinitionNames) {
+        System.out.println(beanDefinitionName);
+      }
+    }
+    ```
+
+    
+
+    
+
+### `@Profile`
+
+指定**组件**在哪个环境的情况下才能被注册到容器中，不指定，任何环境下都能注册这个组件
+
+* 加了环境标识的**bean**，只有这个环境被激活的时候才能注册到容器中。默认不写是default环境，即没有标注环境标识的bean在任何环境下都是加载的
+
+* 写在**配置类上**，只有是指定的环境的时候，整个配置类里面的所有配置才能开始生效
+
+    ```java
+    @Profile("test")
+    ```
+
+使用：
+
+* 运行时使用命令行动态参数：虚拟机参数位置写上`-Dspring.profiles.active=test`
+
+* 代码的方式激活某种环境
+
+    ```java
+    AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+    applicationContext.getEnvironment().setActiveProfiles("dev","test");//设置需要激活的环境
+    applicationContext.register(MainConfigOfProfile.class);//注册主配置类
+    applicationContext.refresh();//启动刷新容器
+    ```
 
 
 
-## `@Import`注册组件
 
-* **`@Import`**
 
-    用于**导入其他的配置类**也可以理解为**直接导入第三方组件**，只能标注在类、接口、枚举类上
+## 注册组件—`@Import` 🔥
 
-    * `value`用于指定其他配置类的**字节码**，是数组，被导入的其他配置类也不用加`@Configuration`注解
+::: tip
 
-        注册的Bean的id为组件的全类名；若是配置类则还会注册配置的Bean（id为指定的或方法名）
+用于**快速导入其他配置类（不像@Bean只能一个个导入）**，也可以理解为**直接导入第三方组件**，只能标注在类、接口、枚举类上
 
-        ```java
-        @Import({Color.class,Red.class,MyImportSelector.class,MyImportBeanDefinitionRegistrar.class})
-        //@Import导入组件，id默认是组件的全类名
-        public class MainConfig2 {
-        ```
+:::
 
-        * **`ImportSelector`**接口：返回需要导入的组件的全类名数组，需要自定义类实现该接口。**Springboot中使用很多**
+### `Class`
 
-            ```java
-            //自定义逻辑返回需要导入的组件
-            public class MyImportSelector implements ImportSelector {
-                //返回值，就是到导入到容器中的组件全类名
-                //AnnotationMetadata:当前标注@Import注解的类的所有注解信息
-                @Override
-                public String[] selectImports(AnnotationMetadata importingClassMetadata) {
-                    return new String[]{"com.atguigu.bean.Blue","com.atguigu.bean.Yellow"};
-                }
-            }
-            ```
+`value`用于指定其他配置类的**Class**，是数组，被导入的其他配置类也不用加`@Configuration`注解
 
-        * `ImportBeanDefinitionRegistrar`接口：手动注册Bean到容器中，需要自定义类实现该接口
+注册的**Bean的id为组件的全类名**；**若是配置类则还会注册配置的Bean**（id为指定的或方法名）
 
-            ```java
-            public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
-                /**
-            	 * AnnotationMetadata:当前标注@Import注解的类的所有注解信息
-            	 * BeanDefinitionRegistry:BeanDefinition注册类；
-            	 * 把所有需要添加到容器中的bean；调用BeanDefinitionRegistry.registerBeanDefinition手工注册进来
-            	 */
-                @Override
-                public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-                    boolean definition = registry.containsBeanDefinition("com.atguigu.bean.Red");
-                    boolean definition2 = registry.containsBeanDefinition("com.atguigu.bean.Blue");
-                    if(definition && definition2){
-                        //指定Bean定义信息；（Bean的类型，Bean。。。）
-                        RootBeanDefinition beanDefinition = new RootBeanDefinition(RainBow.class);
-                        //注册一个Bean，指定bean名
-                        registry.registerBeanDefinition("rainBow", beanDefinition);
-                    }
-                }
-            }
-            ```
+```java
+@Import({Color.class,Red.class,MyImportSelector.class,MyImportBeanDefinitionRegistrar.class})
+//@Import导入组件，id默认是组件的全类名
+public class IOCConfig {}
+```
 
 
 
-## FactoryBean注册组件
+### `ImportSelector` 🔥
 
-与`@Import`不同的是，它是调用无参构造创建Bean，而这个利用工厂获取Bean。多用于**整合Spring和其他框架**的底层代码
+`ImportSelector`接口：返回需要导入的组件的全类名数组，需要自定义类实现该接口。**Springboot中使用很多**🔥
+
+注册的**Bean的id为组件的全类名**
+
+```java
+/**
+ * 自定义逻辑返回需要导入的组件
+ */
+public class MyImportSelector implements ImportSelector {
+    /**
+     *
+     * @param importingClassMetadata 当前标注@Import注解的类的其他所有注解
+     * @return 要导入到容器中的组件全类名
+     */
+    @Override
+    public String[] selectImports(AnnotationMetadata importingClassMetadata) {
+        return new String[]{"top.conanan.bean.Yello","top.conanan.bean.Blue"};
+    }
+
+  	/**
+  	 * TODO
+  	 */
+    @Override
+    public Predicate<String> getExclusionFilter() {
+        return null;
+    }
+}
+```
+
+
+
+### `ImportBeanDefinitionRegistrar`
+
+`ImportBeanDefinitionRegistrar`接口：手动注册Bean到容器中，需要自定义类实现该接口
+
+**可以指定 bean 名称**
+
+```java
+public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
+    /**
+     * 把所有需要添加到容器中的bean；调用BeanDefinitionRegistry.registerBeanDefinition手工注册进来
+     *
+     * @param importingClassMetadata 当前标注@Import注解的类的所有注解信息
+     * @param registry BeanDefinition注册类
+     * @param importBeanNameGenerator TODO
+     */
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
+        // 注意 Bean 名称
+        boolean definition1 = registry.containsBeanDefinition("top.conanan.bean.Red");
+        boolean definition2 = registry.containsBeanDefinition("top.conanan.bean.Yello");
+        boolean definition3 = registry.containsBeanDefinition("top.conanan.bean.Blue");
+
+        System.out.println(""+definition1+definition2+definition3);
+        if (definition1 && definition2 && definition3){
+            // 指定 Bean 的定义信息：Bean 的类型，Bean ...
+            RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(RainBow.class);
+            // 可以指定 bean 名称
+            registry.registerBeanDefinition("rainBow",rootBeanDefinition);
+        }
+    }
+}
+```
+
+
+
+## 注册组件—`FactoryBean`
+
+与`@Import`不同的是，它是**调用无参构造创建Bea**n，而这个利用工厂获取Bean。多用于**整合Spring和其他框架**的底层代码
+
+不能在 ColorFactoryBean 类上使用 @Component 注解，没用！！！
 
 ```java
 //创建一个Spring定义的FactoryBean
@@ -303,7 +535,11 @@ public class ColorFactoryBean implements FactoryBean<Color> {
 	public Class<?> getObjectType() {
 		return Color.class;
 	}
-	//是否为单例？
+	/** 
+	 * 控制 Bean 是否为单例
+   * true：这个bean是单实例，在容器中保存一份
+   * false：多实例，每次获取都会创建一个新的bean；
+   */
 	@Override
 	public boolean isSingleton() {
 		return false;
@@ -312,6 +548,7 @@ public class ColorFactoryBean implements FactoryBean<Color> {
 ```
 
 ```java
+// 不能在 ColorFactoryBean 类上使用 @Component 注解，没用！！！
 @Bean
 public ColorFactoryBean colorFactoryBean(){
     return new ColorFactoryBean();
@@ -319,15 +556,42 @@ public ColorFactoryBean colorFactoryBean(){
 ```
 
 ```java
-//工厂Bean获取的是工厂bean调用getObject创建的对象
-Object bean1 = applicationContext.getBean("colorFactoryBean");
-System.out.println("bean的类型："+bean1.getClass());//Color的全限定类名
+@Test
+public void testBean(){
+  // 获得容器
+  ApplicationContext context = new AnnotationConfigApplicationContext(IOCConfig.class);
+  printBeansName(context);
 
-Object bean2 = applicationContext.getBean("&colorFactoryBean");
-System.out.println(bean2.getClass());//ColorFactoryBean的全限定类名
+  // 工厂Bean获取的是工厂bean调用getObject创建的对象
+  Object bean1 = context.getBean("colorFactoryBean");
+  System.out.println(bean1.getClass());// class top.conanan.bean.Color
+  Color bean3 = context.getBean(Color.class);
+  System.out.println(bean3.getClass());// class top.conanan.bean.Color
+
+  Object bean2 = context.getBean("&colorFactoryBean");
+  System.out.println(bean2.getClass());// class top.conanan.bean.ColorFactoryBean
+  ColorFactoryBean bean4 = context.getBean(ColorFactoryBean.class);
+  System.out.println(bean4.getClass());// class top.conanan.bean.ColorFactoryBean
+
+  // No bean named 'top.conanan.bean.Color' available. Color,color 都不行
+  // Object color = context.getBean("top.conanan.bean.Color");
+
+}
 ```
 
 
+
+## 注册组件—总结
+
+*   包扫描+组件标注注解（@Controller/@Service/@Repository/@Component）：**自己写的类**
+*   `@Bean`：导入的**第三方**包里面的组件
+*   `@Import`：**快速给容器中导入一个组件**
+    *   @Import(要导入到容器中的组件)；容器中就会自动注册这个组件，id默认是全类名
+    *   ImportSelector🔥：返回需要导入的组件的全类名数组。Spring Boot 中使用非常多
+    *   ImportBeanDefinitionRegistrar：手动注册bean到容器中
+*   使用Spring提供的 FactoryBean（工厂Bean）。多用于**整合Spring和其他框架**的底层代码
+    *   默认获取到的是工厂bean调用getObject创建的对象
+    *   要获取工厂Bean本身，我们需要给id前面加一个`&`，`&colorFactoryBean`
 
 
 
@@ -422,6 +686,12 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
 > Spring底层对 BeanPostProcessor 的使用：bean赋值，注入其他组件，@Autowired，生命周期注解功能，@Async等等
 
 
+
+## `@PropertySource`
+
+用于**指定properties文件的位置**，是重复注解
+
+- `value`指定文件的**名称和路径**数组。关键字：**classpath**，表示类路径下
 
 
 
@@ -624,7 +894,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
 
 
 
-## xml 配置（旧）
+## XML 配置（旧）
 
 ### 步骤
 
@@ -655,14 +925,6 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
     ```
 
 
-
-### Spirng中容器接口及其实现类
-
-* ~~`BeanFactory`顶层容器接口。创建对象采用**延迟加载**方式（何时使用何时创建，多例适用）~~
-* **`ApplicationContext`**容器接口。创建对象采用**立即加载**方式（==**读完配置文件**，**默认情况下就创建(可修改)**==，单例适用）
-    * **`ClassPathXmlApplicationContext`**，基于xml配置的实现类。只能加载**类路径**下的配置文件
-    * `FileSystemXmlApplicationContext`，基于xml配置的实现类。可以加载**磁盘任意路径**的配置文件（需有访问权限）
-    * **`AnnotationConfigApplicationContext`**，基于注解配置的实现类。读取**注解**创建容器
 
 
 
@@ -791,7 +1053,7 @@ DI（Dependency Injection）：**依赖注入**，即是**依赖关系的维护*
 
 就是给类中的**集合成员传值**，可以采用set方法注入的方式，只不过变量的数据类型都是集合
 
-* 注入集合数据：只要**==结构相同，标签可以互换==** 
+* 注入集合数据：只要**结构相同，标签可以互换**
     * List结构可以用：array、list、set
     * Map结构可以用：map、entry；props、prop。但是properties只能存储键值都是字符串的数据。
 
