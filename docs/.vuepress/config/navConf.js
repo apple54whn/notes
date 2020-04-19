@@ -27,7 +27,7 @@ module.exports = [
       { text: "Redis", link: "/DataBase/Redis/0 Intro" },
       { text: "Mongo", link: "/DataBase/Mongo/0 Intro" },
       { text: "Lucene", link: "/DataBase/Lucene/0 Primer" },
-      { text: "Solr", link: "/DataBase/Solr/0 Intro" },
+      { text: "Solr", link: "/DataBase/Solr/0 Primer" },
       { text: "Elasticsearch", link: "/DataBase/Elasticsearch/0 Primer" }
     ]
   },
