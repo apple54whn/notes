@@ -60,7 +60,7 @@ module.exports = {
         "1 配置",
         "2 部署",
         "3 插件",
-        "4 概念及 RESTful API",
+        "4 Index & Document",
         "5 搜索",
         "5 原理"
       ]
