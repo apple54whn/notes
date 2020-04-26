@@ -16,7 +16,7 @@
 
 ## @RequestMapping
 
-作用：用于**建立请求 URL** 和**处理请求方法**之间的对应**关系**
+作用：用于**建立请求 URL** 和**处理请求方法**之间的对应**关系**。**所有请求方法都会经过此路由**
 
 ```java
 @Target({ElementType.METHOD, ElementType.TYPE})
