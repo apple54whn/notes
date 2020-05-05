@@ -61,9 +61,7 @@
 
 
 
-## xxAutoConfiguration 自动配置
-
-### @SpringBootApplication
+## @SpringBootApplication
 
 按住Ctrl点击查看启动类MySpringBootApplication上的注解@SpringBootApplication，源码如下：
 
@@ -91,21 +89,21 @@ public @interface SpringBootApplication {
 }
 ```
 
-其中，
 
-`@ComponentScan`：组件扫描，但是仅扫描注解了`@SpringBootApplication`类所在的同级包和子级包
 
-`@SpringBootConfiguration`：等同与`@Configuration`，既标注该类是Spring的一个配置类
+### @SpringBootConfiguration
 
-`@EnableAutoConfiguration`：SpringBoot自动配置功能开启
+等同与`@Configuration`，既标注该类是Spring的一个配置类
+
+
 
 
 
 ### @EnableAutoConfiguration
 
-不是用于自己写的 Bean，而是配置三方库中的 Bean
+SpringBoot 自动配置功能开启。不是用于自己写的 Bean，而是**配置三方库中的 Bean**
 
-按住Ctrl点击查看注解`@EnableAutoConfiguration`
+按住Ctrl点击查看该注解
 
 ```java
 @Target(ElementType.TYPE)
@@ -119,13 +117,19 @@ public @interface EnableAutoConfiguration {
 }
 ```
 
-其中，
+#### @AutoConfigurationPackage
 
-`@AutoConfigurationPackage`**：**自动配置包**，**如下注解的简写`@Import(AutoConfigurationPackages.Registrar.class)` 
+自动配置包**，**如下注解的简写
 
-Spring底层注解`@Import`，给容器中导入一个组件；导入的组件由`AutoConfigurationPackages.Registrar.class`指定，这个类有一个方法，通过注解metadata，将主配置类（`@SpringBootApplication`）所在包及下面所有子包里面的所有组件扫描到Spring容器
+```java
+@Import(AutoConfigurationPackages.Registrar.class)
+```
 
-`@Import(AutoConfigurationImportSelector.class) `导入了`AutoConfigurationImportSelector`类
+
+
+#### @Import
+
+Spring底层注解`@Import`，给容器中导入一个组件；导入的组件由`AutoConfigurationImportSelector.class`指定，这个类有一个方法，通过注解metadata，将主配置类（`@SpringBootApplication`）所在包及下面所有子包里面的所有组件扫描到Spring容器
 
 按住Ctrl点击查看`AutoConfigurationImportSelector`源码
 
@@ -153,7 +157,7 @@ protected List<String> getCandidateConfigurations(AnnotationMetadata metadata,
 }
 ```
 
-其中，`SpringFactoriesLoader.loadFactoryNames` 方法的作用就是从`META-INF/spring.factories`文件中读取指定类对应的全类名的列表，如xxxAutoConfiguration
+其中，`SpringFactoriesLoader.loadFactoryNames` 方法的作用就是从`META-INF/spring.factories`文件中读取指定类对应的**全类名**的列表，如xxxAutoConfiguration
 
 ![1550170881470](./images/1550170881470.png)
 
@@ -211,7 +215,9 @@ public class ServerProperties {
 
 其中，`prefix = "server"` 表示SpringBoot配置文件中的前缀，SpringBoot会将配置文件中以server开始的属性映射到该类的字段中。如在`application.properties`中配置`server.port=80`即可改变当前服务器的HTTP端口号
 
-### 自动配置总结
+
+
+**自动配置总结**
 
 - **SpringBoot启动会加载大量的自动配置类**
 - **我们看我们需要的功能有没有SpringBoot默认写好的自动配置类；**
@@ -220,6 +226,16 @@ public class ServerProperties {
 - **自动配置类对应属性类**
     - xxxxAutoConfigurartion：自动配置类；给容器中添加组件
     - xxxxProperties:封装配置文件中相关属性；
+
+
+
+### @ComponentScan
+
+组件扫描，但是仅扫描注解了`@SpringBootApplication`类所在的同级包和子级包
+
+
+
+
 
 ### 配置信息的查询
 
@@ -296,3 +312,14 @@ spring.elasticsearch.jest.username= # Login username.
 
 
 
+
+
+
+
+### SPI 机制
+
+Service Provider Interface，应对变化的解决方案。基于 Interface 接口 + 策略模式 + 配置文件
+
+之前讲过的 @Primary 和 @Conditionxx 也可以解决，但是关注的粒度是**具体**类、对象
+
+而 SPI 关注的是**整体解决方案**，关注许多类，对象的整体！

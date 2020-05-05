@@ -449,7 +449,7 @@ nexus仓库类型（默认在 sonatype-work 目录中）
 
 ## IDEA中的Maven项目
 
-### IDEA创建Maven工程（过时）
+### IDEA创建Maven工程
 
 * Java工程
   * 使用骨架（archetype）创建Java工程。需要补齐IDEA没有自动创建的目录，并设置其属性。如resources（**Resources Root**）
@@ -482,7 +482,7 @@ Maven中project标签下初始配置可以如下，稍加修改
 
 
 
-### Maven项目的运行（过时）
+### Maven项目的运行
 
 - 方法一：
 
@@ -503,4 +503,21 @@ Maven中project标签下初始配置可以如下，稍加修改
   - 使用本地Tomcat部署（需install）
 
     ![](./images/deploy-tomcat.png)
+
+
+
+## 解决 Maven 项目中 Java 版本警告
+
+在 POM.xml 中添加如下配置（Spring Boot 就是这样配置的）。可查看 [Maven 文档](http://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html)配置
+
+```xml
+<properties>
+  <java.version>1.8</java.version>
+  <maven.compiler.source>${java.version}</maven.compiler.source>
+  <maven.compiler.target>${java.version}</maven.compiler.target>
+  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <resource.delimiter>@</resource.delimiter>
+</properties>
+```
 

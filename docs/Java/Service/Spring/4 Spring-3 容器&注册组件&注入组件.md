@@ -23,52 +23,68 @@
 * `String[] getBeanDefinitionNames()`：查询这个IoC容器中所有Bean的名称
 * `String[] getBeanNamesForType(Class c)`：查询这个IoC容器中指定类型的Bean的名称
 * `Map<String, Class >getBeansOfType(Class c)`：查询这个IoC容器中所有Bean的名称、和Bean对象
-* `Object getBean([String beanName ,] [Class c])`
+* `Object getBean([String beanName] [,Class c])`
 
 
 
 
 
-## `@Configuration`配置类 🔥
+## @Configuration 配置类 🔥
 
-### `@Configuration`
+### @Configuration
 
-用于**指定当前类是一个Spring配置类**，其底层还是`@Componet`，当创建容器时会从该类上加载注解。当**配置类**作为 AnnotationConfigApplicationContext 构造器的**参数**时，该注解可以不写（不推荐）
+用于**指定当前类是一个 Spring 配置类**，其底层还是`@Componet`，当创建容器时会从该类上加载注解。当**配置类**作为 AnnotationConfigApplicationContext 构造器的**参数**时，该注解可以不写（不推荐）
 
 - `value`用于指定配置类的字节码，一般不用
 
 
 
-### 容器 & Bean 测试步骤
+### 测试步骤
 
 1.  Maven 依赖
 
     ```xml
     <dependencies>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>5.2.5.RELEASE</version>
-      </dependency>
+        <!--context 默认传递依赖 core、beans、expression、aop 等-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.2.6.RELEASE</version>
+        </dependency>
     
-      
-      <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.12</version>
-      </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+        </dependency>
     
-      <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>5.6.2</version>
-        <scope>test</scope>
-      </dependency>
+    	<!-- junit5 使用查看 Github 示例 -->    
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     ```
 
-2.  POJO
+2.  此时使用 Maven 来编译会警告 Java 版本，可以在 POM.mxl 中添加如下配置（Spring Boot 就是添加的这种）。
+
+    可查看 [Maven 文档](http://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html)配置
+
+    ```xml
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <resource.delimiter>@</resource.delimiter>
+    </properties>
+    ```
+
+3.  POJO
 
     ```java
     @Data
@@ -82,38 +98,76 @@
     }
     ```
 
-3.  配置类
+4.  配置类
 
     ```java
-    @Configuration// 该类为 容器构造器参数时，可省略该注解（不推荐）
-    public class MainConfig {
+    // 配置类==配置文件
+    @Configuration// //告诉Spring这是一个配置类。该类为 容器构造器参数时，可省略该注解（不推荐）
+    // 每次测试时记得将其他 @Configuration 注释掉，或着注释掉 @ComponentScan
+    public class IocConfig1 {
     
-        @Bean("person")
-        public Person getPerson(){
-            return new Person("conanan",18);
+        @Bean
+        public Person person(){
+            return new Person("person",1);
+        }
+    
+        @Bean
+        @Primary
+        public Person person2(){
+            return new Person("person2",2);
+        }
+    
+    }
+    ```
+
+5.  测试类
+
+    ```java
+    public class IocConfig1Test {
+    
+    
+        @Test
+        public void test(){
+            ApplicationContext context = new AnnotationConfigApplicationContext(IocConfig1.class);
+    
+            // 根据 bean 名称获取。有多个时取第一个（使用@Primary也没用，暂时就这样）
+            Person person1 = (Person) context.getBean("person");
+            System.out.println(person1);
+    
+            // 根据 bean 类型（包括子类、实现类）获取。
+            // 只要容器中有唯一一个 Bean 对象类型和要注入的变量类型匹配，就注入成功，一个都没有则报错
+            // 如果有多个类型匹配到，则报错。可以使用 @Primary 来指定
+            Person person2 = context.getBean(Person.class);
+            System.out.println(person2);
+    
+            // 根据 bean 名称和类型获取
+            Person person3 = context.getBean("person", Person.class);
+            System.out.println(person3);
+    
+            // 获取所有该类型的 bean
+            Map<String, Person> beansOfType = context.getBeansOfType(Person.class);
+            beansOfType.forEach((name,person)->{
+                System.out.println(name+":"+person);
+            });
+    
+            // 获取所有该类型的 bean 名称
+            String[] beanNamesForType = context.getBeanNamesForType(Person.class);
+            System.out.println(Arrays.toString(beanNamesForType));
+    
+    
+            // 获取容器中所有 bean 名称
+            String[] beanDefinitionNames = context.getBeanDefinitionNames();
+            System.out.println(Arrays.toString(beanDefinitionNames));
+    
         }
     }
     ```
 
-4.  测试类
-
-    ```java
-    @Test
-    public void testBean(){
-      ApplicationContext context = new AnnotationConfigApplicationContext(MainConfig.class);
-      Person person = context.getBean(Person.class);
-      System.out.println(person);
-    
-      String[] beanNamesForType = context.getBeanNamesForType(Person.class);
-      System.out.println(Arrays.toString(beanNamesForType));
-    }
-    ```
-
     
 
 
 
-## 注册组件—包扫描 & 四大注解🔥
+## 注册组件—包扫描 & 注解🔥
 
 ::: tip
 
@@ -121,15 +175,25 @@
 
 :::
 
-### `@ComponentScans`
+### @ComponentScans
 
 用于多个`@ComponentScan`。属性有`value`数组，可以包含多个` @ComponentScan`。Java 8 后使用下面的
 
 
 
-### ` @ComponentScan`  🔥
+### @ComponentScan  🔥
 
-指定Spring在**初始化容器**时**要扫描的包**（扫描4个注解的类），在JDK8之后是重复注解，直接写多个，不再使用上边那个
+在JDK8之后是重复注解，直接写多个，不再使用上边那个
+
+扫描规则：
+
+*   指定 value 或 bashPackages 即Spring在**初始化容器**时**要扫描的包**，将扫描该包及其子包下的**所有类**，然后根据规则排除
+
+*   不指定则扫**描配置类所在包及其子包下的所有类**，然后根据规则排除。
+
+*   **默认包括 @Componet 及其派生类，如 @Componet、@Controller、@Service、@Repository、@Configuration 等**
+
+属性：
 
 * `value`或`basePackages`都是用于指定要扫描的包，都是数组类型
 
@@ -145,17 +209,24 @@
     * `FilterType.REGEX`：使用正则指定
     * `FilterType.CUSTOM`：使用自定义规则，需要自定义`TypeFilter`的实现类，重写`match`方法
 
-* `useDefaultFilters`在**仅使用指定的规则时**需要将这个值设置为`false`。默认为`true`，即扫描上面四个注解
+* `useDefaultFilters`在**使用指定的规则时**需要将这个值设置为`false`。默认为`true`
 
-    若该值为`true`，则扫描该四个注解并匹配上述规则。一般不会这样做（很傻逼）
+    *   若该值为`true`，则扫描该五个注解并匹配上述规则。一般不会这样做（很傻逼）
 
-    若该值为`false`，则仅需匹配上述规则
+    *   若该值为`false`，则**仅**需匹配上述规则
 
-    注意：`@Componet`注解是上述三个注解的底层实现，若`exclude`后则四个注解都不会扫描到
+::: 注意
 
-    
+*   `@Componet`注解是上述四个注解的底层实现，若`exclude`后则四个注解都不会扫描到
 
-### 自定义`FilterType`  🔥
+*   `includeFilters` 和 `excludeFilters` 会共同作用，必须都满足（且以 `excludeFilters` 为准）
+*   上述扫描的类型指的都是**该类及其子类**，**该注解及其子注解**
+
+:::
+
+
+
+### 自定义 FilterType  🔥
 
 ```java
 /**
@@ -179,34 +250,39 @@ public class MyTypeFilter implements TypeFilter {
         Resource resource = metadataReader.getResource();
 
         String className = classMetadata.getClassName();
-        System.out.println("--->"+className);
-        return className.contains("er");
+        if (className.endsWith("er")){
+            System.out.println("er --->"+className);
+            return true;
+        } else {
+            System.out.println("not er --->"+className);
+            return false;
+        }
     }
 }
 ```
 
 ```java
-@Configuration
+/**
+ * 包扫描 + 注解。实际中也不会这样写，太乱。可能只用简单的，或只使用自定义Filter
+ */
+// 配置类==配置文件
+@Configuration// 告诉Spring这是一个配置类。该类为 容器构造器参数时，可省略该注解（不推荐）
+// 每次测试时记得将其他 @Configuration 注释掉，或着注释掉 @ComponentScan
 @ComponentScan(
-        value = "conanan",
+        value = "top.conanan",
         includeFilters = {
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class}),
-                // Student 没有添加任何注解
+                // Student 没有添加任何注解，也被注册到容器中了
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {Student.class}),
-                // CUSTOM 会过滤上面过滤后的类（防止影响可以注释掉）
-                @ComponentScan.Filter(type = FilterType.CUSTOM, classes = {MyTypeFilter.class}) 
+                // CUSTOM 自定义 Filter
+                @ComponentScan.Filter(type = FilterType.CUSTOM, classes = {MyTypeFilter.class})
         },
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Service.class})
         },
-        useDefaultFilters = false
-)
-public class IOCConfig {
-
-    @Bean("person")
-    public Person getPerson(){
-        return new Person("conanan",18);
-    }
+        useDefaultFilters = false)
+// includeFilters 和 excludeFilters 会共同作用，必须都满足（且以 excludeFilters 为准）
+public class IocConfig2 {
 }
 ```
 
@@ -220,9 +296,9 @@ stereotype annotations：模式注解
 
 - `@Component`：用于**把当前类对象存入Spirng容器中**。
 
-    注解在实现类上不指定 value 会自动指定 value（抽象类的名词，比如删除 Impl）
+    注解在实现类上不指定 value 会自动指定 value。且注册的是**对象**，所以抽象类或接口无法被注册，都是实**现类才能被注册**
 
-    - 属性：`value`：用于指定bean的id。不写时默认为当前类名，且首字母小写
+    - 属性：`value`：用于指定 bean 的 id。不写时默认为**当前类名，且首字母小写**
 
 - `@Controller`**或**`@RestController`：表现层
 
@@ -235,7 +311,7 @@ stereotype annotations：模式注解
 
 
 
-## 注册组件—Bean 🔥
+## 注册组件—@Bean 🔥
 
 ::: tip
 
@@ -243,30 +319,30 @@ stereotype annotations：模式注解
 
 :::
 
-### `@Bean`  🔥
+### @Bean 🔥
 
 用于把当前**方法的返回值**作为bean对象**注册存入Spring容器**中。该注解**只能写在方法上**
 
-* `value`或`name`用于指定**bean的id**。没写则默认为**当前方法的名称**
+* `value`或`name`用于指定 **bean 的 id**。没写则默认为**当前方法的名称**
 * 细节：当我们使用注解配置方法时，如果**方法有参数**，Spring框架会去容器中查找有没有可用的bean对象。查找的方式和`@Autowired`注解的作用是一样的
 
 
 
 
 
-### `@Scope`  🔥
+### @Scope 🔥
 
-用于指定bean的作用范围。也可以放置注解在定义的4个组件上
+用于指定bean的作用范围。也可以放置注解在定义的4个组件上（除过 @Configuration，因为没作用）
 
 `value`指定范围的取值。常用有：
 
-- `singleton`：**单例**【默认】，一个应用只有一个对象的实例，**IoC容器启动时则会自动创建对象并放入容器**，且**注入**（原因是 Bean 的实例化需要所有属性都实例化）
+- `singleton`：**单例**【默认】，一个应用只有一个对象的实例，**IoC容器启动时则会自动创建对象并放入容器**。需要注入的此时也会**注入**组件，原因是 Bean 的实例化需要所有属性都实例化
 
-    - `@Lazy`：懒加载，修改单例对象创建时间，变为获取对象时才创建（只创建一次），但还是单例。
+    - `@Lazy`：懒加载，**只针对单例对象**的创建时间，变为获取对象时才创建（只创建一次），但还是单例。
 
         可用于所有 Bean，不单单是`@Bean`，还有各种`@Componet`等等
 
-- `prototype`：**多例**，**只有每次获取对象时，才会重新创建对象实例**
+- `prototype`：**多例**，IoC容器启动时不会创建对象，**只有每次获取对象时，才会重新创建对象实例**
 
 - `request`：WEB 项目中，Spring 为**每个请求**创建一个bean实例
 
@@ -275,14 +351,19 @@ stereotype annotations：模式注解
 - `global-session`：作用于**集群(Portlet)环境的全局会话范围**，当不是集群(Portlet)环境时，它就是session
 
 ```java
-@Configuration
-public class IOCConfig {
+/**
+ * 包扫描 + 注解
+ */
+// 配置类==配置文件
+@Configuration// 告诉Spring这是一个配置类。该类为 容器构造器参数时，可省略该注解（不推荐）
+// 每次测试时记得将其他 @Configuration 注释掉，或着注释掉 @ComponentScan
+public class IocConfig2 {
 
-    @Bean("person")
-    @Scope("singleton")
-    @Lazy
-    public Person getPerson(){
-        return new Person("conanan",18);
+    @Bean
+    @Scope("prototype")
+    public Person person() {
+        System.out.println("给容器中添加 Bean person");
+        return new Person("lisi",2);
     }
 }
 ```
@@ -291,30 +372,40 @@ public class IOCConfig {
 
 
 
-### `@Primary` 🔥
+### @Primary 🔥
 
-在Bean对象添加此注解，则首先注入这个Bean。若`@Qualifier`指定了，则这个注解失效
+在Bean对象添加此注解，则**首先注入**这个Bean。若`@Qualifier`指定了，则这个注解失效
 
 
 
-### `@Conditional`🔥
+
+
+### @Conditional 🔥
 
 **条件判断**，**满足**当前条件，**这个 Bean 才能被注册到容器中**。**Spring Boot中使用非常多**
 
-可以标在类（满足条件则类中所有Bean才会注册）和方法（只限制这个方法的Bean）上
+可以标在**类**：满足条件则类中所有 Bean 才会注册
+
+可以标在**方法**：只限制这个方法的 Bean
 
 * `value`为实现了`Condition`接口的实现类数组，实现类需重写`matches`方法
 
     ```java
-    @Configuration
-    public class IOCConfig {
+    /**
+     * Condition
+     */
+    // 配置类==配置文件
+    @Configuration// 告诉Spring这是一个配置类。该类为 容器构造器参数时，可省略该注解（不推荐）
+    // 每次测试时记得将其他 @Configuration 注释掉，或着注释掉 @ComponentScan
+    public class IocConfig3 {
     
-      @Bean("mac-person")
+        @Bean("mac-person")
         @Conditional(MacCondition.class)
         public Person person(){
-            return new Person("conanan",18);
+            return new Person("mac",18);
         }
     
+        //可以标在类（满足条件则类中所有Bean才会注册）和方法（只限制这个方法的Bean）上
         @Conditional(LinuxCondition.class)
         @Bean("linus-person")
         public Person person02(){
@@ -344,7 +435,9 @@ public class IOCConfig {
             //可以判断容器中的bean注册情况，也可以给容器中注册bean
             boolean definition = registry.containsBeanDefinition("person");
     
-            String property = environment.getProperty("os.name");// 也可以直接获取 application.yml 等中的配置
+            // 也可以直接获取 application.yml 等中的配置
+            String property = environment.getProperty("os.name");
+            System.out.println("os.name:"+property);
             return Objects.requireNonNull(property).contains("linux");
         }
     }
@@ -361,34 +454,63 @@ public class IOCConfig {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
     
+            //1、能获取到ioc使用的beanfactory
+            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+            //2、获取类加载器
+            ClassLoader classLoader = context.getClassLoader();
+            //3、获取当前环境信息
             Environment environment = context.getEnvironment();
+            //4、获取到bean定义的注册类
+            BeanDefinitionRegistry registry = context.getRegistry();
+            //可以判断容器中的bean注册情况，也可以给容器中注册bean
+            boolean definition = registry.containsBeanDefinition("person");
     
+            // 也可以直接获取 application.yml 等中的配置
             String property = environment.getProperty("os.name");
+            System.out.println("os.name:"+property);
             return Objects.requireNonNull(property).contains("Mac");
         }
     }
     ```
 
     ```java
-    @Test
-    public void testBean(){
-      // 获得容器
-      ApplicationContext context = new AnnotationConfigApplicationContext(IOCConfig.class);
-      printBeansName(context);
+    public class IocConfig3Test {
     
-    }
+        private ApplicationContext context;
     
-    private void printBeansName(ApplicationContext context){
-      String[] beanDefinitionNames = context.getBeanDefinitionNames();
-      for (String beanDefinitionName : beanDefinitionNames) {
-        System.out.println(beanDefinitionName);
-      }
+        @BeforeEach
+        public void init(){
+            context = new AnnotationConfigApplicationContext(IocConfig3.class);
+            System.out.println("容器创建完成");
+        }
+    
+        @Test
+        public void test(){
+        }
+    
+        @AfterEach
+        public void destroy(){
+    
+            System.out.println("======获取容器中所有 Person bean 名称=====");
+            String[] beanNamesForType = context.getBeanNamesForType(Person.class);
+            for (String s : beanNamesForType) {
+                System.out.println(s);
+            }
+        }
     }
     ```
 
 
 
-### `@Conditional`派生注解
+::: tip
+
+Mac 下无法通过 IDEA 的 VM options 来切换 OS
+
+:::
+
+
+
+### @Conditional 派生注解 🔥
 
 Spring注解版原生的@Conditional作用
 
@@ -414,29 +536,113 @@ Spring注解版原生的@Conditional作用
 
 
 
-### `@Profile`
+### @Profile 🔥
 
 指定**组件**在哪个环境的情况下才能被注册到容器中，不指定，任何环境下都能注册这个组件
 
-* 加了环境标识的**bean**，只有这个环境被激活的时候才能注册到容器中。默认不写是default环境，即没有标注环境标识的bean在任何环境下都是加载的
+* 加了环境标识的**bean**，只有这个环境被激活的时候才能注册到容器中。默认不写是default环境，即没有标注环境标识的bean组件在任何环境下都将被注册到容器中
 
 * 写在**配置类上**，只有是指定的环境的时候，整个配置类里面的所有配置才能开始生效
 
-    ```java
-    @Profile("test")
+* 写在**方法**上，只限定方法返回的 Bean
+
+    application.yml（目前解析只能这样写，缩近方式获取不到）
+
+    ```yml
+    db.url: jdbc:mysql://localhost:3306/test
+    db.driverClass: com.mysql.cj.jdbc.Driver
+    db.username: root
+    db.password: 123456
     ```
 
-使用：
+    DataSourceConfig.Class
 
-* 运行时使用命令行动态参数：虚拟机参数位置写上`-Dspring.profiles.active=test`
+    ```java
+    @Configuration
+    @PropertySource("classpath:/application.yml")
+    public class DataSourceConfig implements EmbeddedValueResolverAware {
+    
+        private StringValueResolver resolver;
+    
+        private String url;
+    
+        @Value("${db.username}")
+        private String username;
+    
+        @Value("${db.driverClass}")
+        private String driverClass;
+    
+        @Bean("hikariDataSource")
+        @Profile({"prod"})
+        public DataSource dataSourceProd(@Value("${db.password}") String password){
+    
+            HikariConfig config = new HikariConfig();
+            url = resolver.resolveStringValue("${db.url}");
+            config.setJdbcUrl(url);
+            // config.setDriverClassName(driverClass);// 自动检测
+            config.setUsername(username);
+            config.setPassword(password);
+            return new HikariDataSource(config);
+        }
+    
+    
+        @Bean("druidDataSource")
+        @Profile({"dev"})
+        public DataSource dataSourceDev(@Value("${db.password}") String password){
+            DruidDataSource druidDataSource = new DruidDataSource();
+            url = resolver.resolveStringValue("${db.url}");
+            druidDataSource.setUrl(url);
+            // druidDataSource.setDriverClassName(driverClass);// 自动检测
+            druidDataSource.setUsername(username);
+            druidDataSource.setPassword(password);
+            return druidDataSource;
+        }
+    
+        @Override
+        public void setEmbeddedValueResolver(StringValueResolver resolver) {
+            this.resolver = resolver;
+        }
+    }
+    ```
+
+使用（两种）：
+
+* 运行时使用命令行动态参数：虚拟机参数位置写上`-Dspring.profiles.active=test`。Mac 下还是失败 😣
 
 * 代码的方式激活某种环境
 
     ```java
-    AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-    applicationContext.getEnvironment().setActiveProfiles("dev","test");//设置需要激活的环境
-    applicationContext.register(MainConfigOfProfile.class);//注册主配置类
-    applicationContext.refresh();//启动刷新容器
+    public class ProfileTest {
+    
+        private AnnotationConfigApplicationContext context;
+    
+        @BeforeEach
+        public void init(){
+            // context = new AnnotationConfigApplicationContext(DataSourceConfig.class);
+            context = new AnnotationConfigApplicationContext();
+            // 如下就是有参构造的内部实现，多了环境设置
+            context.getEnvironment().setActiveProfiles("prod","test");// 设置需要激活的环境
+            context.register(DataSourceConfig.class);// 注册主配置类
+            context.refresh();// 启动刷新容器
+            System.out.println("容器创建完成");
+        }
+    
+        @Test
+        public void test1(){
+        }
+    
+        @AfterEach
+        public void destroy(){
+            // 获取容器中所有 bean 名称
+            System.out.println("======获取容器中所有 bean 名称=====");
+            String[] beanDefinitionNames = context.getBeanDefinitionNames();
+            for (String beanDefinitionName : beanDefinitionNames) {
+                System.out.println(beanDefinitionName);
+            }
+            System.out.println("======获取容器中所有 bean 名称=====");
+    
+        }
+    }
     ```
 
 
@@ -445,7 +651,7 @@ Spring注解版原生的@Conditional作用
 
 
 
-## 注册组件—`@Import` 🔥
+## 注册组件—@Import 🔥
 
 ::: tip
 
@@ -453,11 +659,12 @@ Spring注解版原生的@Conditional作用
 
 :::
 
-### `Class`
+### Class
 
-`value`用于指定其他配置类的**Class**，是数组，被导入的其他配置类也不用加`@Configuration`注解
+`value`用于指定其他配置类的**Class**，是数组，被导入的其他配置类也不用加任何注解，只是一个普通类
 
-注册的**Bean的id为组件的全类名**；**若是配置类则还会注册配置的Bean**（id为指定的或方法名）
+*   注册的**Bean的id为组件的全类名**
+*   **若是配置类则还会注册配置类配置的Bean**（id为指定的或方法名）
 
 ```java
 @Import({Color.class,Red.class,MyImportSelector.class,MyImportBeanDefinitionRegistrar.class})
@@ -467,11 +674,11 @@ public class IOCConfig {}
 
 
 
-### `ImportSelector` 🔥
+### ImportSelector 🔥
 
 `ImportSelector`接口：返回需要导入的组件的全类名数组，需要自定义类实现该接口。**Springboot中使用很多**🔥
 
-注册的**Bean的id为组件的全类名**
+*   注册的**Bean的id为组件的全类名**
 
 ```java
 /**
@@ -500,11 +707,9 @@ public class MyImportSelector implements ImportSelector {
 
 
 
-### `ImportBeanDefinitionRegistrar`
+### ImportBeanDefinitionRegistrar
 
-`ImportBeanDefinitionRegistrar`接口：手动注册Bean到容器中，需要自定义类实现该接口
-
-**可以指定 bean 名称**
+`ImportBeanDefinitionRegistrar`接口，手动注册Bean到容器中，需要自定义类实现该接口。**可以指定 bean 名称**
 
 ```java
 public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
@@ -535,66 +740,107 @@ public class MyImportBeanDefinitionRegistrar implements ImportBeanDefinitionRegi
 
 
 
-## 注册组件—`FactoryBean`
+## 注册组件—FactoryBean
 
 与`@Import`**调用无参构造创建Bean**不同的是，它**利用工厂获取Bean**。多用于**整合Spring和其他框架**的底层代码
 
 不能在 ColorFactoryBean 类上使用 @Component 注解，没用！！！
 
 ```java
-//创建一个Spring定义的FactoryBean
+/**
+ * 创建一个Spring定义的FactoryBean，范型代表要创建的对象类型
+ */
 public class ColorFactoryBean implements FactoryBean<Color> {
-	//返回一个Color对象，这个对象会添加到容器中
-	@Override
-	public Color getObject() throws Exception {
-		System.out.println("ColorFactoryBean...getObject...");
-		return new Color();
-	}
-	@Override
-	public Class<?> getObjectType() {
-		return Color.class;
-	}
-	/** 
-	 * 控制 Bean 是否为单例
-   * true：这个bean是单实例，在容器中保存一份
-   * false：多实例，每次获取都会创建一个新的bean；
-   */
-	@Override
-	public boolean isSingleton() {
-		return false;
-	}
+    /**
+     * 返回一个Color对象，这个对象会添加到容器中
+     *
+     * @return 返回一个Color对象
+     * @throws Exception
+     */
+    @Override
+    public Color getObject() throws Exception {
+        System.out.println("ColorFactoryBean...getObject...");
+        return new Color();
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        return Color.class;
+    }
+
+    /**
+     * 控制 Bean 是否为单例
+     * * true：这个bean是单实例，在容器中保存一份
+     * * false：多实例，每次获取都会创建一个新的bean；
+     */
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
 }
 ```
 
 ```java
-// 不能在 ColorFactoryBean 类上使用 @Component 注解，没用！！！
-@Bean
-public ColorFactoryBean colorFactoryBean(){
-    return new ColorFactoryBean();
+/**
+ * FactoryBean
+ */
+// 配置类==配置文件
+@Configuration// 告诉Spring这是一个配置类。该类为 容器构造器参数时，可省略该注解（不推荐）。
+// 每次测试时记得将其他 @Configuration 注释掉，或着注释掉 @ComponentScan
+// @Import(ColorFactoryBean.class)// 也可以使用 @Bean 来注册 bean，并可以自定义 bean name
+public class IocConfig7 {
+
+    @Bean
+    public ColorFactoryBean colorFactoryBean(){
+        return new ColorFactoryBean();
+    }
+
 }
 ```
 
 ```java
-@Test
-public void testBean(){
-  // 获得容器
-  ApplicationContext context = new AnnotationConfigApplicationContext(IOCConfig.class);
-  printBeansName(context);
+/**
+ * FactoryBean
+ */
+public class IocConfig7Test {
 
-  // 工厂Bean获取的是工厂bean调用getObject创建的对象
-  Object bean1 = context.getBean("colorFactoryBean");
-  System.out.println(bean1.getClass());// class top.conanan.bean.Color
-  Color bean3 = context.getBean(Color.class);
-  System.out.println(bean3.getClass());// class top.conanan.bean.Color
+    private ApplicationContext context;
 
-  Object bean2 = context.getBean("&colorFactoryBean");
-  System.out.println(bean2.getClass());// class top.conanan.bean.ColorFactoryBean
-  ColorFactoryBean bean4 = context.getBean(ColorFactoryBean.class);
-  System.out.println(bean4.getClass());// class top.conanan.bean.ColorFactoryBean
+    @BeforeEach
+    public void init(){
+        context = new AnnotationConfigApplicationContext(IocConfig7.class);
+        System.out.println("容器创建完成");
+    }
 
-  // No bean named 'top.conanan.bean.Color' available. Color,color 都不行
-  // Object color = context.getBean("top.conanan.bean.Color");
+    @Test
+    public void test(){
 
+        // 工厂Bean获取的是工厂bean调用getObject创建的对象。但是容器内始终没有通过getObject创建的对象，只有 ColorFactoryBean
+        Object bean1 = context.getBean("colorFactoryBean");
+        System.out.println(bean1.getClass());// class top.conanan.bean.Color
+        Color bean3 = context.getBean(Color.class);
+        System.out.println(bean3.getClass());// class top.conanan.bean.Color
+
+        // 查看 BeanFactory 工厂类接口即可看到该 Field： String FACTORY_BEAN_PREFIX = "&";
+        Object bean2 = context.getBean("&colorFactoryBean");
+        System.out.println(bean2.getClass());// class top.conanan.bean.ColorFactoryBean
+        ColorFactoryBean bean4 = context.getBean(ColorFactoryBean.class);
+        System.out.println(bean4.getClass());// class top.conanan.bean.ColorFactoryBean
+
+        // No bean named 'top.conanan.bean.Color' available. Color,color 都不行
+        // Object color = context.getBean("color");
+    }
+
+    @AfterEach
+    public void destroy(){
+        // 获取容器中所有 bean 名称
+        System.out.println("======获取容器中所有 bean 名称=====");
+        String[] beanDefinitionNames = context.getBeanDefinitionNames();
+        for (String beanDefinitionName : beanDefinitionNames) {
+            System.out.println(beanDefinitionName);
+        }
+        System.out.println("======获取容器中所有 bean 名称=====");
+    }
 }
 ```
 
@@ -614,58 +860,79 @@ public void testBean(){
 
 
 
-## 注入组件
+## 注入组件—自动注入
 
 ::: tip
 
 作用和xml配置文件中的`<bean>`标签编写`<property>`标签实现功能一致。利用DI完成依赖关系赋值
 
+AutowiredAnnotationBeanPostProcessor：后置处理器，解析完成自动装配功能（以下四个）	
+
 :::
 
-### 注入方式
+
+
+### @Autowired 🔥
+
+*   **byType**：一般**在 IoC 容器启动时**自动**按照类型注入**。首先按照类型去找（**包括子类、实现类**），当容器中**有唯一一个** Bean 对象类型和要注入的变量**类型匹配**，就注入成功，**一个都没有**则**报错**，无法启动！类比仅使用 IoC 容器获取 Bean。
+
+*   **byName**：如果有**多个类型匹配到**，则使用**变量名称**作为 Bean 的 id，在 Spring 容器查找，找到了也可以注入成功，否则报错。类比仅使用 IoC 容器获取 Bean。可以**据此来注入一个接口，但是变量名称修改为实现类的名称**，即可完成**切换**注入实现类（不理想）。
+*   可以使用`required=false`指定后，IoC 容器启动时注入失败也不会报错（了解）
+
+* 出现的位置如下：
+    * 标在构造器上：如果组件只有一个构造器且为有参构造器，这个有参构造器的@Autowired可以**省略**
+    * @Bean + 方法参数：参数从容器中获取，则@Autowired可以**省略**
 
 
 
-#### Field 注入
+#### FIELD 属性
 
 Spring 不推荐，但是最方便
 
 ```java
-@Autowired
-private HelloService helloService;
-```
-
-
-
-#### setter 注入
-
-```java
-@Component
-public class HelloController {
-
-    private TestComponet testComponet;
-
-    @Autowired// 不能省略
-    public void setTestComponet(TestComponet testComponet) {
-        this.testComponet = testComponet;
-    }
-
-    public void test(){
-        System.out.println(testComponet);
-    }
-}
-```
-
-```java
-@SpringBootTest
-class DemoApplicationTests {
+@ToString
+public class Boss1 {
 
     @Autowired
-    private HelloController helloController;
+    private Car car;
+
+    public void print(){
+        System.out.println(car);
+    }
+}
+```
+
+```java
+public class Car {
+}
+```
+
+```java
+@Configuration
+@Import({Boss1.class, Car.class})
+public class DiConfig1 {
+
+}
+```
+
+```java
+public class DiConfig1Test {
+
+    private ApplicationContext context;
+
+    @BeforeEach
+    public void init(){
+        context = new AnnotationConfigApplicationContext(DiConfig1.class);
+        System.out.println("容器创建完成");
+    }
 
     @Test
-    void contextLoads() {
-        helloController.test();
+    public void test1(){
+        Boss1 boss1 = context.getBean(Boss1.class);
+        boss1.print();
+
+        Car car = context.getBean(Car.class);
+        System.out.println(car);// 这个car和上面那个一致
     }
 }
 ```
@@ -674,125 +941,206 @@ class DemoApplicationTests {
 
 
 
-#### 构造器注入
 
-Spring 官方不推荐使用 Field 注入，推荐使用构造器注入（就是比较麻烦）
 
-```java
-@Component
-public class HelloController {
+#### METHOD 方法注入（setter 注入）
 
-    private final TestComponet testComponet;
-
-    //@Autowired// 可以省略
-    public HelloController(TestComponet testComponet) {
-        this.testComponet = testComponet;
-    }
-
-    public void test(){
-        System.out.println(testComponet);
-    }
-}
-```
+Spring 容器创建当前对象时，就会调用该方法，完成赋值。方法参数的值会自动从容器中获取
 
 ```java
-@SpringBootTest
-class DemoApplicationTests {
+@ToString
+public class Boss2 {
+
+    private Car car;
+
+    public Car getCar() {
+        return car;
+    }
 
     @Autowired
-    private HelloController helloController;
+    public void setCar(Car car) {
+        this.car = car;
+    }
+}
+```
+
+```java
+public class Car { }
+```
+
+```java
+@Configuration
+@Import({Boss2.class, Car.class})
+public class DiConfig1 {
+
+}
+```
+
+```java
+public class DiConfig1Test {
+
+    private ApplicationContext context;
+
+    @BeforeEach
+    public void init(){
+        context = new AnnotationConfigApplicationContext(DiConfig1.class);
+        System.out.println("容器创建完成");
+    }
 
     @Test
-    void contextLoads() {
-        helloController.test();
+    public void test2(){
+        Boss2 boss2 = context.getBean(Boss2.class);
+        System.out.println(boss2);
+
+        Car car = context.getBean(Car.class);
+        System.out.println(car);// 这个car和上面那个一致
     }
 }
 ```
 
 
 
-### `@Autowired`🔥
-
-*   **byType**：一般**在 IoC 容器启动时**自动**按照类型注入**。首先按照类型去找（**包括子类、实现类**），只要容器中**有唯一一个** Bean 对象类型和要注入的变量**类型匹配**，就注入成功，**一个都没有**则**报错**，无法启动！
-
-*   **byName**：如果有**多个类型匹配到**，则使用**变量名称**作为 Bean 的 id，在 Spring 容器查找，找到了也可以注入成功，否则报错。可以**据此来注入一个接口，但是变量名称修改为实现类的名称**，即可完成**切换**注入实现类（不理想）
-
-* 出现的位置：**属性**，**方法**（get、set），**构造器**，**参数**
-    * 标注在方法的参数位置：@Bean+方法参数；参数从容器中获取；@Autowired可以**省略**
-    * 标在构造器上：如果组件只有一个有参构造器，这个有参构造器的@Autowired可以**省略**
-
-- 可以使用`required=false`指定后，IoC 容器启动时注入失败也不会报错（了解）
 
 
+#### CONSTRUCTOR—构造器
 
-### `@Qualifier`🔥
+*   Spring 官方不推荐使用 Field 注入，推荐使用构造器注入（就是比较麻烦）
+
+*   **如果组件只有一个构造器且是有参构造器**，这个有参构造器上的@Autowired可以**省略**
+
+```java
+@ToString
+public class Boss3 {
+
+    private Car car;
+
+    public Boss3(){
+        System.out.println("Boss3 无参构造");
+    }
+
+    @Autowired// 有多个则不能省略
+    public Boss3(Car car){
+        this.car = car;
+        System.out.println("Boss3 有参构造");
+    }
+}
+```
+
+```java
+public class Car {
+}
+```
+
+```java
+@Configuration
+@Import({Boss3.class, Car.class})
+public class DiConfig1 {
+
+}
+```
+
+```java
+public class DiConfig1Test {
+
+    private ApplicationContext context;
+
+    @BeforeEach
+    public void init(){
+        context = new AnnotationConfigApplicationContext(DiConfig1.class);
+        System.out.println("容器创建完成");
+    }
+
+    @Test
+    public void test3(){
+        Boss3 boss3 = context.getBean(Boss3.class);
+        System.out.println(boss3);
+
+        Car car = context.getBean(Car.class);
+        System.out.println(car);// 这个car和上面那个一致
+    }
+}
+```
+
+
+
+
+
+
+
+#### PARAMETER—参数 🔥
+
+*   @Bean+方法参数，则参数从容器中获取，此时@Autowired可以**省略**
+
+```java
+@ToString
+public class Boss4 {
+
+    private Car car;
+
+    public Boss4(){
+        System.out.println("Boss4 无参构造");
+    }
+
+    public Boss4(Car car){
+        this.car = car;
+        System.out.println("Boss4 有参构造");
+    }
+}
+```
+
+```java
+public class Car {
+}
+```
+
+```java
+@Configuration
+@Import({Car.class})
+public class DiConfig1 {
+
+    @Bean
+    /*@Autowired*/
+    public Boss4 boss4(/*@Autowired*/ Car car){
+        return new Boss4(car);
+    }
+}
+```
+
+```java
+public class DiConfig1Test {
+
+    private ApplicationContext context;
+
+    @BeforeEach
+    public void init(){
+        context = new AnnotationConfigApplicationContext(DiConfig1.class);
+        System.out.println("容器创建完成");
+    }
+
+	 @Test
+    public void test4(){
+        Boss4 boss4 = context.getBean(Boss4.class);
+        System.out.println(boss4);
+
+        Car car = context.getBean(Car.class);
+        System.out.println(car);// 这个car和上面那个一致
+    }
+}
+```
+
+
+
+
+
+
+
+### @Qualifier 🔥
 
 *   在自动按照类型注入的**基础之上**，**再按照 Bean 的 id 注入**
 
 *   在给**类成员注入时不能单独使用**，但是**给方法参数注入时可以单独使用**
 
 - 属性：`value`用于指定注入的bean的id
-
-
-
-
-
-### `@Resource`
-
-JaveEE（JSR250）的注解，耦合性低
-
-*   可以和@Autowired一样实现自动装配功能，默认是**按照组件名称进行装配的**，找不到再看类型装配。可以独立使用。
-
-*   不支持@Primary功能；不支持@Autowired（reqiured=false）;
-
-- 属性：`name`用于指定注入的bean的id
-
-
-
-### `@Inject`
-
-JaveEE（JSR330）的注解，耦合性低（也不一定，对于 Spring 开发来说）
-
-- 需要导入`javax.inject`依赖。和@Autowired的功能一样，只是没有required=false的功能
-
-以上四个注解都**只能注入其他bean类型数据**，而基本类型和String无法注入。集合类型注入只能用xml、javaConfig实现
-
-> AutowiredAnnotationBeanPostProcessor：解析完成自动装配功能（以上四个）；	
-
-
-
-* 自定义组件想要使用Spring容器底层的一些组件（ApplicationContext，BeanFactory，xxx）
-
-    * 自定义组件需要实现xxxAware（参考Aware接口设计）：在创建对象的时候，会调用接口规定的方法注入相关组件
-    * xxxAware：功能实现使用的是xxxProcessor，如ApplicationContextAware->ApplicationContextAwareProcessor
-
-    ```java
-    @Component
-    public class Red implements ApplicationContextAware,BeanNameAware,EmbeddedValueResolverAware {
-    	
-    	private ApplicationContext applicationContext;
-    
-    	@Override
-    	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    		System.out.println("传入的ioc："+applicationContext);
-    		this.applicationContext = applicationContext;
-    	}
-    
-    	@Override
-    	public void setBeanName(String name) {
-    		System.out.println("当前bean的名字："+name);
-    	}
-    
-    	@Override
-    	public void setEmbeddedValueResolver(StringValueResolver resolver) {
-    		String resolveStringValue = resolver.resolveStringValue("你好 ${os.name} 我是 #{20*18}");
-    		System.out.println("解析的字符串："+resolveStringValue);
-    	}
-    }
-    ```
-
-
-
 
 *   注意：`@Qualifier`给方法参数注入时可以单独使用
 
@@ -880,6 +1228,113 @@ JaveEE（JSR330）的注解，耦合性低（也不一定，对于 Spring 开发
     .....
     ```
 
+
+
+
+
+### @Primary 🔥
+
+在 @Bean 对象添加此注解，则首先注入这个Bean。若`@Qualifier`指定了，则这个注解失效
+
+
+
+### @Resource
+
+JaveEE（JSR250）的注解，耦合性低
+
+*   可以和@Autowired一样实现自动装配功能，默认是**按照组件名称进行装配的**，找不到再看类型装配。可以独立使用。
+
+*   不支持@Primary功能；不支持@Autowired（reqiured=false）;
+
+- 属性：`name`用于指定注入的bean的id
+
+
+
+### @Inject
+
+JaveEE（JSR330）的注解，耦合性低（也不一定，对于 Spring 开发来说）
+
+- 需要导入`javax.inject`依赖。
+- 和@Autowired的功能一样，可以使用@Qualifier，只是没有required=false的功能
+
+
+
+
+
+## 注入组件—Aware接口
+
+若自定义组件想要**使用 Spring 容器底层的一些组件**，如：ApplicationContext，BeanFactory 等到
+
+* 自定义组件需要**实现 xxxAwar**e（参考Aware接口设计）：在**创建该组件对象**的时候，会调用接口规定的方法注入相关组件
+* xxxAware：**功能实现使用对应的xxxProcessor**，如：ApplicationContextAware —> ApplicationContextAwareProcessor
+
+```java
+public class Red implements ApplicationContextAware, BeanNameAware, EmbeddedValueResolverAware {
+
+    private ApplicationContext context;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
+        System.out.println("传入的IoC: " + applicationContext);
+        // 传入的IoC: org.springframework.context.annotation.AnnotationConfigApplicationContext@df27fae, started on Wed May 06 00:37:46 CST 2020
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("当前 bean 的名字: " + name);
+        // 当前 bean 的名字: top.conanan.aware.Red
+    }
+
+    @Override
+    public void setEmbeddedValueResolver(StringValueResolver resolver) {
+        String resolveStringValue = resolver.resolveStringValue("你好 ${os.name} 我是 #{20*18}");
+        System.out.println("解析的字符串："+resolveStringValue);
+        // 解析的字符串：你好 Mac OS X 我是 360
+    }
+}
+```
+
+```java
+@Configuration
+@Import(Red.class)
+public class AwareConfig1 {
+
+}
+```
+
+```java
+public class AwareConfig1Test {
+
+    private ApplicationContext context;
+
+    @BeforeEach
+    public void init(){
+        context = new AnnotationConfigApplicationContext(AwareConfig1.class);
+        System.out.println("容器创建完成");
+    }
+
+    @Test
+    public void test1(){
+    }
+
+    @AfterEach
+    public void destroy(){
+        // 获取容器中所有 bean 名称
+        System.out.println("======获取容器中所有 bean 名称=====");
+        String[] beanDefinitionNames = context.getBeanDefinitionNames();
+        for (String beanDefinitionName : beanDefinitionNames) {
+            System.out.println(beanDefinitionName);
+        }
+        System.out.println("======获取容器中所有 bean 名称=====");
+    }
+}
+```
+
+
+
+
+*   
 
 
 
