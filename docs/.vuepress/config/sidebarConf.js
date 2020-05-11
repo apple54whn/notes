@@ -222,6 +222,10 @@ module.exports = {
       children: [
         "4 Spring-1 概述",
         "4 Spring-2 IoC",
+        "4 Spring-3 容器&注册组件&注入组件",
+        "4 Spring-4 Spring Boot 原理",
+        "4 Spring-4 Bean的生命周期",
+        "4 Spring-5 属性赋值",
         "4 Spring-3 AOP",
         "4 Spring-4 声明式事务",
         "4 Spring-5 工具类"
