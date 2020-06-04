@@ -6,25 +6,23 @@
 
 ## 异常的体系
 
-- 异常的根类是`java.lang.Throwable`，其下有两个子类：
+异常的根类是`java.lang.Throwable`，其下有两个子类：
 
-  - `java.lang.Error`
+- `java.lang.Error`
 
-    **JVM 无法解决的严重问题**。如:JVM 系统内部错误、资源耗尽等严重情况。如栈 stack、堆 heap 内存耗尽**StackOverflowError（可能在递归时发生）**和**OutOfMemoryError（new 了非常多对象）**。一般不编写针对性的代码进行处理。
+  **JVM 无法解决的严重问题**。如：JVM 系统内部错误、资源耗尽等严重情况。如栈 stack、堆 heap 内存耗尽**StackOverflowError（可能在递归时发生）**和**OutOfMemoryError（new 了非常多对象）**。一般不编写针对性的代码进行处理。
 
-  - `java.lang.Exception`
+- `java.lang.Exception`
 
-    其它因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理。
+  其它因编程错误或偶然的外在因素导致的一般性问题，可以使用针对性的代码进行处理。
 
-  ![](./images/Exception.png)
+**Throwable 中的常用方法：**
 
-- **Throwable 中的常用方法：**
+- `public void printStackTrace()`打印异常的**详细信息**。
 
-  - `public void printStackTrace()`打印异常的**详细信息**。
+  包含了异常的类型，异常的原因 ，还包括异常出现的位置，在开发和调试阶段，都得使用 printStackTrace
 
-    包含了异常的类型，异常的原因 ，还包括异常出现的位置，在开发和调试阶段，都得使用 printStackTrace
-
-  - `public String getMessage()`获取发生异常的**原因**。提示**给用户**的时候,就提示错误原因。
+- `public String getMessage()`获取发生异常的**原因**。提示**给用户**的时候,就提示错误原因。
 
 ## 异常的分类
 
@@ -35,13 +33,15 @@
 **异常(Exception)的分类**：根据在编译时期还是运行时期去检查异常。Java 语言规范将派生于**Error**类和**RuntimeException**类的所有异常称为**非受查异常（unchecked 异常）**，其他为**受查异常（checked 异常）**
 
 - **编译时期异常**：在编译时期就会检查，如果没有处理异常则编译失败。(IO、日期格式化异常)
-- **运行时期异常**：在编译时期运行异常不会被检测(不报错)。在运行时期检查异常。(数学异常)
+- **运行时期异常**：在编译时期运行异常不会被检测，即不报错，但在运行时期检查异常。如：数学异常。**运行时发生时一定是程序的问题**，不完善，需要程序员做好**校验等**工作！
+
+![](./images/Exception.png)
 
 ![](./images/Exception-2.png)
 
 ![image-20190916232901753](./images/image-20190916232901753.png)
 
-​
+
 
 ## 异常的处理
 

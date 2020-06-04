@@ -1140,94 +1140,9 @@ public class DiConfig1Test {
 
 *   在给**类成员注入时不能单独使用**，但是**给方法参数注入时可以单独使用**
 
-- 属性：`value`用于指定注入的bean的id
+- 属性：`value`用于指定注入的 Bean 的 ID
 
-*   注意：`@Qualifier`给方法参数注入时可以单独使用
-
-    ```java
-    //@Configuration
-    @ComponentScan("com.itheima")
-    @Import(JdbcConfig.class)
-    @PropertySource("classpath:jdbcConfig.properties")
-    public class SpringConfiguration {
-    
-    }
-    ```
-
-    ```java
-    public class JdbcConfig {
-    
-        @Value("${jdbc.driver}")
-        private String driver;
-    
-        @Value("${jdbc.url}")
-        private String url;
-    
-        @Value("${jdbc.username}")
-        private String username;
-    
-        @Value("${jdbc.password}")
-        private String password;
-    
-        /**
-         * 用于创建一个QueryRunner对象
-         * @param dataSource
-         * @return
-         */
-        @Bean(name="runner")
-        @Scope("prototype")
-        public QueryRunner createQueryRunner(@Qualifier("ds2") DataSource dataSource){
-            return new QueryRunner(dataSource);
-        }
-    
-        /**
-         * 创建数据源对象
-         * @return
-         */
-        @Bean(name="devDataSource")
-        public DataSource createDataSource(){
-            try {
-                DruidDataSource dataSource = new DruidDataSource();
-                dataSource.setDriverClassName(driver);
-                dataSource.setUrl(url);
-                dataSource.setUsername(username);
-                dataSource.setPassword(password);
-                return dataSource;
-            }catch (Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-    
-        @Bean(name="testDataSource")
-        public DataSource createDataSource1(){
-            try {
-                ComboPooledDataSource ds = new ComboPooledDataSource();
-                ds.setDriverClassName(driver);
-                ds.setJdbcUrl("jdbc:mysql://localhost:3306/eesy02");
-                ds.setUser(username);
-                ds.setPassword(password);
-                return ds;
-            }catch (Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    ```
-
-    ```properties
-    #jdbcConfig.properties
-    jdbc.driver=com.mysql.jdbc.Driver
-    jdbc.url=jdbc:mysql://localhost:3306/eesy
-    jdbc.username=root
-    jdbc.password=1234
-    ```
-
-    ```java
-    ApplicationContext ac = new AnnotationConfigApplicationContext(com.itheima.config.SpringConfiguration.class);
-    JdbcTemplate jdbcTemplate = ac.getBean("runner", QueryRunner.class);
-    .....
-    ```
-
+*   注意：`@Qualifier`给方法参数注入时可以单独使用，直接指定 Bean 的 ID
 
 
 
@@ -1369,3 +1284,6 @@ public class AwareConfig1Test {
 
 
 
+## 参考
+
+*   [Spring Component Scan](https://dzone.com/articles/spring-component-scan)

@@ -94,7 +94,7 @@ module.exports = [
     items: [
       { text: "H5&CSS3", link: "/Front End/H5&CSS3/1 HTML" },
       { text: "JS", link: "/Front End/JS/0 Primer" },
-      { text: "Vue", link: "/Front End/Vue/0 Primer" },
+      { text: "Vue", link: "/Front End/Vue/1-1 Primer" },
       { text: "Android", link: "/Front End/Android/0 Intro" },
       { text: "Flutter", link: "/Front End/Flutter/0 Intro" }
     ]

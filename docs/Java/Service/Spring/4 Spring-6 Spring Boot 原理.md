@@ -323,3 +323,4 @@ Service Provider Interface，应对变化的解决方案。基于 Interface 接�
 之前讲过的 @Primary 和 @Conditionxx 也可以解决，但是关注的粒度是**具体**类、对象
 
 而 SPI 关注的是**整体解决方案**，关注许多类，对象的整体！
+

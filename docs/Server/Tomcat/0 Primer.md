@@ -42,24 +42,30 @@
 
     
 
-## Tomcat 入门
+## Tomcat 入门 
 
 1. 下载：[Tomcat官网](https://tomcat.apache.org/)，下载二进制文件中核心文件解压版。（以8.0为例）
 
 2. 安装：解压安装，目录建议不要有中文和空格
 
-3. 卸载：删除目录即可
+3. 权限：在 Mac 和 Linux 中可能和 IDEA 配合运行时有权限问题，只需赋予权限即可
+
+    ```bash
+    chmod a+x /${TOMCAT_HOME}/bin/*
+    ```
+
+4. 卸载：删除目录即可
 
     ![](./images/Tomcat.png)
 
-4. **启动**：`startup.*`。访问：http://localhost:8080 或 http://127.0.0.1:8080 或 替换为服务器所在的IP
+5. **启动**：`startup.*`。访问：http://localhost:8080 或 http://127.0.0.1:8080 或 替换为服务器所在的IP
 
     - 若出现启动时黑窗口一闪而过，则需要正确配置`JAVA_HOME`环境变量
     - 若出现启动报错，如端口已被占用，
         - 可以杀死占用的进程（`netstat -ano`查找PID）
         - 在`server.xml`中的`<Connector>`标签修改自身的端口号。可将Tomcat端口号修改为80(HTTP协议默认)
 
-5. **关闭**：`shutdown.*`或在启动窗口`Ctrl+C`。不建议强制关闭窗口来关闭
+6. **关闭**：`shutdown.*`或在启动窗口`Ctrl+C`。不建议强制关闭窗口来关闭
 
 
 
@@ -160,9 +166,14 @@
 ## IDEA与tomcat的相关配置
 
 * IDEA会为每一个tomcat部署的项目**单独建立一份配置文件**
+    
     * 控制台的LOG：`Using CATALINA_BASE:"C:\Users\Conanan\.IntelliJIdea2018.2\system\tomcat\test"`
+    
 * 工作空间项目和tomcat部署的web项目
     * tomcat真正访问的是“tomcat部署的web项目”，从上述目录配置文件中即可找到目录的配置，"tomcat部署的web项目"对应着"工作空间项目" 的web目录下的所有资源
     * WEB-INF目录下的资源不能被浏览器直接访问。
+    
 * 断点调试：使用"小虫子"启动 dubug 启动
+
+    注意端口问题，可以在配置中的 Startup/Connection 选项中配置，注意范围
 

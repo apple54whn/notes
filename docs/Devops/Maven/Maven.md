@@ -506,7 +506,7 @@ Maven中project标签下初始配置可以如下，稍加修改
 
 
 
-## 解决 Maven 项目中 Java 版本警告
+### 解决 Maven 项目中 Java 版本警告
 
 在 POM.xml 中添加如下配置（Spring Boot 就是这样配置的）。可查看 [Maven 文档](http://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html)配置
 

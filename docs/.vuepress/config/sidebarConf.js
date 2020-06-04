@@ -223,9 +223,10 @@ module.exports = {
         "4 Spring-1 概述",
         "4 Spring-2 IoC",
         "4 Spring-3 容器&注册组件&注入组件",
-        "4 Spring-4 Spring Boot 原理",
         "4 Spring-4 Bean的生命周期",
         "4 Spring-5 属性赋值",
+        "4 Spring-6 Spring Boot 原理—SSM 整合",
+        "4 Spring-6 Spring Boot 原理",
         "4 Spring-3 AOP",
         "4 Spring-4 声明式事务",
         "4 Spring-5 工具类"
@@ -246,6 +247,12 @@ module.exports = {
         "5 SpringMVC-8 Interceptor",
         "5 SpringMVC-9 CORS"
       ]
+    },
+    {
+      title: "框架机制",
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["6 框架机制—1 全局异常处理"]
     },
     {
       title: "Other",
@@ -430,10 +437,48 @@ module.exports = {
   ],
   "/Front End/Vue/": [
     {
-      title: "入门",
+      title: "入门 & 基础语法",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Primer", "1 指令", "2 计算属性和侦听器"]
+      children: [
+        "1-1 Primer",
+        "2-1 插值语法",
+        "2-2 绑定属性",
+        "2-3 计算属性和侦听器",
+        "2-4 事件监听",
+        "2-5 条件和循环",
+        "2-6 表单绑定"
+      ]
+    },
+    {
+      title: "组件化开发",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["3-1 组件化开发"]
+    },
+    {
+      title: "Vue CLI",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["3-1 组件化开发"]
+    },
+    {
+      title: "Vue Router",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["3-1 组件化开发"]
+    },
+    {
+      title: "Vuex",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["3-1 组件化开发"]
+    },
+    {
+      title: "Axios",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["3-1 组件化开发"]
     }
   ],
 
