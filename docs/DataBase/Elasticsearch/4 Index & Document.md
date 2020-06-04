@@ -242,9 +242,28 @@ PUT /<index>
 
 
 
-### 无法修改，可添加 Field
+### 添加新字段
 
-映射创建成功可以**添加新字段**，**已有字段不允许更新 type**
+映射创建成功后可以**添加新字段**
+
+```bash
+PUT /<index>/_mapping/_doc
+{
+	"properties": {
+		"sex": {
+			"type": "text"
+		}
+	}
+}
+```
+
+
+
+### 已有字段不允许更新 Field
+
+可以迁移数据，使用 Reindex 和 alias 完成
+
+
 
 
 
@@ -675,4 +694,118 @@ GET /_cat/indices/<index>
 #==================================================================================================
 green open my_index yIAGPwWLSbi24XluT-hQ5w 1 0 0 0 283b 283b
 ```
+
+
+
+
+
+## Reindex & alias 迁移数据
+
+Reindex：
+
+* 将文档从一个索引复制到另一个索引。
+* Reindex 要求为源索引中的所有文档启用 `_source`。
+
+* 您必须在调用`_reindex`**之前设置目标索引**。 重新索引不会从源索引复制设置。 映射，分片计数，副本等必须提前配置。
+
+alias：
+
+* 通过 alias 来切换索引，因为 alias 中的多条命令是原子性
+
+步骤：
+
+* 查询 source index，据此修改
+
+  ```bash
+  GET /<index>
+  ```
+
+* 创建 dest index（7.0 后和 7.0 之前有些许区别，自己查文档）
+
+  ```bash
+  PUT /<index>
+  {
+    "settings": {
+      "index": {
+        "number_of_shards": "1",
+        "number_of_replicas": "0"
+      }
+    },
+    "properties": {
+      "docContent": {
+        "analyzer": "ik_max_word",
+        "type": "text"
+      },
+      "docName": {
+        "analyzer": "ik_max_word",
+        "type": "text"
+      },
+      "fuseEeason": {
+        "analyzer": "ik_max_word",
+        "type": "text"
+      },
+      "appliedScope": {
+        "analyzer": "ik_max_word",
+        "type": "text"
+      },
+      "docNumber": {
+        "analyzer": "ik_max_word",
+        "type": "text"
+      },
+      "exeDate": {
+        "analyzer": "ik_max_word",
+        "type": "text"
+      },
+      "departName": {
+        "analyzer": "ik_max_word",
+        "type": "text"
+      },
+      "fileSuffix": {
+        "type": "text"
+      },
+      "favType": {
+        "type": "text"
+      }
+    }
+  }
+  ```
+
+* _reindex 复制索引数据
+
+  ```bash
+  POST _reindex
+  {
+    "source": {
+      "index": "index-v1"
+    },
+    "dest": {
+      "index": "index-v2"
+    }
+  }
+  ```
+
+* alias 切换，之后查询的索引还是 index（别名）
+
+  ```bash
+  POST _aliases
+  {
+    "actions": [
+      {
+        "add": {
+          "index": "index_v2",
+          "alias": "index"
+        }
+      },
+      {
+        "remove_index": {
+          "index": "index"
+        }
+      }
+    ]
+  }
+  ```
+
+  
+
+
 
