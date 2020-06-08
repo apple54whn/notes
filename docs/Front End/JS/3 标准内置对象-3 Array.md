@@ -118,18 +118,21 @@ console.log(arr); // 5*4二维数组
 
 - `splice(index,n[, num...])`：**从 index 位置开始删除 n 个元素，并添加任意个元素，index 为 0 时为添加元素**
 
+  **它可以进行增删改操作！**
+
   ```js
   var arr1 = [1, 2, 3];
   console.log(arr1); // [1,2,3]
-
+  
   arr1.splice(0, 0, -1, 0);
   console.log(arr1); // [-1,0,1,2,3]
-
+  
   arr1.splice(1, 2, 6, 7, 8);
   console.log(arr1); // [-1,6,7,8,2,3]
   ```
 
 - `pop()`：删除最后一个元素，**返回删除的那个元素**。栈模式（FILO）
+
 - `shift()`：删除第一个元素，**返回删除的那个元素**。队列模式（FIFO）
 
 ### 反转、分割、拼接、连接
@@ -208,20 +211,25 @@ console.log(arr); // 5*4二维数组
   console.log(arr3);
   ```
 
-- `reduce`，归纳，**原数组不变**
+- `reduce`，归纳（用于汇总），**原数组不变**
 
   ```js
   var arr1 = [1, 2, 3, 4, 5];
   var arr2 = arr1.reduce((previous, current, index, arr1) => {
-    return previous + current;
+      return previous + current;
   });
   console.log(arr2); // 15
   //==========================================================
   // 0为初始值
   var arr3 = arr1.reduce((previous, current, index, arr1) => {
-    return previous + current;
+      return previous + current;
   }, 0);
   console.log(arr3); // 15
+  //==========================================================
+  // 注意reduce对象
+  return this.books.reduce((previous, current, index, arr) => {
+      return previous + current.price * current.count;
+  }, 0);
   ```
 
 - `filter`，**过滤**，返回 boolean 值，为 true 的当前值才能保留，**原数组不变**

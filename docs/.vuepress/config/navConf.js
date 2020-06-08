@@ -93,7 +93,7 @@ module.exports = [
     text: "Front End",
     items: [
       { text: "H5&CSS3", link: "/Front End/H5&CSS3/1 HTML" },
-      { text: "JS", link: "/Front End/JS/0 Primer" },
+      { text: "JS", link: "/Front End/JS/0 作用域和闭包" },
       { text: "Vue", link: "/Front End/Vue/1-1 Primer" },
       { text: "Android", link: "/Front End/Android/0 Intro" },
       { text: "Flutter", link: "/Front End/Flutter/0 Intro" }

@@ -389,7 +389,7 @@ module.exports = {
       title: "理解",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 作用域和闭包", "0 Primer"]
+      children: ["0 作用域和闭包"]
     },
     {
       title: "语法",
@@ -397,6 +397,7 @@ module.exports = {
       sidebarDepth: 2,
       children: [
         "2 语法-1 基础语法",
+        "2 语法-1 ES6",
         "2 语法-2 Function",
         "3 标准内置对象-1 Object",
         "3 标准内置对象-2 String",
@@ -447,7 +448,7 @@ module.exports = {
         "2-3 计算属性和侦听器",
         "2-4 事件监听",
         "2-5 条件和循环",
-        "2-6 表单绑定"
+        "2-6 表单双向绑定"
       ]
     },
     {

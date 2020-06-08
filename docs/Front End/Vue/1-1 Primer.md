@@ -2,7 +2,17 @@
 
 ## Vue.js 是什么
 
-Vue 是一套用于构建用户**界面**的**渐进式框架**。与其它大型框架不同的是，Vue 被设计为可以**自底向上逐层应用**。Vue 的核心库只**关注视图层**，不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与现代化的工具链以及各种支持类库结合使用时，Vue 也完全能够为复杂的单页应用提供驱动。
+Vue 是一套用于构建用户**界面**的**渐进式框架（可以只用 Vue，根据后续需要使用其他如 Router、Vuex 等）**。
+
+与其它大型框架不同的是，Vue 被设计为可以**自底向上逐层应用**。Vue 的核心库只**关注视图层**，不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与现代化的工具链以及各种支持类库结合使用时，Vue 也完全能够为复杂的单页应用提供驱动。
+
+特点如下：
+
+*   解耦视图和数据
+*   可复用的组件
+*   前端路由
+*   状态管理
+*   虚拟DOM
 
 
 
@@ -36,7 +46,7 @@ Vue 是一套用于构建用户**界面**的**渐进式框架**。与其它大�
 在用 Vue 构建大型应用时推荐使用 NPM 安装[[1\]](https://cn.vuejs.org/v2/guide/installation.html#footnote-1)。NPM 能很好地和诸如 [webpack](https://webpack.js.org/) 或 [Browserify](http://browserify.org/) 模块打包器配合使用。同时 Vue 也提供配套工具来开发[单文件组件](https://cn.vuejs.org/v2/guide/single-file-components.html)。
 
 ```bash
-# 最新稳定版
+ # 最新稳定版
 $ npm install vue
 ```
 
@@ -55,44 +65,47 @@ $ npm install vue
 ```html
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计数器</title>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue</title>
-</head>
-
-<body>
-    <div id="demo">
-        <h1>当前计数{{count}}</h1>
-        <!-- <button @click='count++'>-</button>也可这样写，但不推荐 -->
-        <button @click='decrement'>-</button>
-        <button @click="increment">+</button>
+  <body>
+    <div id="app">
+      <h1>当前计数{{count}}</h1>
+      <!-- <button @click='count++'>-</button>也可这样写，‘’中当作方法中写即可，但不推荐 -->
+      <button @click="decrement">-</button>
+      <button @click="increment">+</button>
     </div>
 
     <script src="./lib/vue.js"></script>
     <script>
-        const vm = new Vue({
-            el: '#demo',
-            data: {
-                count: 0
-            },
-            methods: {
-                // 方法不推荐使用“箭头函数”，因为不能传递 this 对象
-                increment: function (e) {
-                    this.count++
-                    // 默认方法会传递对象e，包含 MouseEvent 对象，其中有 target 属性包含了触发该事件的元素
-                    // 但是若上述 HTML 中改为 @click='sub()' 则不包含该对象
-                    console.log(e)
-                },
-                decrement () {
-                    this.count--
-                }
-            }
-        })
+      // vue.js文件中定义了 Vue 对象，使用时可以 new 构造出，并且它还有参数（对象类型）
+      const vm = new Vue({
+        el: "#app",
+        // 声明式编程（声明式渲染），不再使用命令式
+        data: {
+          count: 0,
+        },
+        methods: {
+          // 方法不推荐使用“箭头函数”，因为不能传递 this 对象
+          // 可以使用 ES5 对象字面量写法，也可以使用 ES6 对象字面量增强写法
+          // ES5
+          increment: function (e) {
+            this.count++;
+            // 默认方法会传递对象e，包含 MouseEvent 对象，其中有 target 属性包含了触发该事件的元素
+            // 但是若上述 HTML 中改为 @click='sub()' 则不包含该对象
+            console.log(e);
+          },
+          // ES6
+          decrement() {
+            this.count--;
+          },
+        },
+      });
     </script>
-</body>
-
+  </body>
 </html>
 ```
 
@@ -102,11 +115,11 @@ $ npm install vue
 
 
 
-## option
+## options
 
-在`new Vue({})`中的 option 可以传递什么选项呢？[文档](https://cn.vuejs.org/v2/api/#%E9%80%89%E9%A1%B9-%E6%95%B0%E6%8D%AE)
+在`new Vue(options)`中的 options **对象**可以传递什么选项呢？[文档](https://cn.vuejs.org/v2/api/#%E9%80%89%E9%A1%B9-%E6%95%B0%E6%8D%AE)
 
-### el—DOM
+### el—DOM 🔥
 
 -   **类型**：`string | Element`
 
@@ -124,11 +137,11 @@ $ npm install vue
 
     
 
-### data—数据
+### data—数据 🔥
 
 -   **类型**：`Object | Function`
 
--   **限制**：组件的定义**只接受** `function`。
+-   **限制**：组件的定义**只接受** `function`。因为组件是用来复用的，不同页面每次 `new Vue()`后需要返回不同的 data。
 
 -   **详细**：
 
@@ -178,7 +191,7 @@ $ npm install vue
 
 -   **详细**：
 
-    props 可以是数组或对象，用于**接收来自父组件的数据**。props 可以是简单的数组，或者使用对象作为替代，对象允许配置高级选项，如类型检测、自定义验证和设置默认值。
+    props 可以是数组或对象，用于**接收来自父组件（当前页面使用一个组件，则这个页面称为父组件）的数据**。props 可以是简单的数组，或者使用对象作为替代，对象允许配置高级选项，如类型检测、自定义验证和设置默认值。
 
     你可以基于对象的语法使用以下选项：
 
@@ -242,6 +255,10 @@ $ npm install vue
       methods: {
         plus: function () {
           this.a++
+        },
+       	// 也可以这样写
+        plus2(){
+            console.log("plus2")
         }
       }
     })
@@ -250,6 +267,48 @@ $ npm install vue
     ```
 
 -   **参考**：[事件处理器](https://cn.vuejs.org/v2/guide/events.html)
+
+-   **思考**：什么是 method 方法？什么是 function 函数？
+
+    -   method 一般在类中，和实例、对象挂钩
+    -   function 一般在类外部
+
+
+
+
+
+## 生命周期
+
+[官方文档](https://cn.vuejs.org/v2/guide/instance.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%9B%BE%E7%A4%BA)
+
+**回调函数**：看字面意思即**不是操作者主动调用**，而是**传递**给调用的某个函数后，该函数执行的**某一阶段**，此时回来调用**操作者定义的函数**
+
+经常使用的有：
+
+*   `created`：在组件创建完后，会请求数据并放入 data 中
+*   `mounted`：
+*   `updated`：
+*   `destroyed`：一般只有**组件** Componet 会进行销毁
+
+
+
+### 回调函数是什么？
+
+
+
+
+
+### 中文版
+
+<img src="./images/lifecycle.png" alt="Vue 实例生命周期"  />
+
+
+
+
+
+### 英文版
+
+![The Vue Instance Lifecycle](./images/lifecycle-20200219000859420.png)
 
 
 
@@ -285,7 +344,7 @@ MVVM是[马丁·福勒](https://zh.wikipedia.org/wiki/马丁·福勒)的 PM（Pr
 
 
 
-### Vue
+### Vue 实现 MVVM
 
 ![MVVM](./images/mvvm.png)
 
@@ -345,16 +404,9 @@ MVVM是[马丁·福勒](https://zh.wikipedia.org/wiki/马丁·福勒)的 PM（Pr
 
 
 
+## 源码
 
+在 Github 上下载源码时注意 Branch 和 Tag，一般选择稳定版即 Tag 版。
 
-## 生命周期
+从哪开始查看呢？直接找到 `/src/core/index.js`即可
 
-[官方文档](https://cn.vuejs.org/v2/guide/instance.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%9B%BE%E7%A4%BA)
-
-### 中文版
-
-<img src="./images/lifecycle.png" alt="Vue 实例生命周期"  />
-
-### 英文版
-
-![The Vue Instance Lifecycle](./images/lifecycle-20200219000859420.png)

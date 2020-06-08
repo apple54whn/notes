@@ -62,6 +62,38 @@ console.log(employee2.age); // 20
 
 
 
+## ES6 对象字面量增强写法
+
+```js
+// new 方式，非字面量
+const obj1 = new Object();
+
+let name = "conanan";
+let age = 18;
+
+// ES5
+const obj2 = {
+    name: name,
+    age: age,
+    eat: function () {
+        console.log("eat");
+    },
+};
+console.log(obj2);
+
+// ES6
+const obj3 = {
+    name,
+    age,
+    eat() {
+        console.log("eat");
+    },
+};
+console.log(obj3);
+```
+
+
+
 
 
 ## 属性
