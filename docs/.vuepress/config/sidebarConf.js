@@ -7,8 +7,8 @@ module.exports = {
       title: "Linux",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Intro", "1 Intro1", "2 Intro2"]
-    }
+      children: ["0 Intro", "1 Intro1", "2 Intro2"],
+    },
   ],
 
   "/Basic/Network/": [
@@ -16,14 +16,14 @@ module.exports = {
       title: "Network",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: []
+      children: [],
     },
     {
       title: "HTTP",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 1,
-      children: []
-    }
+      children: [],
+    },
   ],
 
   "/DataBase/RDBMS/": [
@@ -31,24 +31,24 @@ module.exports = {
       title: "运维",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Primer"]
-    }
+      children: ["0 Primer"],
+    },
   ],
   "/DataBase/Lucene/": [
     {
       title: "Primer",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Primer"]
-    }
+      children: ["0 Primer"],
+    },
   ],
   "/DataBase/Solr/": [
     {
       title: "Primer",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Primer"]
-    }
+      children: ["0 Primer"],
+    },
   ],
   "/DataBase/Elasticsearch/": [
     {
@@ -62,9 +62,9 @@ module.exports = {
         "3 插件",
         "4 Index & Document",
         "5 搜索",
-        "5 原理"
-      ]
-    }
+        "5 原理",
+      ],
+    },
   ],
 
   // ---------------------Design start---------------------------
@@ -72,15 +72,15 @@ module.exports = {
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Intro"]
-    }
+      children: ["0 Intro"],
+    },
   ],
   "/Design/MicroServer/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Intro"]
-    }
+      children: ["0 Intro"],
+    },
   ],
   // ---------------------Design end-----------------------------
 
@@ -90,7 +90,7 @@ module.exports = {
       title: "Basic Syntax",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Basic", "1 Basic Syntax"]
+      children: ["0 Basic", "1 Basic Syntax"],
     },
     {
       title: "Object Orientation",
@@ -103,14 +103,14 @@ module.exports = {
         "2 Object Orientation-4 注解",
         "2 Object Orientation-5 范型",
         "2 Object Orientation-6 访问控制",
-        "2 Object Orientation-习题"
-      ]
+        "2 Object Orientation-习题",
+      ],
     },
     {
       title: "Error & Exception",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3 Error & Exception"]
+      children: ["3 Error & Exception"],
     },
     {
       title: "API",
@@ -126,8 +126,8 @@ module.exports = {
         "4 API-7 Random",
         "4 API-8 System",
         "4 API-9 Object",
-        "4 API-习题"
-      ]
+        "4 API-习题",
+      ],
     },
     {
       title: "Container",
@@ -142,57 +142,57 @@ module.exports = {
         "6 Container-6 Map",
         "6 Container-7 Collections",
         "6 Container-9 新API",
-        "6 Container-习题"
-      ]
+        "6 Container-习题",
+      ],
     },
     {
       title: "Thread",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["7 Thread", "7 Thread2"]
+      children: ["7 Thread", "7 Thread2"],
     },
     {
       title: "IO",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["8 IO", "9 NIO", "10 AIO"]
+      children: ["8 IO", "9 NIO", "10 AIO"],
     },
     {
       title: "Network",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["11 Network"]
+      children: ["11 Network"],
     },
     {
       title: "Lambda",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["13 Lambda"]
+      children: ["13 Lambda"],
     },
     {
       title: "Stream",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["14 Stream API"]
+      children: ["14 Stream API"],
     },
     {
       title: "Optional",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["15 Optional"]
+      children: ["15 Optional"],
     },
     {
       title: "类加载器与反射",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["12 Reflect"]
+      children: ["12 Reflect"],
     },
     {
       title: "Other",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["16 9,10,11新特性", "17 Test", "18 设计原则&设计模式"]
-    }
+      children: ["16 9,10,11新特性", "17 Test", "18 设计原则&设计模式"],
+    },
   ],
   // ---------------------Core Java end-------------------------
 
@@ -202,8 +202,8 @@ module.exports = {
       title: "Jakarta EE",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Servlet", "1 Filter", "2 Listener", "3 JSP"]
-    }
+      children: ["0 Servlet", "1 Filter", "2 Listener", "3 JSP"],
+    },
   ],
   // ---------------------Jakarta EE end------------------------
 
@@ -213,7 +213,7 @@ module.exports = {
       title: "Primer",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Primer", "1 Conf", "2 DB", "3 Log"]
+      children: ["0 Primer", "1 Conf", "2 DB", "3 Log"],
     },
     {
       title: "Spring",
@@ -229,8 +229,8 @@ module.exports = {
         "4 Spring-6 Spring Boot 原理",
         "4 Spring-3 AOP",
         "4 Spring-4 声明式事务",
-        "4 Spring-5 工具类"
-      ]
+        "4 Spring-5 工具类",
+      ],
     },
     {
       title: "SpringMVC",
@@ -245,27 +245,27 @@ module.exports = {
         "5 SpringMVC-6 Multipart",
         "5 SpringMVC-7 ExceptionHandler",
         "5 SpringMVC-8 Interceptor",
-        "5 SpringMVC-9 CORS"
-      ]
+        "5 SpringMVC-9 CORS",
+      ],
     },
     {
       title: "框架机制",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["6 框架机制—1 全局异常处理"]
+      children: ["6 框架机制—1 全局异常处理"],
     },
     {
       title: "Other",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["6 Jackson", "7 Test", "Thymeleaf", "Servlet 3.0"]
+      children: ["6 Jackson", "7 Test", "Thymeleaf", "Servlet 3.0"],
     },
     {
       title: "Shiro",
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["9 Shiro"]
-    }
+      children: ["9 Shiro"],
+    },
   ],
   // -----------------Service Framwork end----------------------
 
@@ -275,8 +275,8 @@ module.exports = {
       title: "Mybatis",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Primer"]
-    }
+      children: ["0 Primer"],
+    },
   ],
   "/Java/Persistence/Mybatis Plus/": [
     {
@@ -289,9 +289,9 @@ module.exports = {
         "2 CRUD",
         "3 Wrapper",
         "4 Plugins",
-        "5 ActiveRecord"
-      ]
-    }
+        "5 ActiveRecord",
+      ],
+    },
   ],
   // -----------------Persistence Framwork end----------------------
 
@@ -301,8 +301,8 @@ module.exports = {
       title: "Tomcat",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Primer"]
-    }
+      children: ["0 Primer"],
+    },
   ],
   // ---------------------Server end---------------------------
 
@@ -311,36 +311,36 @@ module.exports = {
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["Vim"]
-    }
+      children: ["Vim"],
+    },
   ],
   "/Devops/Git/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["Git"]
-    }
+      children: ["Git"],
+    },
   ],
   "/Devops/Maven/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["Maven"]
-    }
+      children: ["Maven"],
+    },
   ],
   "/Devops/Docker/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 Docker", "1 Docker Compose"]
-    }
+      children: ["0 Docker", "1 Docker Compose"],
+    },
   ],
   "/Devops/K8/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["K8"]
-    }
+      children: ["K8"],
+    },
   ],
   // ---------------------Devops end-----------------------------
 
@@ -350,13 +350,18 @@ module.exports = {
       title: "HTML",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["1 HTML"]
+      children: ["1 HTML"],
     },
     {
       title: "CSS",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["2 CSS-1 基础", "2 CSS-2 属性", "2 CSS-3 动画", "2 CSS-8 Less"]
+      children: [
+        "2 CSS-1 基础",
+        "2 CSS-2 属性",
+        "2 CSS-3 动画",
+        "2 CSS-8 Less",
+      ],
     },
     {
       title: "CSS布局",
@@ -369,8 +374,8 @@ module.exports = {
         "3 CSS-4 定位",
         "3 CSS-5 传统布局总结",
         "3 CSS-6 Flexible",
-        "3 CSS-99 移动端适配"
-      ]
+        "3 CSS-99 移动端适配",
+      ],
     },
     {
       title: "CSS布局案例",
@@ -380,20 +385,20 @@ module.exports = {
         "99 CSS项目案例——京东",
         "99 CSS项目案例——考拉",
         "88 代码规范",
-        "5 CSS-高级技巧"
-      ]
-    }
+        "5 CSS-高级技巧",
+      ],
+    },
   ],
   "/Front End/JS/": [
     {
       title: "理解",
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["0 作用域和闭包"]
+      children: ["0 作用域和闭包"],
     },
     {
       title: "语法",
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         "2 语法-1 基础语法",
@@ -410,31 +415,61 @@ module.exports = {
         "3 标准内置对象-9 Set",
         "3 标准内置对象-10 Map",
         "4 面向对象",
-        "5 异常"
-      ]
+        "5 异常",
+      ],
     },
     {
       title: "异步",
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
         "6 异步-1 定时器",
         "6 异步-2 Promise",
-        "6 异步-3 async & await"
-      ]
+        "6 异步-3 async & await",
+      ],
     },
     {
       title: "模块化",
-      collapsable: false, // 控制 组 的 close
+      collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["7 模块化-1 ES6模块化"]
+      children: [
+        "7 模块化-1 ES6模块化",
+        "7 模块化-2 ES5模块化",
+        "7 模块化-3 常见模块化规范",
+      ],
+    },
+    {
+      title: "网络",
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["8 网络-1 Ajax"],
     },
     {
       title: "DOM & BOM",
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["DOM", "BOM"],
+    },
+    {
+      title: "jQuery",
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["99 jQuery"],
+    },
+  ],
+  "/Front End/NodeJS/": [
+    {
+      title: "NodeJS",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["DOM", "BOM"]
-    }
+      children: ["NodeJS-1 入门"],
+    },
+    {
+      title: "Webpack",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["Webpack-1 入门"],
+    },
   ],
   "/Front End/Vue/": [
     {
@@ -448,39 +483,39 @@ module.exports = {
         "2-3 计算属性和侦听器",
         "2-4 事件监听",
         "2-5 条件和循环",
-        "2-6 表单双向绑定"
-      ]
+        "2-6 表单双向绑定",
+      ],
     },
     {
       title: "组件化开发",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3-1 组件化开发"]
+      children: ["3-1 组件化开发", "3-2 插槽"],
     },
     {
       title: "Vue CLI",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3-1 组件化开发"]
+      children: ["3-1 组件化开发"],
     },
     {
       title: "Vue Router",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3-1 组件化开发"]
+      children: ["3-1 组件化开发"],
     },
     {
       title: "Vuex",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3-1 组件化开发"]
+      children: ["3-1 组件化开发"],
     },
     {
       title: "Axios",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3-1 组件化开发"]
-    }
+      children: ["3-1 组件化开发"],
+    },
   ],
 
   // ---------------------Front End end---------------------------
@@ -490,22 +525,22 @@ module.exports = {
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["macOS"]
-    }
+      children: ["macOS"],
+    },
   ],
   "/Environment/Windows/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["Windows"]
-    }
+      children: ["Windows"],
+    },
   ],
   "/Environment/Software/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["IDEA", "VSC", "Software"]
-    }
+      children: ["IDEA", "VSC", "Software"],
+    },
   ],
   // ---------------------Environment end-----------------------------
 
@@ -514,15 +549,15 @@ module.exports = {
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["简介"]
-    }
+      children: ["简介"],
+    },
   ],
   "/Project/十次方/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["简介"]
-    }
-  ]
+      children: ["简介"],
+    },
+  ],
   // ---------------------Project end-----------------------------
 };

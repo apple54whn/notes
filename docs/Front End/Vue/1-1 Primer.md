@@ -1,5 +1,11 @@
 # 简介
 
+::: tip 代码
+
+配套的代码在 [Github](https://github.com/apple54whn/study-vuejs) 中
+
+:::
+
 ## Vue.js 是什么
 
 Vue 是一套用于构建用户**界面**的**渐进式框架（可以只用 Vue，根据后续需要使用其他如 Router、Vuex 等）**。

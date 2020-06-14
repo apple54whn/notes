@@ -15,8 +15,6 @@ iwr -useb get.scoop.sh | iex
 
 有可能有问题，需要根据提示输入命令
 
-
-
 ### 开启代理
 
 没用过，只设置了 Git 代理速度即可跑满
@@ -25,15 +23,14 @@ iwr -useb get.scoop.sh | iex
 scoop config proxy
 ```
 
-
-
 ### 开启其他库
 
-`extras` 库可以下载其他软件，如vscode，typora等等
+`extras` 库可以下载其他软件，如 vscode，typora 等等
 
 ```bash
 scoop bucket add extras
 ```
+
 `java` 库
 
 ```bash
@@ -52,25 +49,21 @@ scoop bucket add JetBrains
 
 例如 IDEA Ultimate 目前有如下版本
 
-* IntelliJ-IDEA-Ultimate-EAP-portable (2020.1-201.4865.12)
-* IntelliJ-IDEA-Ultimate-EAP (2020.1-201.4865.12)
-* IntelliJ-IDEA-Ultimate-portable (2019.3.3-193.6494.35)
-* IntelliJ-IDEA-Ultimate-RC-portable (2019.3.3-193.6494.9)
-* IntelliJ-IDEA-Ultimate-RC (2019.3.3-193.6494.9)
-* IntelliJ-IDEA-Ultimate (2019.3.3-193.6494.35)
+- IntelliJ-IDEA-Ultimate-EAP-portable (2020.1-201.4865.12)
+- IntelliJ-IDEA-Ultimate-EAP (2020.1-201.4865.12)
+- IntelliJ-IDEA-Ultimate-portable (2019.3.3-193.6494.35)
+- IntelliJ-IDEA-Ultimate-RC-portable (2019.3.3-193.6494.9)
+- IntelliJ-IDEA-Ultimate-RC (2019.3.3-193.6494.9)
+- IntelliJ-IDEA-Ultimate (2019.3.3-193.6494.35)
 
 区别取下：
 
-* EAP 为 Early Access Program，即为开发版本
-* RC 为 Release Candidate，即发行候选版
-* GA 为 General Availability，即发行版
-* portable 为便携版，可用 U 盘
+- EAP 为 Early Access Program，即为开发版本
+- RC 为 Release Candidate，即发行候选版
+- GA 为 General Availability，即发行版
+- portable 为便携版，可用 U 盘
 
 :::
-
-
-
-
 
 ### 使用`aria2`多线程下载
 
@@ -80,8 +73,6 @@ scoop bucket add JetBrains
 scoop install aria2
 ```
 
-
-
 ### sudo
 
 省去切换管理员打开的烦恼
@@ -89,8 +80,6 @@ scoop install aria2
 ```powershell
 scoop install sudo
 ```
-
-
 
 ### 导出软件
 
@@ -128,8 +117,6 @@ scoop install typora
 scoop install motrix
 ```
 
-
-
 ## Git
 
 ### 使用 Scoop 安装
@@ -139,8 +126,6 @@ scoop search git
 scoop install git
 # 会先下载7zip，后下载git。7zip需手动设置右键菜单
 ```
-
-
 
 ### 设置代理
 
@@ -156,13 +141,9 @@ git config --global --unset http.proxy
 git config --global --unset https.proxy
 ```
 
-
-
-
-
 ## PowerShell
 
 参考该[仓库](https://github.com/spencerwooo/dotfiles)，他还写了篇少数派文章
 
 在选择 powerline 字体时我只找到 source code pro 和 ubuntu 可以使用，其他没测完
-
+Windows Terminal 中可以试试 MesloLGS NF 字体
