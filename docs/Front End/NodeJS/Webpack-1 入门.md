@@ -595,7 +595,512 @@ css-loader 是将 css 装载到 javascript；style-loader 是让 javascript 认�
 
     
 
+### babel
+
+webpack 打包的 JS 文件，没有将 ES6 转为 ES5，有部分浏览器不支持，所以此时可以使用 babel
+
+1.  安装 babel-loader 和 babel（注意此处还是根据 webpack 3.6.* 选择的版本）
+
+    ```bash
+    npm install babel-loader@7 babel-core babel-preset-es2015 --save-dev
+    ```
+
+    我就服了，文档里的配置还让安装 webpack？还失败了，还有些看不懂的配置。算了😄
+
+2.  修改webpack.config.js，添加 module 模块
+
+    ```js
+    // 这个会从 node 中查找，需要 npm init 来生成 package.json
+    const path = require("path");
     
+    module.exports = {
+      entry: "./src/main.js",
+      output: {
+        // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
+        // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+        publicPath: "dist/",
+      },
+      module: {
+        rules: [
+          {
+            // 匹配.css文件
+            test: /\.css$/i,
+    
+            // style-loader 将模块导出作为style添加到DOM中
+            // css-loader解析css文件后，使用import加载，并返回css代码
+            // 使用多个loader时，从右到左加载。顺序不能乱！
+            use: ["style-loader", "css-loader"],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              {
+                loader: "style-loader", // creates style nodes from JS strings
+              },
+              {
+                loader: "css-loader", // translates CSS into CommonJS
+              },
+              {
+                loader: "less-loader", // compiles Less to CSS
+              },
+            ],
+          },
+          {
+            test: /\.(png|jpg|gif|jpeg)$/,
+            use: [
+              {
+                loader: "url-loader",
+                options: {
+                  // 当图片大小小于 limit 时，会被编译为base64字符串
+                  // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+                  limit: 10000,
+                  // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+                  name: "img/[name][hash:8].[ext]",
+                },
+              },
+            ],
+          },
+          {
+            test: /\.js$/,
+            // 排除
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ["es2015"],
+              },
+            },
+          },
+        ],
+      },
+    };
+    ```
+
+3.  重新打包`webpack`或`npn run build`。查看 buldle.js 文件
+
+
+
+
+
+## Vue
+
+### 配置
+
+1.  npm 安装 vue
+
+    ```bash
+    npm install vue --save     
+    ```
+
+    `--save`可以简写为`-S`，vue 是要在发布时也使用的，所以无需添加`-dev`
+
+2.  使用 vue 开发，在 main.js 中
+
+    ```js
+    // CommonJS
+    var { formatDate } = require("./js/utils.js");
+    
+    console.log(formatDate(new Date()));
+    
+    // ES6
+    import * as poem from "./js/poem.js";
+    console.log(poem.SPRING);
+    
+    // CommonJS 语法，不能使用 ES6，那是针对 JS 的
+    require("./css/normal.css");
+    require("./css/special.less");
+    document.writeln("World");
+    
+    import Vue from "vue";
+    
+    const vm = new Vue({
+      el: "#app",
+      data: {
+        message: "Hello",
+      },
+    });
+    ```
+
+    修改 index.html
+
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+      </head>
+      <body>
+        <div id="app">
+          {{message}}
+        </div>
+        <!-- 引用的是打包后的文件。无需写type -->
+        <script src="./dist/bundle.js"></script>
+      </body>
+    </html>
+    ```
+
+3.  重新打包`webpack`或`npn run build`。访问后发现报错
+
+    ```
+    bundle.js:1344 [Vue warn]: You are using the runtime-only build of Vue where the template compiler is not available. Either pre-compile the templates into render functions, or use the compiler-included build.
+    ```
+
+    这是由于 vue 在构建时有两个版本
+
+    *   runtime-only：代码中，不可以有任何 template，如 id="app" 那个 div
+    *   runtime-compiler：代码中，可以有 template，compiler 会对其进行编译
+
+    官网文档[解释](https://cn.vuejs.org/v2/guide/installation.html#%E5%AF%B9%E4%B8%8D%E5%90%8C%E6%9E%84%E5%BB%BA%E7%89%88%E6%9C%AC%E7%9A%84%E8%A7%A3%E9%87%8A)，修改webpack.config.js
+
+    ```js
+    // 这个会从 node 中查找，需要 npm init 来生成 package.json
+    const path = require("path");
+    
+    module.exports = {
+      entry: "./src/main.js",
+      output: {
+        // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
+        // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+        publicPath: "dist/",
+      },
+      module: {
+        rules: [
+          {
+            // 匹配.css文件
+            test: /\.css$/i,
+    
+            // style-loader 将模块导出作为style添加到DOM中
+            // css-loader解析css文件后，使用import加载，并返回css代码
+            // 使用多个loader时，从右到左加载。顺序不能乱！
+            use: ["style-loader", "css-loader"],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              {
+                loader: "style-loader", // creates style nodes from JS strings
+              },
+              {
+                loader: "css-loader", // translates CSS into CommonJS
+              },
+              {
+                loader: "less-loader", // compiles Less to CSS
+              },
+            ],
+          },
+          {
+            test: /\.(png|jpg|gif|jpeg)$/,
+            use: [
+              {
+                loader: "url-loader",
+                options: {
+                  // 当图片大小小于 limit 时，会被编译为base64字符串
+                  // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+                  limit: 10000,
+                  // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+                  name: "img/[name][hash:8].[ext]",
+                },
+              },
+            ],
+          },
+          {
+            test: /\.js$/,
+            // 排除
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ["es2015"],
+              },
+            },
+          },
+        ],
+      },
+      resolve: {
+        alias: {
+          // 指定发布的版本
+          vue$: "vue/dist/vue.esm.js", // 用 webpack 1 时需用 'vue/dist/vue.common.js'
+        },
+      },
+    };
+    ```
+
+4.  重新打包`webpack`或`npn run build`。访问
+
+
+
+
+
+### el 和 template 区别
+
+实际使用时，不会修改 index.html 的代码，仅仅留个 id="app" 的 div，只需要在使用 vue 时指定 template 即可，vue 内部会自动将 template 中的代码替换 id="app" 的 div（该div将不见）
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- 引用的是打包后的文件。无需写type -->
+    <script src="./dist/bundle.js"></script>
+  </body>
+</html>
+```
+
+```js
+// main.js
+
+// CommonJS
+var { formatDate } = require("./js/utils.js");
+
+console.log(formatDate(new Date()));
+
+// ES6
+import * as poem from "./js/poem.js";
+console.log(poem.SPRING);
+
+// CommonJS 语法，不能使用 ES6，那是针对 JS 的
+require("./css/normal.css");
+require("./css/special.less");
+document.writeln("World");
+
+import Vue from "vue";
+
+const vm = new Vue({
+  el: "#app",
+  template: `
+    <div>
+        <h2>{{message}}</h2>
+        <button @click="btnClick">按钮</button>
+    </div>
+    `,
+  data: {
+    message: "Hello",
+  },
+  methods: {
+    btnClick() {
+      alert(1);
+    },
+  },
+});
+```
+
+
+
+### 终极使用
+
+这个[视频](https://www.bilibili.com/video/BV15741177Eh?p=84)讲解的非常详细，一步一步
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- 引用的是打包后的文件。无需写type -->
+    <script src="./dist/bundle.js"></script>
+  </body>
+</html>
+```
+
+```js
+// CommonJS
+var { formatDate } = require("./js/utils.js");
+
+console.log(formatDate(new Date()));
+
+// ES6
+import * as poem from "./js/poem.js";
+console.log(poem.SPRING);
+
+// CommonJS 语法，不能使用 ES6，那是针对 JS 的
+require("./css/normal.css");
+require("./css/special.less");
+// document.writeln("World");
+
+import Vue from "vue";
+// 导入组件 js 文件，可省略后缀
+// import App from "./vue/app";
+// 导入组件 vue 文件，不可省略后缀。在 vue 文件中可以省略（但需webpack配置）
+import App from "./vue/App.vue";
+
+const vm = new Vue({
+  el: "#app",
+  template: "<App/>",
+  components: {
+    App,
+  },
+});
+```
+
+```vue
+<!-- vue/App.vue-->
+<template>
+  <div>
+    <h2>{{ message }}</h2>
+    <button @click="btnClick">按钮</button>
+    <cpn />
+  </div>
+</template>
+
+<script>
+// 可省略后缀（需在 webpakc 中配置）
+import Cpn from "./Cpn";
+
+export default {
+  name: "App",
+  components: {
+    Cpn,
+  },
+  data() {
+    return { message: "Hello" };
+  },
+  methods: {
+    btnClick() {
+      alert(1);
+    },
+  },
+};
+</script>
+
+<style></style>
+```
+
+```vue
+<!-- vue/Cpn.vue-->
+<template>
+  <div>
+    <h2>{{ message }}</h2>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Cpn",
+  data() {
+    return {
+      message: "Cpn 组件！！！！！",
+    };
+  },
+};
+</script>
+
+<style></style>
+```
+
+若修改后重新打包失败，可以安装 [Vue Loader](https://vue-loader.vuejs.org/zh/guide/#vue-cli)
+
+```bash
+npm install -D vue-loader vue-template-compiler
+```
+
+webpack.config.js
+
+```js
+// 这个会从 node 中查找，需要 npm init 来生成 package.json
+const path = require("path");
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
+
+module.exports = {
+  entry: "./src/main.js",
+  output: {
+    // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+    publicPath: "dist/",
+  },
+  module: {
+    rules: [
+      {
+        // 匹配.css文件
+        test: /\.css$/i,
+
+        // style-loader 将模块导出作为style添加到DOM中
+        // css-loader解析css文件后，使用import加载，并返回css代码
+        // 使用多个loader时，从右到左加载。顺序不能乱！
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: "style-loader", // creates style nodes from JS strings
+          },
+          {
+            loader: "css-loader", // translates CSS into CommonJS
+          },
+          {
+            loader: "less-loader", // compiles Less to CSS
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif|jpeg)$/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              // 当图片大小小于 limit 时，会被编译为base64字符串
+              // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+              limit: 10000,
+              // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+              name: "img/[name][hash:8].[ext]",
+            },
+          },
+        ],
+      },
+      {
+        test: /\.js$/,
+        // 排除
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["es2015"],
+          },
+        },
+      },
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
+      },
+    ],
+  },
+  resolve: {
+    // 在 .vue 文件中导入如下文件时可以省略后缀
+    extensions: [".js", ".vue", ".css"],
+    alias: {
+      // 指定发布的版本
+      vue$: "vue/dist/vue.esm.js", // 用 webpack 1 时需用 'vue/dist/vue.common.js'
+    },
+  },
+  plugins: [
+    // 请确保引入这个插件！
+    new VueLoaderPlugin(),
+  ],
+};
+```
+
+重新打包`webpack`或`npn run build`。访问
+
+
+
+## plugin
 
 
 
