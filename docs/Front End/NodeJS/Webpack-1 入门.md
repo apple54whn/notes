@@ -299,7 +299,7 @@ bundle.js  4.2 kB       0  [emitted]  main
 
 
 
-## loader
+## loader 🔥
 
 webpack 只能理解 JavaScript 和 JSON 文件，这是 webpack 开箱可用的自带能力。**loader** 让 webpack 能够去处理其他类型的文件，并将它们转换为有效 [模块](https://webpack.docschina.org/concepts/modules)，以供应用程序使用，以及被添加到依赖图中。
 
@@ -684,7 +684,7 @@ webpack 打包的 JS 文件，没有将 ES6 转为 ES5，有部分浏览器不�
 
 
 
-## Vue
+## Vue—配合 webpack 使用 🔥
 
 ### 配置
 
@@ -1102,81 +1102,653 @@ module.exports = {
 
 ## plugin
 
+plugin 与 loader 区别：
+
+*   loader：用于转换某些类型的模块，是转换器
+*   plugin：是对 webpack 本身的扩展，是扩展器
+
+使用步骤：
+
+1.  npm 安装（某些 webpack 内置的无需安装）
+2.  在 webpack.config.js 中的 plugins 配置
 
 
-## 快速入门
+
+### banner
+
+webpack 自带，只需配置好
+
+```js
+// 这个会从 node 中查找，需要 npm init 来生成 package.json
+const path = require("path");
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
+
+module.exports = {
+  entry: "./src/main.js",
+  output: {
+    // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+    publicPath: "dist/",
+  },
+  module: {
+    rules: [
+      {
+        // 匹配.css文件
+        test: /\.css$/i,
+
+        // style-loader 将模块导出作为style添加到DOM中
+        // css-loader解析css文件后，使用import加载，并返回css代码
+        // 使用多个loader时，从右到左加载。顺序不能乱！
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: "style-loader", // creates style nodes from JS strings
+          },
+          {
+            loader: "css-loader", // translates CSS into CommonJS
+          },
+          {
+            loader: "less-loader", // compiles Less to CSS
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif|jpeg)$/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              // 当图片大小小于 limit 时，会被编译为base64字符串
+              // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+              limit: 10000,
+              // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+              name: "img/[name][hash:8].[ext]",
+            },
+          },
+        ],
+      },
+      {
+        test: /\.js$/,
+        // 排除
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["es2015"],
+          },
+        },
+      },
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
+      },
+    ],
+  },
+  resolve: {
+    // 在 .vue 文件中导入如下文件时可以省略后缀
+    extensions: [".js", ".vue", ".css"],
+    alias: {
+      // 指定发布的版本
+      vue$: "vue/dist/vue.esm.js", // 用 webpack 1 时需用 'vue/dist/vue.common.js'
+    },
+  },
+  plugins: [
+    // 请确保引入这个插件！
+    new VueLoaderPlugin(),
+  ],
+};
+```
+
+重新打包`webpack`或`npn run build`。查看 bundle.js 文件
 
 
 
 
 
+### HtmlWebpackPlugin 🔥
 
+目前我们的 index.html 文件在根目录下，且打包后也是在原位置，而实际真实发布项目时，发布的是 dist 目录中的内容，但是其中并没有 index.html，只能复制过去。所以我们需要可以将 index.html 打包到 dist 目录的插件。
 
+HtmlWebpackPlugin 插件可以做：
 
+*   自动生成一个 index.html（可指定模板）
+*   将打包的 js 文件，自动通过 script 标签插入到 index.html 的 body 中
 
-### 结合Vue打包
+使用步骤：
 
-1. 定义`module01.js`，此文件就是一个模块，定义了一些方法
+1.  安装（只开发时依赖）由于 webpack 版本为 3.6.*，所以此处需要安装指定版本的
 
-    ```js
-    //定义add函数
-    function add(x, y) {
-        return x + y;
-    }
-    
-    //定义add2函数
-    function add2(x, y) {
-        return x + y + 2;
-    }
-    
-    //定义add3函数
-    exports.add3 = function (x, y) {
-        return x + y + 2;
-    }
-    
-    //要导出的方法
-    // module.exports.add = add;
-    // module.exports.add2 = add2;
-    module.exports = {add,add2};//多个方法这样导出更方便！或每次定义方法时导出，如add3
+    ```bash
+    npm install html-webpack-plugin@3.2.0 --save-dev
     ```
 
-2. 定义`main.js`，是本程序的js主文件，名称任意取。包括如下内容：
+2.  修改 webpack.config.js 中 plugins 内容
 
-    1. 引用`module01.js`模块
-    2. 引用`vue.min.js`模块（它也一个模块）
-    3. 将html页面中构建vue实例的代码放在`main.js`中（总之html中不再有js代码）
+    注意删掉`publicPath`
 
     ```js
-    //如下都是ES5的导入方法！
-    var {add} = require('./module01.js');//可以省略.js，但是必须带上./前缀表示当前目录！
-    var module01 = require('./module01.js');//也可以全部导入
-    var Vue = require('./vue.min.js');
+    // 这个会从 node 中查找，需要 npm init 来生成 package.json
+    const path = require("path");
+    const VueLoaderPlugin = require("vue-loader/lib/plugin");
+    const webpack = require("webpack");
+    const htmlWebpackPlugin = require("html-webpack-plugin");
     
-    var VM = new Vue({
-        el: "#app",//表示当前vue对象接管app的div区域
-        data: {
-            name: '黑马程序员',// 相当于是MVVM中的Model这个角色
-            num1: 0,
-            num2: 0,
-            result: 0,
+    module.exports = {
+      entry: "./src/main.js",
+      output: {
+        // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
+        // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+        // publicPath: "dist/",
+      },
+      module: {
+        rules: [
+          {
+            // 匹配.css文件
+            test: /\.css$/i,
+    
+            // style-loader 将模块导出作为style添加到DOM中
+            // css-loader解析css文件后，使用import加载，并返回css代码
+            // 使用多个loader时，从右到左加载。顺序不能乱！
+            use: ["style-loader", "css-loader"],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              {
+                loader: "style-loader", // creates style nodes from JS strings
+              },
+              {
+                loader: "css-loader", // translates CSS into CommonJS
+              },
+              {
+                loader: "less-loader", // compiles Less to CSS
+              },
+            ],
+          },
+          {
+            test: /\.(png|jpg|gif|jpeg)$/,
+            use: [
+              {
+                loader: "url-loader",
+                options: {
+                  // 当图片大小小于 limit 时，会被编译为base64字符串
+                  // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+                  limit: 10000,
+                  // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+                  name: "img/[name][hash:8].[ext]",
+                },
+              },
+            ],
+          },
+          {
+            test: /\.js$/,
+            // 排除
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ["es2015"],
+              },
+            },
+          },
+          {
+            test: /\.vue$/,
+            loader: "vue-loader",
+          },
+        ],
+      },
+      resolve: {
+        // 在 .vue 文件中导入如下文件时可以省略后缀
+        extensions: [".js", ".vue", ".css"],
+        alias: {
+          // 指定发布的版本
+          vue$: "vue/dist/vue.esm.js", // 用 webpack 1 时需用 'vue/dist/vue.common.js'
         },
-        methods: {
-            change: function () {
-                //这里使用了导入的model01.js文件中的add方法
-                this.result = module01.add2(Number.parseInt(this.num1), Number.parseInt(this.num2));
-            }
-        }
+      },
+      plugins: [
+        // 请确保引入这个插件！
+        new VueLoaderPlugin(),
+        // banner插件
+        new webpack.BannerPlugin("最终版权归conanan所有"),
+        // htmlWebpackPlugin 插件
+        new htmlWebpackPlugin({
+          template: "index.html",
+        }),
+      ],
+    };
+    ```
+
+3.  重新打包`webpack`或`npn run build`。查看 index.html 文件
+
+
+
+### uglifyjs 压缩 🔥
+
+1.  安装（由于 webpack 版本及 CLI2，遂选择该版本）
+
+    还是报错，我看 node_modules 中好像自带了，只需配置即可食用
+
+    ```bash
+    npm install uglifyjs-webpack-plugin@1.1.1 --save-dev
+    ```
+
+2.  修改 webpack.config.js 中 plugins 内容
+
+    ```js
+    // 这个会从 node 中查找，需要 npm init 来生成 package.json
+    const path = require("path");
+    const VueLoaderPlugin = require("vue-loader/lib/plugin");
+    const webpack = require("webpack");
+    const htmlWebpackPlugin = require("html-webpack-plugin");
+    const uglifyjsWebpackPlugin = require("uglifyjs-webpack-plugin");
+    
+    module.exports = {
+      entry: "./src/main.js",
+      output: {
+        // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
+        // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+        // publicPath: "dist/",
+      },
+      module: {
+        rules: [
+          {
+            // 匹配.css文件
+            test: /\.css$/i,
+    
+            // style-loader 将模块导出作为style添加到DOM中
+            // css-loader解析css文件后，使用import加载，并返回css代码
+            // 使用多个loader时，从右到左加载。顺序不能乱！
+            use: ["style-loader", "css-loader"],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              {
+                loader: "style-loader", // creates style nodes from JS strings
+              },
+              {
+                loader: "css-loader", // translates CSS into CommonJS
+              },
+              {
+                loader: "less-loader", // compiles Less to CSS
+              },
+            ],
+          },
+          {
+            test: /\.(png|jpg|gif|jpeg)$/,
+            use: [
+              {
+                loader: "url-loader",
+                options: {
+                  // 当图片大小小于 limit 时，会被编译为base64字符串
+                  // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+                  limit: 10000,
+                  // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+                  name: "img/[name][hash:8].[ext]",
+                },
+              },
+            ],
+          },
+          {
+            test: /\.js$/,
+            // 排除
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ["es2015"],
+              },
+            },
+          },
+          {
+            test: /\.vue$/,
+            loader: "vue-loader",
+          },
+        ],
+      },
+      resolve: {
+        // 在 .vue 文件中导入如下文件时可以省略后缀
+        extensions: [".js", ".vue", ".css"],
+        alias: {
+          // 指定发布的版本
+          vue$: "vue/dist/vue.esm.js", // 用 webpack 1 时需用 'vue/dist/vue.common.js'
+        },
+      },
+      plugins: [
+        // 请确保引入这个插件！
+        new VueLoaderPlugin(),
+        // banner插件
+        new webpack.BannerPlugin("最终版权归conanan所有"),
+        // htmlWebpackPlugin 插件
+        new htmlWebpackPlugin({
+          template: "index.html",
+        }),
+        // uglifyjsWebpackPlugin 插件
+        new uglifyjsWebpackPlugin(),
+      ],
+    };
+    ```
+
+3.  重新打包`webpack`或`npn run build`。查看 bundle.js 文件
+
+
+
+
+
+## webpack-dev-server 🔥
+
+webpack 提供了一个可选的本地开发服务器，基于node搭建，内部使用express 框架，可以实现浏览器自动“刷新”显示我们修改后的结果。不过它是一个单独的模块，需要先安装。
+
+1.  安装（版本号还是由于 webpack 3.6.*）
+
+    ```bash
+    npm install webpack-dev-server@2.9.1 --save-dev
+    ```
+
+2.  修改 webpack.config.js 中 devServer 内容
+
+    ```js
+    // 这个会从 node 中查找，需要 npm init 来生成 package.json
+    const path = require("path");
+    const VueLoaderPlugin = require("vue-loader/lib/plugin");
+    const webpack = require("webpack");
+    const htmlWebpackPlugin = require("html-webpack-plugin");
+    const uglifyjsWebpackPlugin = require("uglifyjs-webpack-plugin");
+    
+    module.exports = {
+      entry: "./src/main.js",
+      output: {
+        // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
+        // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+        // publicPath: "dist/",
+      },
+      module: {
+        rules: [
+          {
+            // 匹配.css文件
+            test: /\.css$/i,
+    
+            // style-loader 将模块导出作为style添加到DOM中
+            // css-loader解析css文件后，使用import加载，并返回css代码
+            // 使用多个loader时，从右到左加载。顺序不能乱！
+            use: ["style-loader", "css-loader"],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              {
+                loader: "style-loader", // creates style nodes from JS strings
+              },
+              {
+                loader: "css-loader", // translates CSS into CommonJS
+              },
+              {
+                loader: "less-loader", // compiles Less to CSS
+              },
+            ],
+          },
+          {
+            test: /\.(png|jpg|gif|jpeg)$/,
+            use: [
+              {
+                loader: "url-loader",
+                options: {
+                  // 当图片大小小于 limit 时，会被编译为base64字符串
+                  // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+                  limit: 10000,
+                  // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+                  name: "img/[name][hash:8].[ext]",
+                },
+              },
+            ],
+          },
+          {
+            test: /\.js$/,
+            // 排除
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ["es2015"],
+              },
+            },
+          },
+          {
+            test: /\.vue$/,
+            loader: "vue-loader",
+          },
+        ],
+      },
+      resolve: {
+        // 在 .vue 文件中导入如下文件时可以省略后缀
+        extensions: [".js", ".vue", ".css"],
+        alias: {
+          // 指定发布的版本
+          vue$: "vue/dist/vue.esm.js", // 用 webpack 1 时需用 'vue/dist/vue.common.js'
+        },
+      },
+      plugins: [
+        // 请确保引入这个插件！
+        new VueLoaderPlugin(),
+        // banner插件
+        new webpack.BannerPlugin("最终版权归conanan所有"),
+        // htmlWebpackPlugin 插件
+        new htmlWebpackPlugin({
+          template: "index.html",
+        }),
+        // uglifyjsWebpackPlugin 插件
+        new uglifyjsWebpackPlugin(),
+      ],
+      devServer: {
+        // 为那个目录提供本地服务，默认是项目根目录
+        contentBase: "./dist",
+        // 页面实时刷新
+        inline: true,
+        // 端口
+        port: 9999,
+        // 在SPA中，依赖H5的history模式
+        // historyApiFallback,
+      },
+    };
+    ```
+
+3.  执行`webpack-dev-server`发现没有该命令，原因是安装到本地，可以在 package.json 中配置 scripts，即可实现默认查找本地 node_modules 中命令。`--open`可以在服务启动后自动打开浏览器
+
+    ```json
+    {
+        "scripts": {
+        "dev": "webpack-dev-server --open"
+      },
+    }
+    ```
+
+    但是发现无法启动，报错
+
+    ```
+    ERROR in bundle.js from UglifyJs
+    Unexpected token: name (urlParts) [bundle.js:4153,4]
+    ```
+
+    参考这个[博客](https://www.cnblogs.com/aredleave/p/7586911.html)，虽然可以启动了，但是修改文件后还是报错。算了（所以目前代码5 webpack-plugins可能有问题，接下来就解决了）
+
+
+
+## 配置文件分离
+
+这里就有问题了，webpack.config.js中的配置，有些是开发模式需要的，有些才是发布模式需要的，如何分离？并且开发模式时使用 uglifyjs 插件会无法调试，如何解决？此时需要 webpack 的**配置文件分离**。
+
+1.  安装依赖
+
+    ```bash
+    npm install webpack-merge --save-dev
+    ```
+
+2.  build/base.config.js。注意 output 目录的改变
+
+    ```js
+    // 基础依赖
+    // 这个会从 node 中查找，需要 npm init 来生成 package.json
+    const path = require("path");
+    const VueLoaderPlugin = require("vue-loader/lib/plugin");
+    const webpack = require("webpack");
+    const htmlWebpackPlugin = require("html-webpack-plugin");
+    
+    module.exports = {
+      entry: "./src/main.js",
+      output: {
+        // path 需要写绝对路径，但又不能直接指定，可以动态获取（采用 node 语法）
+        // 配置文件分离后需要修改 path
+        path: path.resolve(__dirname, "../dist"),
+        filename: "bundle.js",
+        // 输出涉及url时，会自动在前面添加该字符串。实际中，会把所有文件都打包到 dist 中，此时应该删掉publicPath配置
+        // publicPath: "dist/",
+      },
+      module: {
+        rules: [
+          {
+            // 匹配.css文件
+            test: /\.css$/i,
+    
+            // style-loader 将模块导出作为style添加到DOM中
+            // css-loader解析css文件后，使用import加载，并返回css代码
+            // 使用多个loader时，从右到左加载。顺序不能乱！
+            use: ["style-loader", "css-loader"],
+          },
+          {
+            test: /\.less$/,
+            use: [
+              {
+                loader: "style-loader", // creates style nodes from JS strings
+              },
+              {
+                loader: "css-loader", // translates CSS into CommonJS
+              },
+              {
+                loader: "less-loader", // compiles Less to CSS
+              },
+            ],
+          },
+          {
+            test: /\.(png|jpg|gif|jpeg)$/,
+            use: [
+              {
+                loader: "url-loader",
+                options: {
+                  // 当图片大小小于 limit 时，会被编译为base64字符串
+                  // 当大于 limit 时，会使用 file-loader 进行加载，仅需要安装！
+                  limit: 10000,
+                  // img/目录下，[name]为原名，[hash:8]为8位哈希值，.[ext]为后缀
+                  name: "img/[name][hash:8].[ext]",
+                },
+              },
+            ],
+          },
+          {
+            test: /\.js$/,
+            // 排除
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ["es2015"],
+              },
+            },
+          },
+          {
+            test: /\.vue$/,
+            loader: "vue-loader",
+          },
+        ],
+      },
+      resolve: {
+        // 在 .vue 文件中导入如下文件时可以省略后缀
+        extensions: [".js", ".vue", ".css"],
+        alias: {
+          // 指定发布的版本
+          vue$: "vue/dist/vue.esm.js", // 用 webpack 1 时需用 'vue/dist/vue.common.js'
+        },
+      },
+      plugins: [
+        // 请确保引入这个插件！
+        new VueLoaderPlugin(),
+        // banner插件
+        new webpack.BannerPlugin("最终版权归conanan所有"),
+        // htmlWebpackPlugin 插件
+        new htmlWebpackPlugin({
+          template: "index.html",
+        }),
+      ],
+    };
+    ```
+
+3.  build/dev.config.js
+
+    ```js
+    // 开发时配置
+    const baseConfig = require("./base.config");
+    const webpackMerge = require("webpack-merge");
+    
+    module.exports = webpackMerge(baseConfig, {
+      devServer: {
+        // 为那个目录提供本地服务，默认是项目根目录
+        contentBase: "./dist",
+        // 页面实时刷新
+        inline: true,
+        // 端口
+        port: 9999,
+        // 在SPA中，依赖H5的history模式
+        // historyApiFallback,
+      },
     });
     ```
 
-3. 打包测试
+4.  build/prod.config.js
 
-    1. 进入程序即js文件所在目录，执行`webpack main.js build.js`，将`main.js`打包输出为`build.js`文件。也可以定义webpack.config.js配置打包方式
-    2. 在HTML中引用`<script src="build.js"></script>`
+    ```js
+    // 生产时依赖
+    const uglifyjsWebpackPlugin = require("uglifyjs-webpack-plugin");
+    const baseConfig = require("./base.config");
+    const webpackMerge = require("webpack-merge");
+    
+    module.exports = webpackMerge(baseConfig, {
+      plugins: [
+        // uglifyjsWebpackPlugin 插件
+        new uglifyjsWebpackPlugin(),
+      ],
+    });
+    ```
+
+5.  删掉之前的 webpack.config.js，此时命令就不能使用了，需要修改配置 package.json
+
+    ```json
+    {
+        "scripts": {
+        "dev": "webpack-dev-server --open --config ./build/dev.config.js",
+        "build": "webpack --config ./build/prod.config.js"
+      },
+    }
+    ```
+
+    执行上述命令，发现一切都好了！😄
 
 
 
-### webpack-dev-server
+
+
+
+
+
 
 webpack-dev-server开发服务器，它的功能可以实现热加载并且自动刷新浏览器。
 
@@ -1257,6 +1829,5 @@ webpack-dev-server开发服务器，它的功能可以实现热加载并且自�
 
     - 在webpack.config.js中配置：`devtool: 'eval‐source‐map',`具体查看上面的代码
     - 在js中跟踪代码的位置上添加**debugger**，开启浏览器开发者工具……
-
 
 
