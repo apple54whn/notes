@@ -95,6 +95,25 @@ services:
 
 
 
+## Redis
+
+```yml
+version: '3.1'
+
+services:
+  redis:
+    image: redis
+    restart: "no"
+    ports:
+      - 6379:6379
+```
+
+
+
+
+
+
+
 ## GitLab
 
 ### 部署
@@ -580,6 +599,46 @@ docker push 172.16.154.12:8082/myshop/nginx:latest
 ```bash
 docker pull 172.16.154.12:8082/myshop/nginx:latest
 ```
+
+
+
+
+
+## Mongo
+
+```yml
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: "no"
+    ports:
+        - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: w111111
+    volumes:
+        - ./data/db:/data/db
+        - /etc/localtime:/etc/localtime
+
+  mongo-express:
+    image: mongo-express
+    restart: "no"
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: w111111
+```
+
+ports 一定要暴露，否则只能本地访问！
+
+
+
+
 
 
 

@@ -7,8 +7,8 @@ module.exports = [
         text: "OS",
         items: [
           { text: "Linux", link: "/Basic/OS/Linux/0 Intro" },
-          { text: "Morden OS", link: "/Basic/OS/Morden OS/0 Intro" },
-          { text: "macOS", link: "/Basic/OS/macOS/0 Intro" },
+          { text: "Docker", link: "/Basic/OS/Docker/0 Docker" },
+          { text: "K8", link: "/Basic/OS/K8/0 Intro" },
         ],
       },
       {
@@ -73,13 +73,11 @@ module.exports = [
     ],
   },
   {
-    text: "Devops",
+    text: "Tools",
     items: [
-      { text: "Vim", link: "/Devops/Vim/Vim" },
-      { text: "Git", link: "/Devops/Git/Git" },
-      { text: "Maven", link: "/Devops/Maven/Maven" },
-      { text: "Docker", link: "/Devops/Docker/0 Docker" },
-      { text: "K8", link: "/Devops/K8/K8" },
+      { text: "Vim", link: "/Tools/Vim/Vim" },
+      { text: "Git", link: "/Tools/Git/Git" },
+      { text: "Maven", link: "/Tools/Maven/Maven" },
     ],
   },
   {
@@ -94,7 +92,7 @@ module.exports = [
     items: [
       { text: "H5&CSS3", link: "/Front End/H5&CSS3/1 HTML" },
       { text: "JS", link: "/Front End/JS/0 作用域和闭包" },
-      { text: "NodeJS", link: "/Front End/NodeJS/Webpack-1 入门" },
+      { text: "NodeJS", link: "/Front End/NodeJS/NodeJS-1 入门" },
       { text: "Vue", link: "/Front End/Vue/1-1 Primer" },
       { text: "Android", link: "/Front End/Android/0 Intro" },
       { text: "Flutter", link: "/Front End/Flutter/0 Intro" },

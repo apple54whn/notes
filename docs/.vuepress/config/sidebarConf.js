@@ -11,6 +11,15 @@ module.exports = {
     },
   ],
 
+  "/Basic/OS/Docker/": [
+    {
+      title: "Docker",
+      collapsable: false, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ["0 Docker", "1 Docker Compose"],
+    },
+  ],
+
   "/Basic/Network/": [
     {
       title: "Network",
@@ -306,43 +315,29 @@ module.exports = {
   ],
   // ---------------------Server end---------------------------
 
-  // ---------------------Devops start---------------------------
-  "/Devops/Vim/": [
+  // ---------------------Tools start---------------------------
+  "/Tools/Vim/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: ["Vim"],
     },
   ],
-  "/Devops/Git/": [
+  "/Tools/Git/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: ["Git"],
     },
   ],
-  "/Devops/Maven/": [
+  "/Tools/Maven/": [
     {
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
       children: ["Maven"],
     },
   ],
-  "/Devops/Docker/": [
-    {
-      collapsable: false, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: ["0 Docker", "1 Docker Compose"],
-    },
-  ],
-  "/Devops/K8/": [
-    {
-      collapsable: false, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: ["K8"],
-    },
-  ],
-  // ---------------------Devops end-----------------------------
+  // ---------------------Tools end-----------------------------
 
   // ---------------------Front End start---------------------------
   "/Front End/H5&CSS3/": [
@@ -496,7 +491,7 @@ module.exports = {
       title: "Vue CLI",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3-1 组件化开发"],
+      children: ["4-1 Vue CLI入门"],
     },
     {
       title: "Vue Router",

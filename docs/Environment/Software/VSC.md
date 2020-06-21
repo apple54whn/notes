@@ -134,6 +134,41 @@ display: inline-block;
 
 可以安装 pretty 插件后选择 Default Formatter，推荐！
 
+其实也不推荐！
+
+
+
+## Vetur 🔥
+
+安装后有配置
+
+```json
+"vetur.format.defaultFormatterOptions": {
+    "prettier": {
+        // 去掉分号
+        "semi": false,
+        // 单引号
+        "singleQuote": true
+    }
+},
+"vetur.completion.scaffoldSnippetSources": {},
+```
+
+
+
+
+
+### JS 自动缩进
+
+```json
+"editor.tabSize": 2,
+"editor.detectIndentation": false
+```
+
+
+
+
+
 
 
 ### JS & CSS Minifier（测试）

@@ -272,6 +272,23 @@ Identity added: /Users/conanan/.ssh/id_rsa (54whn54@gmail.com)
 
 如果 `pbcopy` 不可用，可找到隐藏的 `.ssh` 文件夹，在常用的文本编辑器中打开该文件，并将其复制到剪贴板。
 
+
+
+### 防止卡死
+
+参考这篇[博客](https://zj-network-guide.readthedocs.io/zh_CN/latest/ssh/[SSH]%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5%E4%B8%80%E6%AE%B5%E6%97%B6%E9%97%B4%E5%90%8E%E5%8D%A1%E6%AD%BB%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/)
+
+在服务器上修改文件`/etc/ssh/sshd_config`，添加如下内容：
+
+```
+ServerAliveInterval 20
+ServerAliveCountMax 999
+```
+
+每隔`30s`向服务器发送一次心跳；若超过`999`次请求都没有发送成功，则主动断开与服务器端的连接
+
+
+
 ## SDKMAN
 
 > [官网](https://sdkman.io/)，可能需要科学上网
