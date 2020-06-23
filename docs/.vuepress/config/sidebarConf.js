@@ -497,7 +497,7 @@ module.exports = {
       title: "Vue Router",
       collapsable: false, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ["3-1 组件化开发"],
+      children: ["5-1 Vue Router入门"],
     },
     {
       title: "Vuex",

@@ -105,52 +105,228 @@ new Vue({
 
 ### render
 
-*   普通用法
+普通用法
 
-    ```js
-    import Vue form 'vue'
-    import App form './App'
-    
-    Vue.config.productionTip = false
-    
-    new Vue({
-        el: '#app',
-        // createElement('标签名', {标签的属性}, [])
-        render: createElement => createElement('h2',
-                                              {class: 'box'},
-                                               ['Hello World', createElement('button',
-                                                                            {class: 'btn'},
-                                                                            ['按钮'])]
-                                              )
-    })
-    ```
+```js
+import Vue form 'vue'
+import App form './App'
 
-*   传入组件对象。直接 --render--> vdom --> UI
+Vue.config.productionTip = false
 
-    ```js
-    import Vue form 'vue'
-    import App form './App'
-    
-    Vue.config.productionTip = false
-    
-    const cpn = {
-        template: '<div>{{message}}</div>',
-        data(){
-            return {
-                message: '我是组件message'
-            }
+new Vue({
+    el: '#app',
+    // createElement('标签名', {标签的属性}, [])
+    render: createElement => createElement('h2',
+                                          {class: 'box'},
+                                           ['Hello World', createElement('button',
+                                                                        {class: 'btn'},
+                                                                        ['按钮'])]
+                                          )
+})
+```
+
+传入组件对象。直接 --render--> vdom --> UI
+
+```js
+import Vue form 'vue'
+import App form './App'
+
+Vue.config.productionTip = false
+
+const cpn = {
+    template: '<div>{{message}}</div>',
+    data(){
+        return {
+            message: '我是组件message'
         }
     }
+}
+
+new Vue({
+    el: '#app',
+    // render: createElement => createElement(cpn)
     
-    new Vue({
-        el: '#app',
-        // render: createElement => createElement(cpn)
-        
-        // 同样的 App 组件也可以直接传递
-        // render: createElement => createElement(App)
-        // 精简
-        render: h => h(App)
-    })
+    // 同样的 App 组件也可以直接传递
+    // render: createElement => createElement(App)
+    // 精简
+    render: h => h(App)
+})
+```
+
+
+
+
+
+## Vue-CLI 2 目录
+
+### 目录
+
+生成的目录如下图，其中 build 和 config 都是配置相关的文件。
+
+![img](./images/68747470733a2.png)
+
+
+
+### build
+
+如图所示，build 中将 webpack 的配置文件做了分离：
+
+-   `webpack.base.conf.js`（公共配置）
+-   `webpack.dev.conf.js`（开发环境）
+-   `webpack.prod.conf.js`（生产环境）
+
+![img](./images/68747470733a2f2.png)
+
+我们使用的脚本命令配置在`package.json`中。
+
+![img](./images/68747470733a2f2f67697.png)
+
+打包构建：
+
+```bash
+npm run build
+```
+
+如果搭建了本地服务器`webpack-dev-server`，本地开发环境：
+
+```bash
+npm run dev
+```
+
+此时`npm run build`打包命令相当于使用 node 执行 build 文件夹下面的 build.js 文件。
+
+![img](./images/68747470733a2f2f6769.png)
+
+1.  检查dist文件夹是否已经存在，存在先删除
+2.  如果没有err，就使用webpack的配置打包dist文件夹
+
+在生产环境，即使用build打包时候，使用的是`webpack.prod.conf.js`配置文件。
+
+![img](./images/68747470733a2f2f6769746.png)
+
+源码中，显然使用了`webpack-merge`插件来合并prod配置文件和公共的配置文件，合并成一个配置文件并打包，而`webpack.dev.conf.js`也是如此操作，在开发环境使用的是dev的配置文件。
+
+config文件夹中是build的配置文件中所需的一些变量、对象，在`webpack.base.conf.js`中引入了`index.js`。
+
+```js
+const config = require('../config')
+```
+
+
+
+### src & static
+
+src源码目录，就是我们需要写业务代码的地方。
+
+static是放静态资源的地方，static文件夹下的资源会原封不动的打包复制到dist文件夹下。
+
+
+
+### .babelrc
+
+.babelrc是ES代码相关转化配置。
+
+```
+{
+  "presets": [
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+      }
+    }],
+    "stage-2"
+  ],
+  "plugins": ["transform-vue-jsx", "transform-runtime"]
+}
+```
+
+1.  browsers表示需要适配的浏览器，份额大于1%，最后两个版本，不需要适配ie8及以下版本
+2.  babel需要的插件
+
+
+
+### .editorconfig
+
+.editorconfig是编码配置文件。
+
+```
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+```
+
+一般是配置编码，代码缩进2空格，是否清除空格等。
+
+
+
+
+
+### .eslintignore
+
+.eslintignore文件忽略一些不规范的代码。
+
+```
+/build/
+/config/
+/dist/
+/*.js
+```
+
+忽略build、config、dist文件夹和js文件。
+
+
+
+### .postcssrc.js
+
+css转化是配置的一些。
+
+
+
+### index.html
+
+index.html文件是使用`html-webpack-plugin`插件打包的index.html模板。
+
+
+
+### package.json & package-lock.json
+
+*   package.json（包管理，记录大概安装的版本）
+
+*   package-lock.json（记录真实安装版本）
+
+所以一般下载开源项目时，要根据 lock 使用的是 npm 还是 yarn 来安装依赖，才能防止版本不一致
+
+
+
+
+
+## Vue-CLI 3 介绍
+
+与 2 的区别
+
+-   Vue-CLI 3 基于 webpack4 打造，Vue-CLI 2是基于 webpack3
+
+-   Vue-CLI 3 的设计原则是"**0配置**"，**移除了配置文件，build 和 config等**。最终跑到 node_modules/@vue/cli-service/webpack.config.js，实在要改变则在根目录下创建 vue.config.js，类似 webpack.config.js
+
+    ```js
+    //在module.exports中修改配置
+    module.exports = {
+      
+    }
     ```
 
-    
+-   Vue-CLI 3 提供`vue ui`的命令，提供了可视化配置
+
+-   **移除了 static 文件夹**，**新增了public文件夹**，并将 index.html 移入了public 文件夹。**打包时原封不动**！
+
+
+
+
+
