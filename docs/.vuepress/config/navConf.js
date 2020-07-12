@@ -94,6 +94,7 @@ module.exports = [
       { text: "JS", link: "/Front End/JS/0 作用域和闭包" },
       { text: "NodeJS", link: "/Front End/NodeJS/NodeJS-1 入门" },
       { text: "Vue", link: "/Front End/Vue/1-1 Primer" },
+      { text: "微信小程序", link: "/Front End/微信小程序/1-1 Primer" },
       { text: "Android", link: "/Front End/Android/0 Intro" },
       { text: "Flutter", link: "/Front End/Flutter/0 Intro" },
     ],
