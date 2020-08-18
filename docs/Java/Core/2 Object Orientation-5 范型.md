@@ -1,7 +1,5 @@
 # Generic 范型
 
-[[toc]]
-
 ## 为什么要有泛型
 
 *   泛型：类似标签。例如：中药店，每个抽屉外面贴着标签；垃圾分类！
@@ -29,19 +27,19 @@
 
 
 
-## 自定义泛型
+## 自定义泛型 🔥
 
 注意：
 
 *   泛型类可能有多个参数，此时应将多个参数一起放在尖括号内。比如`<E1,E2,E3>`
 
-*   `E`或其他只能是类，不能用基本数据类型填充，但可以使用包装类填充。
+*   `E`或其他只能是**类**，不能用基本数据类型填充，但可以使用**包装类**填充。
 
-*   构造器不用带`E`
+*   构造器不用带`E`或其他
 
 *   **泛型不同的引用不能相互赋值**
 
-*   在类/接口上声明的泛型，在本类或本接口中即代表某种类型，可以作为**非静态属性的类型、非静态方法的参数类型、非静态方法的返回值类型**。但**在静态方法中不能使用（使用！）类的泛型**。因为泛型是在创建对象时确定，晚于 static
+*   在类/接口上声明的泛型，在本类或本接口中即代表某种类型，可以作为**非静态属性的类型、非静态方法的参数类型、非静态方法的返回值类型**。但**在静态方法中不能使用类（使用类！）的泛型**。因为类泛型是在创建对象时确定，晚于 static
 
 *   异常类不能是泛型的；不能在try-catch中使用泛型定义 
 
@@ -162,33 +160,48 @@ my.add("aa");
 
 
 
-### 自定义泛型方法
+### 自定义泛型方法 🔥
 
-*   方法也可以被泛型化，**不管此时定义在其中的类是不是泛型类**。在泛型方法中可以定义泛型参数，此时参数的类型就是传入数据的类型。
+*   方法可以被泛型化，**无论方法所属的类是否为泛型类**
 
-*   **调用方法传递数据时**确定泛型的类型
-*   **泛型方法可以声明为静态的（不同于使用类的泛型）**。原因：泛型参数是在调用方法时确定的。并非在实例化类时确定。
+*   在泛型方法中可以定义泛型参数，在**调用方法传递数据时**确定泛型的类型
+*   **泛型方法可以声明为静态的（不同于使用类的泛型）**。原因：泛型参数是在调用方法时确定的。并非在实例化类时确定
 
 ```java
-修饰符 <代表泛型的变量> 返回值类型 方法名(参数){  } //格式
-public class MyGenericMethod {	  
-    // 权限修饰符后的<E>可以写上，让编译器知道这是泛型，不是具体类。也可以不写，在 IDEA2019中没报错
-    public <E>  List<E> show(E[] e) {
-        System.out.println(e.getClass());
-        return null;
+// 修饰符 <代表泛型的变量> 返回值类型 方法名(参数){  } //格式
+public class LinearSearch {
+
+    /**
+     * @param data   要查找的数据集
+     * @param target 目标数据
+     * @return index
+     */
+    public static <E> int search(E[] data, E target) {
+        for (int i = 0; i < data.length; i++) {
+            // 对象类型笔记使用 equal，除非就是比较地址值。若是自定义的类比较，需要自己重写 equals 方法
+            if (data[i].equals(target))
+                return i;
+        }
+        return -1;
     }
 
-    public static <E> E show2(E e) {
-        return e;
+
+    public static void main(String[] args) {
+        Integer[] arr = {1, 3, 2, 5, 7, 4, 3, 11};
+        //调用方法传递数据时确定泛型的类型
+        int search = LinearSearch.search(arr, 3);
+        System.out.println(search);
+
+
+        String[] strArr = {"conanan", "conan", "zhangsan"};
+        //调用方法传递数据时确定泛型的类型
+        int conan = LinearSearch.search(strArr, "conan");
+        System.out.println(conan);
     }
 }
 ```
 
-```java
-MyGenericMethod mm = new MyGenericMethod();
-mm.show("aaa"); //调用方法传递数据时确定泛型的类型
-mm.show(1);
-```
+
 
 
 
