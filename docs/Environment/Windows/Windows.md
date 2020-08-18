@@ -141,9 +141,44 @@ git config --global --unset http.proxy
 git config --global --unset https.proxy
 ```
 
+
+
+
+
+## Windows Terminal
+
+[Github](https://github.com/microsoft/terminal)
+
+### 安装
+
+Microsoft Store 中下载安装即可，不再赘述
+
+
+
+### 配置
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## PowerShell
 
 参考该[仓库](https://github.com/spencerwooo/dotfiles)，他还写了篇少数派文章
 
 在选择 powerline 字体时我只找到 source code pro 和 ubuntu 可以使用，其他没测完
 Windows Terminal 中可以试试 MesloLGS NF 字体
+
+
+
+### 安装 PowerShell
+
+不是 Windows 自带的 PowerShell！
+
