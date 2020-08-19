@@ -500,11 +500,15 @@ Maven中project标签下初始配置可以如下，稍加修改
 
   方法三：
 
-  - 使用本地Tomcat部署（需install）
+  - 使用本地Tomcat部署（依赖其他模块时需 install 被依赖模块，否则只需 package）
 
     ![](./images/deploy-tomcat.png)
-
-
+    
+  - 注意自动生成得 Artifacts 可能**路径不对**（我也不知道为啥就生成的不对。。。），正确的如下图：
+  
+    ![artifact_war](./images/artifact_war.png)
+  
+    ![artifact_war_exploded](./images/artifact_war_exploded.png)
 
 ### 解决 Maven 项目中 Java 版本警告
 
