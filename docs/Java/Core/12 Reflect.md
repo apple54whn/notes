@@ -1,69 +1,162 @@
-# 12 Reflect—java.lang.reflect
+# Reflect—java.lang.reflect
 
-[[toc]]
+## 反射简介
 
-## 12.1 反射简介
+### 动态语言 & 静态语言
 
-*   Reflection(反射)是被视为动态语言的关键，反射机制允许程序在**执行期**借助于Reflection API取得任何类的内部信息，并能直接操作任意对象的内部属性及方法。
+Reflection(反射)是被视为动态语言的关键，反射机制允许程序在**执行期**借助于Reflection API取得任何类的内部信息，并能直接操作任意对象的内部属性及方法。
 
->   动态语言：是一类在运行时可以改变其结构的语言。例如新的函数、对象、甚至代码可以被引进，已有的函数可以被删除或是其他结构上的变化。通俗点说就是在运行时代码可以根据某些条件改变自身结构。 主要动态语言有Object-C、C#、JavaScript、PHP、Python、Erlang
->
->   静态语言：与动态语言相对应的，运行时结构不可变的语言就是静态语言。如Java、C、 C++。 
->
->   Java不是动态语言，但Java可以称之为“准动态语言”。即Java有一定的动 态性，我们可以利用反射机制、字节码操作获得类似动态语言的特性。 Java的动态性让编程的时候更加灵活!
+*   动态语言：是一类在运行时可以改变其结构的语言。例如新的函数、对象、甚至代码可以被引进，已有的函数可以被删除或是其他结构上的变化。通俗点说就是在运行时代码可以根据某些条件改变自身结构。 主要动态语言有Object-C、C#、JavaScript、PHP、Python、Erlang
+
+*   静态语言：与动态语言相对应的，运行时结构不可变的语言就是静态语言。如Java、C、 C++。 
+
+Java不是动态语言，但Java可以称之为“准动态语言”。即Java有一定的动 态性，我们可以利用反射机制、字节码操作获得类似动态语言的特性。 Java的动态性让编程的时候更加灵活!
 
 
 
-> 反射是框架设计的灵魂。框架：半成品软件。可以在框架的基础上进行软件开发，简化编码
->
-> 通过直接new的方式或反射的方式都可以调用公共的结构，开发中到底用那个？
->
-> *   推荐 new，除非编译期不确定 new 的对象，如 SpringMVC 中 URL 映射
+### 用处
 
-* Java 反射机制是在**运行状态中**，对于任意一个**类**，都能够**获得**这个类的**所有属性和方法**；对于任意一个**对象**，都能够**调用**它的任意一个**属性和方法**；**能够分析类能力的程序称为反射**。
+反射是框架设计的灵魂。框架：半成品软件。可以在框架的基础上进行软件开发，简化编码
 
-    加载完类之后，在堆内存的方法区中就产生了一个Class类型的对象(一个类只有一个Class对象)，这个对象就包含了完整的类的结构信息。我们可以通过这个对象看到类的结构。这个对象就像一面镜子，透过这个镜子看到类的结构，所以，我们形象的称之为反射。
+通过直接new的方式或反射的方式都可以调用公共的结构，开发中到底用那个？
 
-* **原理：**
+*   推荐 new，除非编译期不确定 new 的对象，如 SpringMVC 中 URL 映射
 
-    2. **`javac`命令编译`.java`文件，生成一个或多个`.class`文件**
-    3. **JVM通过类加载器将`.class`文件加载到内存中，用`Class`类表示（Java中万事万物皆对象），可通过 `java` 命令解释运行**
-    4. **得到了这个`Class`类之后，就可以得到`.class`文件里面的所有内容**
+
+
+
+
+## Java 的反射机制
+
+### 简介 🔥
+
+Java 反射机制是在**运行状态中**，对于任意一个**类**，都能够**获得**这个类的**所有属性和方法**；对于任意一个**对象**，都能够**调用**它的任意一个**属性和方法**；**能够分析类能力的程序称为反射**。
+
+加载完类之后，在堆内存的方法区中就产生了一个 Class 类型的对象（一个类只有一个Class对象，内部类算多个），这个对象就包含了完整的类的结构信息，我们可以通过这个对象看到原始类的结构，这个对象就像原始类被镜子反射出来一样。
+
+
+
+### 原理 & 过程 🔥
+
+1.  `javac`命令编译`.java`文件，生成一个或多个`.class`文件
+2.  JVM通过类加载器将`.class`文件加载到内存中，用`Class`类表示（Java中万事万物皆对象），可通过 `java` 命令解释运行
+3.  得到了这个`Class`类之后，就可以得到`.class`文件里面的所有内容
+
+
+
+### 好处
+
+* 可以在**程序运行过程中，操作这些对象**。如IDE中代码提示
+* 可以**解耦，提高程序的可扩展性**
+
+
+
+### 反射相关的主要 API
+
+* `java.lang.Class`:代表一个类
+* `java.lang.reflect.Field`:代表类的成员变量
+* `java.lang.reflect.Constructor`:代表类的构造器 
+* `java.lang.reflect.Method`:代表类的方法
+
+
+
+
+
+## ClassLoader 类加载器
+
+### 分类 🔥
+
+**类加载器**（负责将`.class`文件**加载到内存中**，并为之**生成**对应的`Class`**对象**）
+
+* Bootstrap ClassLoader：**引导类加载器**
+
+    负责JDK中`jre/lib`目录下`rt.jar`文件中**Java核心类的加载**，比如System、String等
+
+* Extension ClassLoader：**扩展类加载器** 
+
+    负责JDK中`jre/lib/ext`目录下或`-D java.ext.dirs`指定目录下**jar包**的加载
+
+* System(Application) ClassLoader：**系统类加载器**
+
+    JVM 启动时，负责`java -classpath`或`-D java.class.path`所指目录下的类与 jar 包的加载
+
+    ![image-20191103231822517](./images/image-20191103231822517.png)
+
+
+
+### 常用方法
+
+* `clazz.getClassLoader()`
+
+    **获得类加载器**
+
+* `classLoader.getParent()`
+
+    获取类加载器的类加载器
+
+    ```java
+    // 如下在 OpenJDK11 测试
+    ClassLoader classLoader1 = ReflectTest.class.getClassLoader();
+    System.out.println(classLoader1);// jdk.internal.loader.ClassLoaders$AppClassLoader@2c13da15
     
-* 好处
+    ClassLoader classLoader2 = classLoader1.getParent();
+    System.out.println(classLoader2);// jdk.internal.loader.ClassLoaders$PlatformClassLoader@2d209079
+    
+    ClassLoader classLoader3 = classLoader2.getParent();
+    System.out.println(classLoader3);// null，Bootstrap ClassLoader 无法获取到
+    
+    // 在 OpenJDK8 中测试如下
+    // sun.misc.Launcher$AppClassLoader@18b4aac2
+    // sun.misc.Launcher$ExtClassLoader@6d6f6e28
+    // null
+    ```
 
-    * 可以在**程序运行过程中，操作这些对象**。如IDE中代码提 示
-    * 可以**解耦，提高程序的可扩展性**
+* `classLoader.getResource(name)`
 
-* 反射相关的主要API
+    ```java
+    URL url = clazz.getResource("test.txt")；
+    String path = url.getPath();
+    ```
 
-    * `java.lang.Class`:代表一个类
-    * `java.lang.reflect.Field`:代表类的成员变量
-    * `java.lang.reflect.Constructor`:代表类的构造器 
-    * `java.lang.reflect.Method`:代表类的方法
+* `InputStream classLoader.getResourceAsStream`就是上面的进行了封装简化后的版本
+
+::: tip 
+
+读取配置文件方式：
+
+*   IDEA 中`@Test` **相对于 Module**，若是 `main` 方法则**相对于 Project**
+*   ClassLoader 的 getResource 或 getResourceAsStream 方法获取相对classes（out或src）下的任何URL资源，不能以`/`开头
+
+:::
 
 
 
-## 12.2 类的加载及ClassLoader
+## 类的加载过程 🔥
 
-* 当程序要使用某个类时，如果该类还未被加载到内存中，则系统会通过加载，连接，初始化三步来实现对这个类进行初始化 
+当程序要使用某个类时，如果该类还未被加载到内存中，则系统会通过加载，连接，初始化三步来实现对这个类进行初始化 
 
-    **加载** 
+### 加载
 
-    - 将`.class`文件字节码内容加载到内存中，并将这些静态数据转换成**方法区**的运行时数据结构，然后生成一个代表这个类的`java.lang.Class`对象，作为方法区中类数据的访问入口（即引用地址）。所有需要访问和使用类数据只能通过这个`Class`对象。这个加载的过程需要类加载器参与。
-    - 类缓存：标准的JavaSE类加载器可以按要求查找类，但一旦某个类被加载到类加载器中，它将维持加载(缓存)一段时间。不过JVM垃圾回收机制可以回收这些Class对象。
+- 将`.class`文件字节码内容加载到内存中，并将这些静态数据转换成**方法区**的运行时数据结构，然后生成一个代表这个类的`java.lang.Class`对象，作为**方法区**中类数据的访问入口（即引用地址）。所有需要访问和使用类数据只能通过这个`Class`对象。这个加载的过程需要类加载器参与。
+- 类缓存：标准的JavaSE类加载器可以按要求查找类，但一旦某个类被加载到类加载器中，它将维持加载(缓存)一段时间。不过JVM垃圾回收机制可以回收这些Class对象。
 
-    **连接**：将Java类的二进制代码合并到JVM的运行状态之中的过程 
 
-    - 验证：确保加载的类信息符合JVM规范，例如以cafe开头，没有安全方面的问题 
-    - 准备：正式为类变量(static)分配内存并设置**类变量默认初始值**的阶段，这些内存 都将在方法区中进行分配。 
-    - 解析：虚拟机常量池内的符号引用(常量名)替换为直接引用(地址)的过程 
 
-    **初始化**
+### 连接
 
-    - 执行**类构造器**`<clinit>()`方法的过程。**类构造器`<clinit>()`方法是由编译期自动收集类中所有类变量的赋值动作和静态代码块中的语句合并产生的**。(类构造器是构造类信息的，不是构造该类对象的构造器)。
-    - 当初始化一个类的时候，如果发现其父类还没有进行初始化，则需要先触发其父类的初始化。
-    - 虚拟机会保证一个类的`<clinit>()`方法在多线程环境中被正确加锁和同步。
+将Java类的二进制代码合并到JVM的运行状态之中的过程 
+
+- 验证：确保加载的类信息符合JVM规范，例如以cafe开头，没有安全方面的问题 
+- 准备：正式为类变量(static)分配内存并设置**类变量默认初始值**的阶段，这些内存 都将在方法区中进行分配。 
+- 解析：虚拟机常量池内的符号引用(常量名)替换为直接引用(地址)的过程 
+
+
+
+### 初始化
+
+- 执行**类构造器**`<clinit>()`方法的过程。**类构造器`<clinit>()`方法是由编译期自动收集类中所有类变量的赋值动作和静态代码块中的语句合并产生的**。(类构造器是构造类信息的，不是构造该类对象的构造器)。
+- 当初始化一个类的时候，如果发现其父类还没有进行初始化，则需要先触发其父类的初始化。
+- 虚拟机会保证一个类的`<clinit>()`方法在多线程环境中被正确加锁和同步。
 
 * **类初始化时机**
 
@@ -82,120 +175,79 @@
 
 
 
-* **类加载器**（负责将**`.class`文件加载**到内存中，并为之**生成**对应的**`Class`对象**）
+## Class 🔥
 
-    * Bootstrap ClassLoader：**引导类加载器**
+### 获取字节码文件的`Class`对象 🔥
 
-        负责JDK中`jre/lib`目录下`rt.jar`文件中**Java核心类的加载**，比如System、String等
+*   `Calss<Student> c = Student.class`通过**类名**得到。多用于参数传递
+*   `Class<Student> c = stu.getClass()`通过**对象**得到，Object类中的方法。多用于对象获取字节码
+*   `Class<Student> c = Class.forName(String name)`：包括包名的全类名。多用于配置文件
+    *   `String getName();`获取全类名
+    *   `String getPackageName();`获取包名
+*   `Class<Student> c = clazz.getClassLoader().loadClass(String name)` 类加载器
 
-    * Extension ClassLoader：**扩展类加载器** 
+**同一个字节码文件`*.class`在一次程序运行过程中只会被加载一次，以上方式获取的`Class`对象都是同一个。**
 
-        负责JDK中`jre/lib/ext`目录下或`-D java.ext.dirs`指定目录下**jar包**的加载
 
-    * System(Application) ClassLoader：**系统类加载器**
 
-         JVM 启动时，负责`java -classpath`或`-D java.class.path`所指目录下的类与 jar 包的加载
+### 哪些类型可以有 `Class` 对象 🔥
 
-        ![image-20191103231822517](./images/image-20191103231822517.png)
+* class：外部类，成员（成员内部类，静态内部类），局部内部类，匿名内部类，如`Object.class`
+* interface：接口，如`Comparable.class`
+* Array：数组，如`int[][].class`。🔥
+* Enum：枚举，如`ElementType.class`
+* Annotation：注解@interface，如`Override.class`
+* primitive type：基本数据类型，如`int.class`
+* void：如`void.class`
+* Class：如`Class.class`本身
 
-* **类加载器的方法**
+* **泛型的 Class 对象是什么？** 🔥
 
-    * `clazz.getClassLoader()`
+    首先要明确泛型仅存在于编译时期，反射存在于运行时期，在**运行时泛型已经被转为 Object 或其他的类型**
 
-        **获得类加载器**
-
-    * `classLoader.getParent()`
-
-        获取类加载器的类加载器
-
-        ```java
-        // 如下在 OpenJDK11 测试
-        ClassLoader classLoader1 = ReflectTest.class.getClassLoader();
-        System.out.println(classLoader1);// jdk.internal.loader.ClassLoaders$AppClassLoader@2c13da15
-        
-        ClassLoader classLoader2 = classLoader1.getParent();
-        System.out.println(classLoader2);// jdk.internal.loader.ClassLoaders$PlatformClassLoader@2d209079
-        
-        ClassLoader classLoader3 = classLoader2.getParent();
-        System.out.println(classLoader3);// null，Bootstrap ClassLoader 无法获取到
-        
-        // 在 OpenJDK8 中测试如下
-        // sun.misc.Launcher$AppClassLoader@18b4aac2
-        // sun.misc.Launcher$ExtClassLoader@6d6f6e28
-        // null
-        ```
-
-    * `classLoader.getResource(name)`
-
-        **获取相对classes（out或src）下 的任何URL资源**，name是资源路径，不能以`/`开头
-
-        ```java
-        URL url = clazz.getResource("test.txt")；
-        String path = url.getPath();
-        ```
-
-    * `InputStream classLoader.getResourceAsStream`就是上面的进行了封装简化后的版本
-
->   读取配置文件方式：
->
->   *   IDEA 中**@Test 相对于 Module **，若是 **main 方法则相对于 Project**
->   *   ClassLoader 的 getResource 或 getResourceAsStream 方法获取相对classes（out或src）下的任何URL资源
-
-## 12.2 Class
-
-### Class 简介
-
-* **获取**字节码文件`Class`类型对象 
-
-    *   `Calss<Student> c = Student.class`通过**类名**得到。多用于参数传递
-    *   `Class<Student> c = stu.getClass()`通过**对象**得到，Object类中的方法。多用于对象获取字节码
-    *   `Class<Student> c = Class.forName(String name)`：包括包名的全类名。多用于配置文件
-        *   `String getName();`获取全类名
-        *   `String getPackageName();`获取包名
-    *   `Class<Student> c = clazz.getClassLoader().loadClass(String name)` 类加载器
-
-    **同一个字节码文件`*.class`在一次程序运行过程中只会被加载一次，以上方式获取的`Class`对象都是同一个。**
-
-* 哪些类型可以有 `Class` 对象
-
-    * class：外部类，成员（成员内部类，静态内部类），局部内部类，匿名内部类，如`Object.class`
-
-    * interface：接口，如`Comparable.class`
-
-    * Array：数组，如`int[][].class`
-
-    * Enum：枚举，如`ElementType.class`
-
-    * Annotation：注解@interface，如`Override.class`
-
-    * primitive type：基本数据类型，如`int.class`
-
-    * void：如`void.class`
-
-    * Class：如`Class.class`本身
-
-        那么问题来了，看下面
-
-        ```java
-        int[] a = new int[10];
-        int[] b = new int[100];
-        Class c10 = a.getClass();
-        Class c100 = b.getClass();
-        System.out.println(c10 = c100);// true
-        ```
-
-        结论：只要数组的**元素类型**和**纬度**一样，就是同一个 Class
-
-* **通过反射分析类的能力**：**域(成员变量)**、**构造器**、**方法**
-
-    * **不带Declare**返回类提供的**public**域、方法和构造器的**数组**，包括**超类的公有成员**
-
-    * **带Declare**返回类提供的**全部**域、方法和构造器，**包括私有和保护成员**，但不包括超类的成员
-
-        操作私有成员时**`setAccessible(flag)`**中flag设置为true
+    若参数为：
 
     ```java
-//若类中没有域(成员变量)或者Class对象描述的是基本类型或数组类型，则返回一个长度为0的数组
+    public static <E extends Comparable<E>> void sort(E[] arr)
+    ```
+
+    则最终转为`Comparable[].class`类型
+
+    若参数为：
+
+    ```java
+    public static <E> void sort(E[] arr, Comparator<E> comparator)
+    ```
+
+    则最终转为`Object[].class`和`Comparator.class`类型（这里是俩参数）
+
+* 看下面代码。结论：只要数组的**元素类型**和**纬度**一样，就是同一个 Class
+
+    ```java
+    int[] a = new int[10];
+    int[] b = new int[100];
+    
+    System.out.println(a.getClass());// class [I
+    System.out.println(b.getClass());// class [I
+    
+    System.out.println(a.getClass() == b.getClass());// true
+    System.out.println(a.getClass() == int[].class);// true
+    ```
+
+    
+
+
+
+### 分析类：**域(成员变量)**、**构造器**、方法 🔥
+
+* **不带Declare**返回类提供的**public**域、方法和构造器的**数组**，包括**超类的公有成员**
+
+* **带Declare**返回类提供的**全部**域、方法和构造器，**包括私有和保护成员**，但不包括超类的成员。
+
+* 操作私有成员时`setAccessible(flag)`中设置为true
+
+    ```java
+    //若类中没有域(成员变量)或者Class对象描述的是基本类型或数组类型，则返回一个长度为0的数组
     Field get(Declare)Field(String name)
     Field[] get(Declare)Fields()
     
@@ -210,12 +262,12 @@
     //以上其底层都是调用构造器来创建对象
     
     setAccessible(boolean b)//为以上三种反射对象设置可访问标志，true为屏蔽java语言访问检查
-    ```
-    
-    ```java
+        
+        
+    // ============================================    
     // 单个构造,无参构造可不带.class;传递参数类型
     Constructor<Person> con = clazz.getConstructor(String.class, int.class, String.class);
-Person obj = con.newInstance("zhangsan", 33, "beijing");
+    Person obj = con.newInstance("zhangsan", 33, "beijing");
     //Object o = c.newInstance();//若调用空参构造可以直接使用Class类的newInstance()方法。在Java9开始弃用
     String name = con.getName();//获取构造方法名称
      
@@ -239,407 +291,7 @@ Person obj = con.newInstance("zhangsan", 33, "beijing");
 
 
 
-### 获取运行时类的完整结构 
-
-*   实现的全部接口
-
-    *   `public Class<?>[] getInterfaces() `
-
-        确定此对象所表示的类或接口实现的接口。 
-
-*   所继承的父类
-
-    *   `public Class<? Super T> getSuperclass()`
-
-        返回表示此 Class 所表示的实体(类、接口、基本类型)的父类的 Class。 
-
-*   全部的构造器
-
-    *   `public Constructor<T>[] getConstructors()`
-
-        返回此 Class 对象所表示的类的所有public构造方法。 
-
-    *   `public Constructor<T>[] getDeclaredConstructors() `
-
-        返回此 Class 对象表示的类声明的所有构造方法。
-
-    *   Constructor类中：
-
-        *   取得修饰符：`public int getModifiers()`
-        *   取得方法名称：`public String getName()`
-        *   取得参数的类型：`public Class<?>[] getParameterTypes()`
-
-*   全部的方法
-
-    *   `public Method[] getMethods() `
-
-        返回此Class对象所表示的类或接口的public的方法
-
-    *   `public Method[] getDeclaredMethods() `
-
-        返回此Class对象所表示的类或接口的全部方法
-
-    *   Method类中：
-
-        *   `public Class<?> getReturnType()`取得全部的返回值
-        *   `public Class<?>[] getParameterTypes()`取得全部的参数 
-        *   `public int getModifiers()`取得修饰符
-        *   `public Class<?>[] getExceptionTypes()`取得异常信息 
-
-*   全部的Field
-
-    *   `public Field[] getFields() `
-
-        返回此Class对象所表示的类或接口的public的Field。 
-
-    *   `public Field[] getDeclaredFields() `
-
-        返回此Class对象所表示的类或接口的全部Field。 
-
-    *   Field方法中：
-
-        *   `public int getModifiers()` 以整数形式返回此Field的修饰符 
-        *   `public Class<?> getType()` 得到Field的属性类型 
-        *   `public StringgetName()` 返回Field的名称。 
-
-*   Annotation相关
-
-    *   `get Annotation(Class<T> annotationClass) `
-    *   `getDeclaredAnnotations()`
-
-*   Generic
-
-    *   获取父类泛型类型：`Type getGenericSuperclass() `
-    *   泛型类型：`ParameterizedType `
-    *   获取实际的泛型类型参数数组：`getActualTypeArguments() `
-
-*   类所在的包
-
-    *   `Package getPackage()`
-
-```java
-public class Creature<T> implements Serializable {
-  private char gender;
-  public double weight;
-
-  private void breath(){
-    System.out.println("生物呼吸");
-  }
-
-  public void eat(){
-    System.out.println("生物吃东西");
-  }
-}
-//--------------------------
-public interface MyInterface {
-    void info();
-}
-//--------------------------
-@Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface MyAnnotation {
-    String value() default "hello";
-
-}
-//--------------------------
-@MyAnnotation(value="hi")
-public class Person extends Creature<String> implements Comparable<String>,MyInterface{
-
-  private String name;
-  int age;
-  public int id;
-
-  public Person(){}
-
-  @MyAnnotation(value="abc")
-  private Person(String name){
-    this.name = name;
-  }
-
-  Person(String name,int age){
-    this.name = name;
-    this.age = age;
-  }
-  @MyAnnotation
-  private String show(String nation){
-    System.out.println("我的国籍是：" + nation);
-    return nation;
-  }
-
-  public String display(String interests,int age) throws NullPointerException,ClassCastException{
-    return interests + age;
-  }
-
-  @Override
-  public void info() {
-    System.out.println("我是一个人");
-  }
-
-  @Override
-  public int compareTo(String o) {
-    return 0;
-  }
-
-  private static void showDesc(){
-    System.out.println("我是一个可爱的人");
-  }
-
-  @Override
-  public String toString() {
-    return "Person{" +
-      "name='" + name + '\'' +
-      ", age=" + age +
-      ", id=" + id +
-      '}';
-  }
-}
-```
-
-#### Field
-
-```java
-public class FieldTest {
-
-  @Test
-  public void test1(){
-
-    Class clazz = Person.class;
-
-    //获取属性结构
-    //getFields():获取当前运行时类及其父类中声明为public访问权限的属性
-    Field[] fields = clazz.getFields();
-    for(Field f : fields){
-      System.out.println(f);
-    }
-    System.out.println();
-
-    //getDeclaredFields():获取当前运行时类中声明的所有属性。（不包含父类中声明的属性）
-    Field[] declaredFields = clazz.getDeclaredFields();
-    for(Field f : declaredFields){
-      System.out.println(f);
-    }
-  }
-
-  //权限修饰符  数据类型 变量名
-  @Test
-  public void test2(){
-    Class clazz = Person.class;
-    Field[] declaredFields = clazz.getDeclaredFields();
-    for(Field f : declaredFields){
-      //1.权限修饰符
-      int modifier = f.getModifiers();// 可在 Modifier 类中找到 int 对应的权限修饰符
-      System.out.print(Modifier.toString(modifier) + "\t");// 这样也可以获取权限修饰符名称
-
-      //2.数据类型
-      Class type = f.getType();
-      System.out.print(type.getName() + "\t");
-
-      //3.变量名
-      String fName = f.getName();
-      System.out.print(fName);
-      System.out.println();
-    }
-  }
-}
-```
-
-#### Method
-
-```java
-public class MethodTest {
-
-  @Test
-  public void test1(){
-
-    Class clazz = Person.class;
-
-    //getMethods():获取当前运行时类及其所有父类中声明为public权限的方法
-    Method[] methods = clazz.getMethods();
-    for(Method m : methods){
-      System.out.println(m);
-    }
-    System.out.println();
-    //getDeclaredMethods():获取当前运行时类中声明的所有方法。（不包含父类中声明的方法）
-    Method[] declaredMethods = clazz.getDeclaredMethods();
-    for(Method m : declaredMethods){
-      System.out.println(m);
-    }
-  }
-
-  /*
-    @Xxxx
-    权限修饰符  返回值类型  方法名(参数类型1 形参名1,...) throws XxxException{}
-     */
-  @Test
-  public void test2(){
-    Class clazz = Person.class;
-    Method[] declaredMethods = clazz.getDeclaredMethods();
-    for(Method m : declaredMethods){
-      //1.获取方法声明的注解
-      Annotation[] annos = m.getAnnotations();
-      for(Annotation a : annos){
-        System.out.println(a);
-      }
-
-      //2.权限修饰符
-      System.out.print(Modifier.toString(m.getModifiers()) + "\t");
-
-      //3.返回值类型
-      System.out.print(m.getReturnType().getName() + "\t");
-
-      //4.方法名
-      System.out.print(m.getName());
-      System.out.print("(");
-      //5.形参列表
-      Class[] parameterTypes = m.getParameterTypes();
-      if(!(parameterTypes == null && parameterTypes.length == 0)){
-        for(int i = 0;i < parameterTypes.length;i++){
-
-          if(i == parameterTypes.length - 1){
-            System.out.print(parameterTypes[i].getName() + " args_" + i);
-            break;
-          }
-
-          System.out.print(parameterTypes[i].getName() + " args_" + i + ",");
-        }
-      }
-      System.out.print(")");
-
-      //6.抛出的异常
-      Class[] exceptionTypes = m.getExceptionTypes();
-      if(exceptionTypes.length > 0){
-        System.out.print("throws ");
-        for(int i = 0;i < exceptionTypes.length;i++){
-          if(i == exceptionTypes.length - 1){
-            System.out.print(exceptionTypes[i].getName());
-            break;
-          }
-          System.out.print(exceptionTypes[i].getName() + ",");
-        }
-      }
-      System.out.println();
-    }
-  }
-}
-```
-
-#### Other
-
-```java
-public class OtherTest {
-
-  /*
-    获取构造器结构
-     */
-  @Test
-  public void test1(){
-
-    Class clazz = Person.class;
-    //getConstructors():获取当前运行时类中声明为public的构造器
-    Constructor[] constructors = clazz.getConstructors();
-    for(Constructor c : constructors){
-      System.out.println(c);
-    }
-
-    System.out.println();
-    //getDeclaredConstructors():获取当前运行时类中声明的所有的构造器
-    Constructor[] declaredConstructors = clazz.getDeclaredConstructors();
-    for(Constructor c : declaredConstructors){
-      System.out.println(c);
-    }
-
-  }
-
-  /*
-    获取运行时类的父类
-     */
-  @Test
-  public void test2(){
-    Class clazz = Person.class;
-
-    Class superclass = clazz.getSuperclass();
-    System.out.println(superclass);
-  }
-
-  /*
-    获取运行时类的带泛型的父类
-     */
-  @Test
-  public void test3(){
-    Class clazz = Person.class;
-
-    Type genericSuperclass = clazz.getGenericSuperclass();
-    System.out.println(genericSuperclass);
-  }
-
-  /*
-    获取运行时类的带泛型的父类的泛型
-    代码：逻辑性代码  vs 功能性代码
-     */
-  @Test
-  public void test4(){
-    Class clazz = Person.class;
-
-    Type genericSuperclass = clazz.getGenericSuperclass();
-    ParameterizedType paramType = (ParameterizedType) genericSuperclass;
-    //获取泛型类型
-    Type[] actualTypeArguments = paramType.getActualTypeArguments();
-    //System.out.println(actualTypeArguments[0].getTypeName());
-    System.out.println(((Class)actualTypeArguments[0]).getName());
-  }
-
-  /*
-    获取运行时类实现的接口
-     */
-  @Test
-  public void test5(){
-    Class clazz = Person.class;
-
-    Class[] interfaces = clazz.getInterfaces();
-    for(Class c : interfaces){
-      System.out.println(c);
-    }
-    System.out.println();
-    
-    //获取运行时类的父类实现的接口
-    Class[] interfaces1 = clazz.getSuperclass().getInterfaces();
-    for(Class c : interfaces1){
-      System.out.println(c);
-    }
-
-  }
-  /*
-   获取运行时类所在的包
-    */
-  @Test
-  public void test6(){
-    Class clazz = Person.class;
-
-    Package pack = clazz.getPackage();
-    System.out.println(pack);
-  }
-
-  /*
-    获取运行时类声明的注解
-   */
-  @Test
-  public void test7(){
-    Class clazz = Person.class;
-
-    Annotation[] annotations = clazz.getAnnotations();
-    for(Annotation annos : annotations){
-      System.out.println(annos);
-    }
-  }
-
-}
-```
-
-
-
-
-
-### * 获取运行时类的指定结构
+### 获取运行时类的指定结构 🔥
 
 #### 调用指定方法
 
@@ -689,6 +341,506 @@ public class OtherTest {
 
 
 
+### 准备的类
+
+```java
+public class Creature<T> implements Serializable {
+    private char gender;
+    public double weight;
+
+    private void breath() {
+        System.out.println("生物呼吸");
+    }
+
+    public void eat() {
+        System.out.println("生物吃东西");
+    }
+}
+```
+
+```java
+@Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+    String value() default "hello";
+
+}
+```
+
+```java
+public interface MyInterface {
+    void info();
+}
+```
+
+```java
+@MyAnnotation(value = "hi")
+public class Person extends Creature<String> implements Comparable<String>, MyInterface {
+
+    private String name;
+    int age;
+    public int id;
+
+    public Person() {
+    }
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @MyAnnotation(value = "abc")
+    private Person(String name) {
+        this.name = name;
+    }
+
+    @MyAnnotation
+    private String show(String nation) {
+        System.out.println("我的国籍是：" + nation);
+        return nation;
+    }
+
+    public String display(String interests, int age) throws NullPointerException, ClassCastException {
+        return interests + age;
+    }
+
+    @Override
+    public void info() {
+        System.out.println("我是一个人");
+    }
+
+    @Override
+    public int compareTo(String o) {
+        return 0;
+    }
+
+    private static void showDesc() {
+        System.out.println("我是一个可爱的人");
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", id=" + id +
+                '}';
+    }
+}
+```
+
+
+
+
+
+### Field
+
+```java
+public class FieldTest {
+
+    /**
+     * 获取 Field
+     */
+    @Test
+    public void test1(){
+
+        Class<Person> clazz = Person.class;
+
+        // getFields():获取当前运行时类及其父类中声明为public访问权限的属性
+        Field[] fields = clazz.getFields();
+        System.out.println(Arrays.toString(fields));
+        // [public int pojo.Person.id, public double pojo.Creature.weight]
+
+        // getDeclaredFields():获取当前运行时类中声明的所有属性。（不包含父类中声明的属性）
+        Field[] declaredFields = clazz.getDeclaredFields();
+        System.out.println(Arrays.toString(declaredFields));
+        // [private java.lang.String pojo.Person.name, int pojo.Person.age, protected java.lang.String pojo.Person.sex, public int pojo.Person.id]
+
+    }
+
+    /**
+     * 权限修饰符  数据类型 变量名
+     */
+    @Test
+    public void test2(){
+        Class<Person> clazz = Person.class;
+
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for(Field f : declaredFields){
+
+            //1.权限修饰符
+            int modifier = f.getModifiers();// 可在 Modifier 类中找到 int 对应的权限修饰符
+            System.out.print(Modifier.toString(modifier) + "\t");// 这样也可以获取权限修饰符名称
+
+            //2.数据类型
+            Class<?> type = f.getType();
+            System.out.print(type.getName() + "\t");
+
+            //3.变量名
+            String fName = f.getName();
+            System.out.print(fName);
+            System.out.println();
+        }
+        // private      java.lang.String	name
+        //              int	age
+        // protected    java.lang.String	sex
+        // public       int                 id
+    }
+
+
+    /**
+     * 操作
+     */
+    @Test
+    public void test3() throws Exception {
+        Class<Person> clazz = Person.class;
+
+        Constructor<Person> personConstructor = clazz.getDeclaredConstructor(String.class, int.class);
+        personConstructor.setAccessible(true);
+        Person person = personConstructor.newInstance("conanan", 22);
+
+        Field nameField = clazz.getDeclaredField("name");
+        nameField.setAccessible(true);
+        String name = (String) nameField.get(person);
+        System.out.println(name);// conanan
+
+        nameField.set(person, "conan");
+        name = (String) nameField.get(person);
+        System.out.println(name);// conan
+    }
+}
+```
+
+
+
+
+
+### Method
+
+```java
+public class MethodTest {
+
+    /**
+     * 获取方法
+     */
+    @Test
+    public void test1() {
+
+        Class<Person> clazz = Person.class;
+
+        // getMethods():获取当前运行时类及其所有父类中声明为public权限的方法
+        Method[] methods = clazz.getMethods();
+        System.out.println(Arrays.toString(methods));
+
+        // getDeclaredMethods():获取当前运行时类中声明的所有方法。（不包含父类中声明的方法）
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        System.out.println(Arrays.toString(declaredMethods));
+
+    }
+
+
+    /**
+     * @Xxxx 权限修饰符  返回值类型  方法名(参数类型1 形参名1,...) throws XxxException{}
+     */
+    @Test
+    public void test2() {
+        Class<Person> clazz = Person.class;
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method m : declaredMethods) {
+            //1.获取方法声明的注解
+            Annotation[] annos = m.getAnnotations();
+            Arrays.stream(annos).forEach(System.out::println);
+
+            //2.权限修饰符
+            System.out.print(Modifier.toString(m.getModifiers()) + "\t");
+
+            //3.返回值类型
+            System.out.print(m.getReturnType().getName() + "\t");
+
+            //4.方法名
+            System.out.print(m.getName());
+            System.out.print("(");
+
+            //5.形参列表
+            Class<?>[] parameterTypes = m.getParameterTypes();
+            if (parameterTypes.length > 0){
+                for (int i = 0; i < parameterTypes.length; i++) {
+
+                    if (i == parameterTypes.length - 1) {
+                        System.out.print(parameterTypes[i].getName() + " args_" + i);
+                        break;
+                    }
+
+                    System.out.print(parameterTypes[i].getName() + " args_" + i + ", ");
+                }
+            }
+            System.out.print(")");
+
+            //6.抛出的异常
+            Class<?>[] exceptionTypes = m.getExceptionTypes();
+            if (exceptionTypes.length > 0) {
+                System.out.print("throws ");
+                for (int i = 0; i < exceptionTypes.length; i++) {
+                    if (i == exceptionTypes.length - 1) {
+                        System.out.print(exceptionTypes[i].getName());
+                        break;
+                    }
+                    System.out.print(exceptionTypes[i].getName() + ", ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+
+    /**
+     * 操作
+     */
+    @Test
+    public void test3() throws Exception {
+        Class<Person> clazz = Person.class;
+        Constructor<Person> personConstructor = clazz.getDeclaredConstructor(String.class, int.class);
+        personConstructor.setAccessible(true);
+        Person person = personConstructor.newInstance("conanan", 22);
+
+        // private 方法
+        // 泛型 和 数组 参数注意怎么写！
+        Method show = clazz.getDeclaredMethod("show", String.class);
+        show.setAccessible(true);
+        String  returnValue = (String) show.invoke(person, "中国");
+        System.out.println(returnValue);// 中国
+
+
+        // 静态方法
+        Method showDesc = clazz.getDeclaredMethod("showDesc");
+        showDesc.setAccessible(true);
+        showDesc.invoke(person);// 我是一个可爱的人
+        // 操作静态方法时，第一个参数为null，不需要实例
+        showDesc.invoke(null);// 我是一个可爱的人
+
+    }
+}
+```
+
+
+
+
+
+### Other
+
+```java
+public class OtherTest {
+
+    /**
+     * 获取构造器结构
+     */
+    @Test
+    public void test1() {
+
+        Class<Person> clazz = Person.class;
+        // getConstructors():获取当前运行时类中声明为public的构造器
+        Constructor<?>[] constructors = clazz.getConstructors();
+        System.out.println(Arrays.toString(constructors));
+        // [public pojo.Person()]
+
+        System.out.println();
+        // getDeclaredConstructors():获取当前运行时类中声明的所有的构造器
+        Constructor<?>[] declaredConstructors = clazz.getDeclaredConstructors();
+        System.out.println(Arrays.toString(declaredConstructors));
+        // [private pojo.Person(java.lang.String), pojo.Person(java.lang.String,int), public pojo.Person()]
+    }
+
+    /**
+     * 获取运行时类的父类
+     */
+    @Test
+    public void test2() {
+        Class<Person> clazz = Person.class;
+
+        Class<? super Person> superclass = clazz.getSuperclass();
+        System.out.println(superclass);
+        // class pojo.Creature
+    }
+
+    /**
+     * 获取运行时类的带泛型的父类
+     */
+    @Test
+    public void test3() {
+        Class<Person> clazz = Person.class;
+
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        System.out.println(genericSuperclass);
+        // pojo.Creature<java.lang.String>
+    }
+
+    /**
+     * 获取运行时类的带泛型的父类的泛型
+     * 代码：逻辑性代码  vs 功能性代码
+     */
+    @Test
+    public void test4() {
+        Class<Person> clazz = Person.class;
+
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        ParameterizedType paramType = (ParameterizedType) genericSuperclass;
+        //获取泛型类型
+        Type[] actualTypeArguments = paramType.getActualTypeArguments();
+        //System.out.println(actualTypeArguments[0].getTypeName());
+        System.out.println(((Class) actualTypeArguments[0]).getName());
+        // java.lang.String
+    }
+
+    /**
+     * 获取运行时类实现的接口
+     */
+    @Test
+    public void test5() {
+        Class<Person> clazz = Person.class;
+
+        Class<?>[] interfaces = clazz.getInterfaces();
+        Arrays.stream(interfaces).forEach(System.out::println);
+        // interface java.lang.Comparable
+        // interface pojo.MyInterface
+        System.out.println();
+
+
+        // 获取运行时类的父类实现的接口
+        Class<?>[] interfaces1 = clazz.getSuperclass().getInterfaces();
+        Arrays.stream(interfaces1).forEach(System.out::println);
+        // interface java.io.Serializable
+
+    }
+
+    /*
+     获取运行时类所在的包
+      */
+    @Test
+    public void test6() {
+        Class<Person> clazz = Person.class;
+
+        Package pack = clazz.getPackage();
+        System.out.println(pack);
+        // package pojo
+    }
+
+    /*
+      获取运行时类声明的注解
+     */
+    @Test
+    public void test7() {
+        Class<Person> clazz = Person.class;
+
+        Annotation[] annotations = clazz.getAnnotations();
+        Arrays.stream(annotations).forEach(System.out::println);
+        // @pojo.MyAnnotation(value=hi)
+    }
+
+}
+```
+
+
+
+
+
+### 文字版
+
+#### 获取类实现的全部接口
+
+*   `public Class<?>[] getInterfaces() `
+
+    确定此对象所表示的类或接口实现的接口。 
+
+
+
+#### 获取类所继承的父类
+
+*   `public Class<? Super T> getSuperclass()`
+
+    返回表示此 Class 所表示的实体(类、接口、基本类型)的父类的 Class。 
+
+
+
+#### 获取类全部的构造器
+
+*   `public Constructor<T>[] getConstructors()`
+
+    返回此 Class 对象所表示的类的所有public构造方法。 
+
+*   `public Constructor<T>[] getDeclaredConstructors() `
+
+    返回此 Class 对象表示的类声明的所有构造方法。
+
+*   Constructor类中：
+
+    *   取得修饰符：`public int getModifiers()`
+    *   取得方法名称：`public String getName()`
+    *   取得参数的类型：`public Class<?>[] getParameterTypes()`
+
+*   全部的方法
+
+    *   `public Method[] getMethods() `
+
+        返回此Class对象所表示的类或接口的public的方法
+
+    *   `public Method[] getDeclaredMethods() `
+
+        返回此Class对象所表示的类或接口的全部方法
+
+    *   Method类中：
+
+        *   `public Class<?> getReturnType()`取得全部的返回值
+        *   `public Class<?>[] getParameterTypes()`取得全部的参数 
+        *   `public int getModifiers()`取得修饰符
+        *   `public Class<?>[] getExceptionTypes()`取得异常信息 
+
+
+
+#### 获取类全部的 Field
+
+*   `public Field[] getFields() `
+
+    返回此Class对象所表示的类或接口的public的Field。 
+
+*   `public Field[] getDeclaredFields() `
+
+    返回此Class对象所表示的类或接口的全部Field。 
+
+*   Field方法中：
+
+    *   `public int getModifiers()` 以整数形式返回此Field的修饰符 
+    *   `public Class<?> getType()` 得到Field的属性类型 
+    *   `public StringgetName()` 返回Field的名称。 
+
+
+
+#### 获取类 Annotation 相关
+
+*   `get Annotation(Class<T> annotationClass) `
+*   `getDeclaredAnnotations()`
+
+
+
+#### 获取类 Generic
+
+*   获取父类泛型类型：`Type getGenericSuperclass() `
+*   泛型类型：`ParameterizedType `，强转
+*   获取实际的泛型类型参数数组：`getActualTypeArguments() `
+
+
+
+#### 获取类所在的包
+
+*   `Package getPackage()`
+
+
+
+
+
+
+
+
+
 ### 习题
 
 #### 通过配置文件运行类中方法
@@ -717,6 +869,8 @@ public class Demo{
 }
 ```
 
+
+
 #### 通过反射越过泛型检查
 
 * ArrayList`<Integer>`对象，添加一个字符串数据 
@@ -730,6 +884,8 @@ Class c = arrayList.getClass();//获取对象所属类的字节码文件对象
 Method method = c.getMethod("add", Object.class);
 method.invoke(arrayList, "hello");
 ```
+
+
 
 #### 通过反射给任意的一个对象的任意的属性赋值为指定的值
 
@@ -754,7 +910,7 @@ public static void main(String[] args) throws Exception {
 
 
 
-## 12.4 代理模式
+## 代理模式
 
 * **代理**：使用一个代理将对象包装起来，然后用该代理对象取代原始对象。任何对原始对象的调用都要通过代理，代理对象决定是否以及何时将方法调用转到原始对象上。
 * 静态代理和动态代理两者区别在于代理对象的生成模式
