@@ -1,4 +1,4 @@
-# Spring Boot 原理
+# Spring Boot 优势 & 原理
 
 ## starter 起步依赖
 
@@ -56,6 +56,12 @@
 从上面的spring-boot-dependencies的pom.xml中我们可以发现，一部分坐标的**版本、依赖管理、插件管理**已经定义好，所以我们的SpringBoot工程继承spring-boot-starter-parent后已经具备**版本锁定**等配置了。所以起步依赖作用就是进行**依赖的传递**。
 
 同理spring-boot-starter-web就是将web开发要使用的spring-web、spring-webmvc等坐标进行了“打包”，这样我们的工程只要引入spring-boot-starter-web起步依赖的坐标就可以进行web开发了，同样体现了依赖传递的作用。
+
+
+
+
+
+## 自动配置
 
 
 
@@ -324,3 +330,20 @@ Service Provider Interface，应对变化的解决方案。基于 Interface 接�
 
 而 SPI 关注的是**整体解决方案**，关注许多类，对象的整体！
 
+
+
+
+
+## 版本号
+
+如`2.2.1.RELEASE`，Maven 中显示的版本号，文档中不一定这样显示
+
+*   2：主版本。极有可能底层改变，无法兼容旧版本
+*   2：次版本。发布新特性，基本需要保证兼容
+*   1：增量版本。修复 bug，保证兼容（也不确定）
+*   RELEASE：里程碑。版本的发布计划、状态
+    *   GA（General Availability）：Spring Boot 优先选择
+    *   RC：基本和 GA 等同
+    *   SNAPSHOT：快照
+    *   Alpha
+    *   Beta

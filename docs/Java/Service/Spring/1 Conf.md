@@ -378,13 +378,19 @@ spring:
 
 ### IDEA 热部署
 
-热部署失效：原因是因为Intellij IEDA默认情况下不会自动编译，需要对IDEA进行自动编译的设置（Debug模式没此问题）
+热部署的原理是，检测到 target 下的 class 文件发生变化后自动重启，所以需要对修改的文件进行编译，否则无效
+
+热部署失效：原因是因为Intellij IEDA默认情况下不会自动编译，需要对IDEA进行自动编译的设置
 
 ![](./images/1548621994782.png)
 
 `Shift + Ctrl + Alt + /` （Mac：`Shift + Command + Alt + /`），选择Registry...
 
 ![](./images/1548622068044.png)
+
+但是还是推荐使用 Jrebel！！！
+
+
 
 
 

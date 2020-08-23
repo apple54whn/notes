@@ -1,7 +1,5 @@
 # IoC
 
-
-
 ## OCP—LOL😁
 
 ### awkward 版
@@ -280,7 +278,7 @@ public class Main {
 
     public static void main(String[] args) {
         String heroName = getPlayerInput();
-        // HeroFactory 如何消除？此时时静态调用，若需要实例化时也是强耦合了、
+        // HeroFactory 如何消除？此时是静态调用，若需要实例化时也是强耦合了、
         ISkill iSkill = HeroFactory.getHero(heroName);
         iSkill.r();
 
@@ -362,14 +360,11 @@ public class Diana implements ISkill {
 ```java
 public class HeroFactory {
 
-    public static <T> ISkill getHero(Class<T> clazz) throws 
-      IllegalAccessException, 
-  	InstantiationException, 
-  	NoSuchMethodException, 
-  	InvocationTargetException {
+    public static ISkill getHero(Class<? extends ISkill> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+
         // 对象实例化
-        Constructor<T> constructor = clazz.getDeclaredConstructor();
-        return (ISkill) constructor.newInstance();
+        Constructor<? extends ISkill> constructor = clazz.getDeclaredConstructor();
+        return constructor.newInstance();
     }
 }
 ```
@@ -384,12 +379,6 @@ public class Main {
   InvocationTargetException {
         ISkill hero = HeroFactory.getHero(Irilia.class);
         hero.r();
-    }
-
-    private static String getPlayerInput(){
-        System.out.print("Enter a hero's name: ");
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
     }
 }
 ```
@@ -418,7 +407,7 @@ public class Main {
 
 
 
-## 接口 + 工厂实现 OCP
+## 接口 + 工厂实现 OCP 🔥
 
 面向对象：实例化对象，调用方法（完成业务逻辑）
 
@@ -438,7 +427,7 @@ public class Main {
 
 
 
-## 如何理解 IoC 和 DI (DIP)
+## 如何理解 IoC 和 DI (DIP) 🔥
 
 ### IoC
 
@@ -454,7 +443,17 @@ IoC 的主要实现的作用就是**将组件（Bean）注册到到容器**中�
 
 ### DI（Dependency Injection）
 
-依赖注入。即调用类对某一接口实现类的依赖关系由第三方容器或协作类注入，移除调用类对某一接口实现类的依赖。
+::: tip
+
+[martinfowler 博客](https://martinfowler.com/articles/injection.html)及 [ThoughtWork 的翻译](https://insights.thoughtworks.cn/injection/)
+
+:::
+
+DI（依赖注入） 的目的在于**将组件的配置与使用分离开**。如何在**运行时（不是编译时）**将**组件（抽象的具体实现可能有多个，所以编译时无法确定哪个）动态连入程序**中（这里是不是想起接口的概念了）
+
+这里的组件可以指代服务（Service也行）
+
+即调用类对某一接口实现类的依赖关系由第三方容器或协作类注入，移除调用类对某一接口实现类的依赖。
 
 一般完成特定的业务逻辑可能会需要多个类之间进行协作。按传统的做法，每个对象负责管理与自己互相协作的对象(它所依赖的对象)的引用，这会导致高度耦合并难以测试的代码。利用依赖注入，每个对象可以直接获取所依赖的对象
 

@@ -1,12 +1,14 @@
-# 0 Servlet
+# Servlet
 
-Servlet（server applet）：运行在服务器端的小程序。是**JavaWeb三大组件之一**（Servlet、Filter、Listener），可以**接收请求数据、处理请求、完成响应**。
+Servlet（server applet）是运行在服务器端的小程序。是 Java EE 规范之一。是 **JavaWeb 三大组件之一**（Servlet、Filter、Listener），可以**接收请求数据、处理请求、完成响应**。
 
-Servlet就是一个**接口**，定义了**Java类能被**浏览器访问到（**或者说被tomcat识别**）的**规则**。
+Servlet 实质就是一个**接口**，定义了**Java 类能被**浏览器访问到（**或者说被 Tomcat 等 Servlet 容器识别**）的**规则**。那么浏览器如何访问Servlet？
 
-## 实现Servlet的方式
+给 Servlet 指定一个**路径**，浏览器通过访问路径来访问，一般路径配置在**web.xml**中或直接**注解**（Servlet 3 后）
 
-> **浏览器访问Servlet**？给Servlet指定一个**路径**，浏览器通过访问路径来访问。一般写在**web.xml**中或直接**注解**
+
+
+## 实现 Servlet 的方式
 
 1. 实现`javax.servlet.Servlet`接口
 
@@ -16,7 +18,9 @@ Servlet就是一个**接口**，定义了**Java类能被**浏览器访问到（*
 
     通常我们会去继承`HttpServlet`类来完成我们的Servlet，但学习还要从`javax.servlet.Servlet`接口开始
 
-### 实现javax.servlet.Servlet接口
+### 实现 Servlet 接口
+
+#### 实现 javax.servlet.Servlet 接口
 
 ```java
 //初始化，在Servlet对象创建后马上执行，只执行一次
@@ -43,7 +47,7 @@ public void destroy() {
 }
 ```
 
-* **配置web.xml**
+#### 配置web.xml
 
 ```xml
 <servlet>
@@ -57,35 +61,37 @@ public void destroy() {
 <!--  访问时：http://localhost:8080/MyServlet ，前提是IDEA中Application context配置的是“/” -->
 ```
 
-* **执行原理**
+#### 执行原理
 
-    1. 当Tomcat服务器接受到客户端浏览器的请求后，会解析请求URL路径，获取访问的Servlet的资源路径
+1. 当Tomcat服务器接受到客户端浏览器的请求后，会解析请求URL路径，获取访问的Servlet的资源路径
 
-    2. 查找web.xml文件，是否有对应的`<url-pattern>`标签体内容。
+2. 查找web.xml文件，是否有对应的`<url-pattern>`标签体内容。
 
-    3. 如果有，则通过`<servlet-name>`找到对应的`<servlet-class>`全类名
+3. 如果有，则通过`<servlet-name>`找到对应的`<servlet-class>`全类名
 
-    4. Tomcat会将字节码文件加载进内存，并且通过反射创建其对象，调用其方法
+4. Tomcat会将字节码文件加载进内存，并且通过反射创建其对象，调用其方法
 
-        ==即Servlet**类**由我们来写，但**对象由服务器来创建**，并且**由服务器来调用相应的方法**==
+    即Servlet**类**由我们来写，但**对象由服务器来创建**，并且**由服务器来调用相应的方法**
 
-* **生命周期方法**
+#### 生命周期方法
 
-    * `void init(ServletConfig)`：**创建Servlet对象后**立即执行初始化方法（只1次）；
-        * Servlet的`init`方法只执行一次，说明**一个Servlet在内存中只存在一个对象(单例)**
-            * 多用户同时访问可能存在线程安全问题
-            * 解决：尽量不要在Servlet中定义成员变量。即使定义了成员变量，也不要对其修改值
-        * Servlet什么时候被创建？
-            1. **默认**情况下，**第一次被访问时**，Servlet被创建。即`<load-on-startup>`的值默认为负数。
-            2. 可以**配置**执行Servlet的**创建时机**，在注解中配置`loadOnStartup`，给出一个**非负整数**即可，数字**越小优先级越高**。
+* `void init(ServletConfig)`：**创建Servlet对象后**立即执行初始化方法（只1次）；
+    * Servlet的`init`方法只执行一次，说明**一个Servlet在内存中只存在一个对象(单例)**
+        * 多用户同时访问可能存在线程安全问题
+        * 解决：尽量不要在Servlet中定义成员变量。即使定义了成员变量，也不要对其修改值
+    * Servlet什么时候被创建？
+        1. **默认**情况下，**第一次被访问时**，Servlet被创建。即`<load-on-startup>`的值默认为负数。
+        2. 可以**配置**执行Servlet的**创建时机**，在注解中配置`loadOnStartup`，给出一个**非负整数**即可，数字**越小优先级越高**。
 
-    * `void service(ServletRequest request, ServletResponse response)`：**每次处理请求**时都会被调用；
+* `void service(ServletRequest request, ServletResponse response)`：**每次处理请求**时都会被调用；
 
-    * `void destroy()`：服务器**正常关闭**，**销毁Servlet对象前**执行释放资源的方法（只1次）；
+* `void destroy()`：服务器**正常关闭**，**销毁Servlet对象前**执行释放资源的方法（只1次）；
 
 
 
-### 继承javax.servlet.GenericServlet抽象类
+### 继承 GenericServlet 抽象类
+
+#### 继承javax.servlet.GenericServlet抽象类
 
 * `GenericServlet`是`Servlet`接口的**实现类**，但它是一个**抽象类**，它**唯一的抽象方法就是`service()`方法**，它将Servlet接口中的其他4个方法做了空实现。
 
@@ -97,31 +103,33 @@ public void destroy() {
 
 
 
-### 继承javax.servlet.http.HttpServlet抽象类
+### 继承 HttpServlet 抽象类
 
-* `HttpServlet`是`GenericServlet`接口的实现类，但它也是一个**抽象类**。对HTTP协议的一种封装，简化操作
+#### 继承javax.servlet.http.HttpServlet抽象类
 
-* **HttpServlet处理请求顺序**
+`HttpServlet`是`GenericServlet`接口的实现类，但它也是一个**抽象类**。对HTTP协议的一种封装，简化操作
 
-    1. Tomcat**调用HttpServlet继承的**生命周期方法`service(ServletRequest sr, ServletResponse srr)`对参数进行**强转**为HTTP协议相关的参数类型
-    2. 然后**调用HttpServlet本类的**`service(HttpServletRequest sr, HttpServletResponse srr)`方法
-    3. 获取请求方法，**根据请求方式**来调用`doGet()`或`doPost()`或其他，需自己**重写**，否则调用到该方法时返回`405`
+#### HttpServlet处理请求顺序
 
-    ```java
-    //注解的方式直接配置web.xml
-    @WebServlet("/ServletAuto")
-    public class ServletAuto extends HttpServlet {
-    	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-         throws ServletException,IOException {
-    
-        }
-    
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-            response.getWriter().write("hello auto");
-        }
+1. Tomcat**调用HttpServlet继承的**生命周期方法`service(ServletRequest sr, ServletResponse srr)`对参数进行**强转**为HTTP协议相关的参数类型
+2. 然后**调用HttpServlet本类的**`service(HttpServletRequest sr, HttpServletResponse srr)`方法
+3. 获取请求方法，**根据请求方式**来调用`doGet()`或`doPost()`或其他，需自己**重写**，否则调用到该方法时返回`405`
+
+```java
+//注解的方式直接配置web.xml
+@WebServlet("/ServletAuto")
+public class ServletAuto extends HttpServlet {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+     throws ServletException,IOException {
+
     }
-    ```
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+        throws ServletException, IOException {
+        response.getWriter().write("hello auto");
+    }
+}
+```
 
 
 
@@ -289,11 +297,17 @@ public void destroy() {
 
 ### Request继承体系
 
-​	`ServletRequest`           —— 接口
-​		|	继承
-​	`HttpServletRequest`	  —— 接口
-​		|	实现
-​	`org.apache.catalina.connector.RequestFacade`  ——类  (Tomcat编写的)
+```
+ServletRequest 接口
+      |
+     继承
+      |
+HttpServletRequest 接口
+      |
+     实现
+      |
+org.apache.catalina.connector.RequestFacade 类，由 Tomcat 提供，若是其他容器则不一样
+```
 
 以上体系Response也适用
 
@@ -342,7 +356,7 @@ public void destroy() {
         * GET方式：Tomcat 8及以上版本已经将get方式乱码问题解决了
         * POST方式：会乱码。在获取参数前，**设置request的编码`request.setCharacterEncoding("utf-8");`**
 
-    * 获取的**参数封装为JavaBean**可以利用Apache提供的`commons-beanutils-1.8.0`工具类，**简化数据封装**
+    * 获取的**参数封装为JavaBean**可以利用 Spring 或其他提供的 BeanUtils 工具类，**简化数据封装**
 
         * JavaBean：标准的Java类，功能为封装数据。要求如下：
 
@@ -363,8 +377,10 @@ public void destroy() {
                 ```java
                 User user = new User();
                 Map<String, String[]> map = request.getParameterMap();
-                BeanUtils.populate(user,map); //populate需要try...catch
+                BeanUtils.populate(user,map); //populate需要try...catch。spring的beanutils可能不一样
                 ```
+
+
 
 ### 请求转发
 
@@ -518,18 +534,37 @@ public void destroy() {
 
 
 
-### 输出字符数据到浏览器
 
-> 由于浏览器默认使用GBK或GB2312，而服务器获取的**流**默认使用ISO8859-1，不支持中文。且编码解码不同，必乱码。
 
-* **获取字符输出流之前**设置该**流的默认编码**，告诉浏览器**响应体使用的编码**。设置后一步代码时会自动执行上一步，所以可省略
+### 输出字符数据到浏览器—乱码
 
-    ```java
-    response.setCharacterEncoding("utf-8");//可省略
-    response.setHeader("Content-type","text/html;charset=utf-8");//封装的简单方法如下
-    ```
+由于浏览器默认使用 GBK 或 GB2312 或 UTF-8，而服务器获取的**流**默认使用 ISO8859-1（应该是使用的 Servlet 容器如 Tomcat 设置的），不支持中文。且编码解码不同，必乱码。
 
-* **简写：`response.setContentType("text/html;charset=utf-8")`**
+可通过如下代码查到服务器获取的**流**的编码
+
+```java
+response.getCharacterEncoding()
+```
+
+如何解决中文乱码呢？
+
+**获取字符输出流之前**设置该**流的默认编码**，告诉浏览器**响应体使用的编码**
+
+```java
+System.out.println(response.getCharacterEncoding());// ISO-8859-1
+System.out.println(response.getContentType());// null
+
+// response.setCharacterEncoding("UTF-8");
+
+// 设置 setContentType 后会自动设置 CharacterEncoding
+// response.setHeader("Content-type","text/html;charset=utf-8");// setHeader 封装后的方法如下
+response.setContentType("application/json;charset=utf-8");// 纯文本也可以设置为 text/plain;charset=utf-8
+
+System.out.println(response.getCharacterEncoding());// UTF-8
+System.out.println(response.getContentType());// application/json;charset=utf-8
+```
+
+
 
 
 

@@ -504,11 +504,19 @@ Maven中project标签下初始配置可以如下，稍加修改
 
     ![](./images/deploy-tomcat.png)
     
-  - 注意自动生成得 Artifacts 可能**路径不对**（我也不知道为啥就生成的不对。。。），正确的如下图：
+  - 注意自动生成得 Artifacts 可能**路径不对**（那是由于在配置 Deployment 时删掉了两个 Build，特别是第二个生成 Artifacts 路径的那个）。但是由于老项目编码问题太烦人，所以删掉也可以（只删除第一个暂未尝试）
   
     ![artifact_war](./images/artifact_war.png)
   
     ![artifact_war_exploded](./images/artifact_war_exploded.png)
+    
+  - 但是其实自动生成的是对的，在配置 Deployment 时不删除 Before Launch 中的选项时是可以运行的（特别是第二个！第二个才是生成该目录的构建）
+  
+      ![image-20200824011833643](./images/image-20200824011833643.png)
+  
+      ![image-20200824012018027](./images/image-20200824012018027.png)
+
+
 
 ### 解决 Maven 项目中 Java 版本警告
 

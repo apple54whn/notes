@@ -99,7 +99,7 @@ module.exports = {
       title: 'Basic Syntax',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ['0 Basic', '1 Basic Syntax'],
+      children: ['0 Basic', '1 Basic Syntax', '1 Basic Syntax-1 数组'],
     },
     {
       title: 'Object Orientation',
@@ -173,22 +173,10 @@ module.exports = {
       children: ['11 Network'],
     },
     {
-      title: 'Lambda',
+      title: '函数式编程',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ['13 Lambda'],
-    },
-    {
-      title: 'Stream',
-      collapsable: true, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: ['14 Stream API'],
-    },
-    {
-      title: 'Optional',
-      collapsable: true, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: ['15 Optional'],
+      children: ['13 Lambda', '14 Stream API', '15 Optional'],
     },
     {
       title: '类加载器与反射',
@@ -234,7 +222,7 @@ module.exports = {
         '4 Spring-3 容器&注册组件&注入组件',
         '4 Spring-4 Bean的生命周期',
         '4 Spring-5 属性赋值',
-        '4 Spring-6 Spring Boot 原理—SSM 整合',
+        '4 Spring-6 SSM 整合',
         '4 Spring-6 Spring Boot 原理',
         '4 Spring-3 AOP',
         '4 Spring-4 声明式事务',
@@ -277,6 +265,17 @@ module.exports = {
     },
   ],
   // -----------------Service Framwork end----------------------
+
+  // -----------------Service OAuth2 Framwork start--------------------
+  '/Java/Service/OAuth2/': [
+    {
+      title: 'Primer',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ['0 Primer', '1 基于Session的认证'],
+    },
+  ],
+  // -----------------Service OAuth2 Framwork end----------------------
 
   // -----------------Persistence Framwork start--------------------
   '/Java/Persistence/Mybatis/': [

@@ -48,7 +48,7 @@ module.exports = [
       { text: 'Core', link: '/Java/Core/0 Basic' },
       {
         text: 'Jakarta EE',
-        items: [{ text: 'Servlet', link: '/Java/Jakarta EE/0 Servlet' }],
+        items: [{ text: 'Java Web', link: '/Java/Jakarta EE/0 Servlet' }],
       },
       {
         text: 'Service',
@@ -57,6 +57,7 @@ module.exports = [
           { text: 'Dubbo', link: '/language/chinese/' },
           { text: 'Spring Cloud Netflix', link: '/language/japanese/' },
           { text: 'Spring Cloud Alibaba', link: '/language/japanese/' },
+          { text: '认证&授权', link: '/Java/Service/OAuth2/0 Primer' },
         ],
       },
       {

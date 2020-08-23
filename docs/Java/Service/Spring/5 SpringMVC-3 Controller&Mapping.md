@@ -2,19 +2,34 @@
 
 ## @Controller
 
-不多解释了吧
-
 
 
 ## @RestController
 
 是`@Controller`和`@ResponseBody`的组合
 
+@ResponseBody 会自动设置如下代码（解决乱码）
+
+```java
+response.setContentType("application/json;charset=utf-8");// 返回对象为 Object 时
+response.setContentType("text/plain;charset=utf-8");// 返回对象为 String 时
+```
+
+@ResponseBody 自动调用如下代码，若输出对象，则省掉手动序列号操作（输出）
+
+```java
+response.getWriter().write("hello 测试2")
+```
+
+
+
 
 
 
 
 ## @RequestMapping
+
+封装了 Servlet 的 url-partten
 
 作用：用于**建立请求 URL** 和**处理请求方法**之间的对应**关系**。**所有请求方法都会经过此路由**
 

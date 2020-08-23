@@ -1,6 +1,4 @@
-# 13 Lambda
-
-[[toc]]
+# Lambda
 
 在数学中，函数就是有输入量、输出量的一套计算方案，也就是“拿什么东西做什么事情”。相对而言，**面向对象**过分强调“必须**通过对象的形式来做事情**”，而**函数式思想**则尽量忽略面向对象的复杂语法——**强调做什么及结果，而不是以什么形式做**。
 
@@ -27,28 +25,28 @@
 
 
 
-## 13.1 函数式接口
+## 函数式接口
 
 函数式接口在Java中是指：**有且仅有一个抽象方法的接口**。可以适用于Lambda使用的接口，只有确保接口为函数式接口，Java中的Lambda才能顺利地进行**推导**。 
 
 > 备注：“语法糖”是指使用更加方便，但是原理不变的代码语法。例如在遍历集合时使用的for-each语法，其实底层的实现原理仍然是迭代器，这便是“语法糖”。从应用层面来讲，Java中的Lambda可以被当做是匿名内部类的“语法糖”，但是二者在原理上是不同的。
 
-- **格式**
+**格式**
 
-    ```java
-    修饰符 interface 接口名称 { 
-        /*public abstract*/ 返回值类型 方法名称(可选参数信息);     
-        // 其他非抽象方法内容，默认方法，静态方法，私有方法
-    }
-    ```
+```java
+修饰符 interface 接口名称 { 
+    /*public abstract*/ 返回值类型 方法名称(可选参数信息);     
+    // 其他非抽象方法内容，默认方法，静态方法，私有方法
+}
+```
 
-- **`@FunctionalInterface`注解**
+`@FunctionalInterface`注解
 
-    Java 8中专门为函数式接口引入的注解，可用于一个接口的定义上。一旦使用该注解来定义接口，**编译器将会强制检查**该接口是否确实有且仅有一个抽象方法，否则将会报错。不使用该注解也可以定义函数式接口。
+Java 8中专门为函数式接口引入的注解，可用于一个接口的定义上。一旦使用该注解来定义接口，**编译器将会强制检查**该接口是否确实有且仅有一个抽象方法，否则将会报错。不使用该注解也可以定义函数式接口。
 
 
 
-## 13.2 函数式编程
+## 函数式编程
 
 - Lambda表达式的标准格式为
 
@@ -102,61 +100,66 @@
 
 
 
-## 13.3 Lambda的延迟执行
+## Lambda的延迟执行
 
 有些场景的代码执行后，结果不一定会被使用，从而造成性能浪费。而Lambda表达式是延迟执行的，这正好可以 作为解决方案，提升性能。 
 
-- **性能浪费的日志案例**
 
-    ```java
-    public static void main(String[] args) throws FileNotFoundException {
-        String a = "hello";
-        String b = "world";
-        log(1,a+b);
+
+### 性能浪费的日志案例
+
+```java
+public static void main(String[] args) throws FileNotFoundException {
+    String a = "hello";
+    String b = "world";
+    log(1,a+b);
+}
+public static void log(int level,String msg) {
+    if (level==1) {
+        System.out.println(msg);
     }
-    public static void log(int level,String msg) {
-        if (level==1) {
-            System.out.println(msg);
-        }
+}
+```
+
+> 无论级别是否满足要求，作为` log` 方法的第二个参数，三个字符串一定会首先被拼接并传入方法内，然后才会进行级别判断。如果级别不符合要求，那么字符串的拼接操作就白做了，存在**性能浪费**。
+>
+> 备注：**SLF4J**是应用非常广泛的日志框架，它在记录日志时为了解决这种性能浪费的问题，并不推荐首先进行字符串的拼接，而是**将字符串的若干部分作为可变参数传入方法中**，仅在日志级别**满足要求**的情况下**才会进行字符串拼接**。例如： LOGGER.debug("变量{}的取值为{}。", "os", "macOS") ，其中的大括号 {} 为占位符。如果满足日志级别要求，则会将“os”和“macOS”两个字符串依次拼接到大括号的位置；否则不会进行字 符串拼接。这也是一种可行解决方案，但Lambda可以做到更好
+
+
+
+### 体验Lambda的更优写法
+
+函数式接口
+
+```java
+@FunctionalInterface 
+public interface MessageBuilder {
+    String buildMessage();
+}
+```
+
+然后对 `log` 方法进行改造
+
+```java
+public static void main(String[] args) throws FileNotFoundException {
+    String a = "hello";
+    String b = "world";
+    log(1, () -> a + b );
+}
+public static void log(int level,MessageBuilder mb) {
+    if (level==1) {
+        System.out.println(mb.buildMessage());
     }
-    ```
+}
+```
 
-    > 无论级别是否满足要求，作为` log` 方法的第二个参数，三个字符串一定会首先被拼接并传入方法内，然后才会进行级别判断。如果级别不符合要求，那么字符串的拼接操作就白做了，存在**性能浪费**。
-    >
-    > 备注：**SLF4J**是应用非常广泛的日志框架，它在记录日志时为了解决这种性能浪费的问题，并不推荐首先进行字符串的拼接，而是**将字符串的若干部分作为可变参数传入方法中**，仅在日志级别**满足要求**的情况下**才会进行字符串拼接**。例如： LOGGER.debug("变量{}的取值为{}。", "os", "macOS") ，其中的大括号 {} 为占位符。如果满足日志级别要求，则会将“os”和“macOS”两个字符串依次拼接到大括号的位置；否则不会进行字 符串拼接。这也是一种可行解决方案，但Lambda可以做到更好
-
-- **体验Lambda的更优写法**
-
-    - 函数式接口
-
-        ```java
-        @FunctionalInterface public interface MessageBuilder {
-            String buildMessage();
-        }
-        ```
-
-    - 然后对 `log` 方法进行改造
-
-        ```java
-        public static void main(String[] args) throws FileNotFoundException {
-            String a = "hello";
-            String b = "world";
-            log(1, () -> a + b );
-        }
-        public static void log(int level,MessageBuilder mb) {
-            if (level==1) {
-                System.out.println(mb.buildMessage());
-            }
-        }
-        ```
-
-        > 只有当级别满足要求的时候，才会进行三个字符串的拼接；否则三个字符串将不会进行拼接。 
-        >
-        > 证明：只需在lambda大括号中打印一个语句，并让`log`方法传递的参数改为2，发现打印语句不执行
+> 只有当级别满足要求的时候，才会进行三个字符串的拼接；否则三个字符串将不会进行拼接。 
+>
+> 证明：只需在lambda大括号中打印一个语句，并让`log`方法传递的参数改为2，发现打印语句不执行
 
 
 
-## 13.4 常用的函数式接口
+## 常用的函数式接口
 
 JDK提供了大量常用的函数式接口以丰富Lambda的典型使用场景，它们主要在**`java.util.function`**中提供。 
 
@@ -172,7 +175,7 @@ Java 内置四大核心函数式接口
 
 ![image-20191105234644979](./images/image-20191105234644979.png)
 
-### Supplier
+### Supplier—生产型接口
 
 `java.util.function.Supplier<T> `用来**获取一个泛型参数指定类型的对象数据**。由于这是一个函数式接口，这也就意味着对应的Lambda表达式**需要“对外提供”一个符合泛型类型**的对象数据。这个接口也称为**生产型接口**。
 
@@ -200,7 +203,7 @@ Java 内置四大核心函数式接口
 
     
 
-### Consumer
+### Consumer—消费型接口
 
 `java.util.function.Consumer<T> `接口则正好与`Supplier`接口相反，它不是生产一个数据。**消费型接口**。
 
@@ -248,7 +251,7 @@ Java 内置四大核心函数式接口
 
 
 
-### Predicate
+### Predicate—判断
 
 有时候我们需要**对某种类型的数据进行判断**，从而得到一个boolean值结果。这时可以使用 `java.util.function.Predicate<T> `接口。 
 
@@ -365,7 +368,7 @@ Java 内置四大核心函数式接口
 
 
 
-## 13.5 方法引用
+## 方法引用
 
 > 在使用Lambda表达式的时候，我们实际上传递进去的代码就是一种解决方案：拿什么参数做什么操作。那么考虑 一种情况：如果我们在Lambda中所指定的操作方案，已经有地方存在相同方案，那是否还有必要再写重复逻辑？ 
 
@@ -391,6 +394,8 @@ Java 内置四大核心函数式接口
 如果使用Lambda，那么根据“可推导就是可省略”的原则，**无需指定参数类型**，**也无需指定的重载形式**——它们都将被自动推导。而如果使用方法引用，也是同样可以根据上下文进行推导。
 
 函数式接口是Lambda的基础，而方法引用是Lambda的孪生兄弟。 
+
+
 
 ### 对象::非静态方法
 
@@ -482,6 +487,8 @@ public void test4() {
 }
 ```
 
+
+
 ### 类名::非静态方法
 
 当函数式接口方法的第一个参数是需要引用方法的调用者，并且第二个参数是需要引用方法的参数（或无参数）时，可以使用`类名::非静态方法`替代lambda
@@ -526,6 +533,8 @@ public class Man extends Human {
 }
 ```
 
+
+
 ### 通过this引用成员方法 
 
 this代表当前对象，如果需要引用的方法就是当前类中的成员方法，那么可以使用`this::成员方法`的格式来使用方法引用
@@ -552,7 +561,9 @@ public class Husband {
 }
 ```
 
-## 13.6 构造器引用
+
+
+## 构造器引用
 
 和方法引用类似，函数式接口的抽象方法的形参列表和构造器的形参列表一致，抽象方法的返回值类型即为构造器所属的类的类型。由于构造器的名称与类名完全一样，并不固定。所以构造器引用使用`类名称::new` 的格式表示
 
@@ -630,7 +641,9 @@ public void test3(){
 }
 ```
 
-## 13.7 数组的构造器引用
+
+
+## 数组的构造器引用
 
 数组也是`Object` 的子类对象，所以同样**具有构造器**，只是语法稍有不同
 
@@ -675,7 +688,141 @@ public void test4(){
 
 ## 习题
 
-### Pedicate接口使用
+**Lambda 接口在 Java 中只能用于方法的参数！！！**
+
+### Comparator 使用 🔥
+
+使用 Collections.sort() 方法, 推荐直接使用 Stream，通过定制排序比较两个 Employee (先按年龄比，年龄相同按姓名比), 使用 Lambda 表达式作为参数传递。
+
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Employee {
+
+	private int id;
+	private String name;
+	private int age;
+	private double salary;
+
+}
+```
+
+```java
+public class LambdaTest {
+
+    List<Employee> emps = Arrays.asList(
+        new Employee(101, "张三", 18, 9999.99),
+        new Employee(102, "李四", 59, 6666.66),
+        new Employee(103, "王五", 18, 3333.33),
+        new Employee(104, "赵六", 8, 7777.77),
+        new Employee(105, "田七", 18, 5555.55)
+    );
+
+    @Test
+    public void test1() {
+        emps.stream().sorted((e1, e2) -> {
+            if (e1.getAge() != e2.getAge()) {
+                return Integer.compare(e1.getAge(), e2.getAge());
+            } else {
+                return e1.getName().compareTo(e2.getName());
+            }
+        }).forEach(System.out::println);
+
+        /*Collections.sort(emps, (e1, e2) -> {
+            if (e1.getAge() != e2.getAge()) {
+                return Integer.compare(e1.getAge(), e2.getAge());
+            } else {
+                return e1.getName().compareTo(e2.getName());
+            }
+        });*/
+        
+        // Collections.sort 会提示直接使用如下方式
+        /*emps.sort((e1, e2) -> {
+            if (e1.getAge() != e2.getAge()) {
+                return Integer.compare(e1.getAge(), e2.getAge());
+            } else {
+                return e1.getName().compareTo(e2.getName());
+            }
+        });*/
+    }
+}
+```
+
+
+
+### 函数式接口1 🔥
+
+1.  声明函数式接口，接口中声明抽象方法：`String getValue(String str);`
+2.  声明类 LambdaTest，类中**编写方法**使用接口作为参数，将一个字符串转换成大写，并作为方法的返回值。
+3.  再将一个字符串的第 2 个到第 4 个索引位置进行截取子串。
+
+```java
+@FunctionalInterface
+public interface MyFunctional1 {
+    String getValue(String str);
+}
+```
+
+```java
+@Test
+public void test2(){
+    String s = "abcdEfg";
+
+    String s1 = strHandler(s, String::toUpperCase);
+    System.out.println(s1);
+
+    String s2 = strHandler(s, str -> str.substring(2, 5));
+    System.out.println(s2);
+}
+
+/**
+ * 用于处理字符串
+ */
+private String strHandler(String str, MyFunctional1 func){
+    return func.getValue(str);
+}
+```
+
+
+
+### 函数式接口2 🔥
+
+1.  声明一个带两个**泛型的函数式接口**，泛型类型为<T,R> : T 为参数，R 为返回值
+2.  接口中声明对应抽象方法
+3.  在 LambdaTest 类中**声明方法**，使用接口作为参数，计算两个 long 型参数的和
+4.  再计算两个 long 型参数的乘积
+
+```java
+@FunctionalInterface
+public interface MyFunctional2<T, R> {
+    R calc(T t1, T t2);
+}
+```
+
+```java
+@Test
+void test3() {
+    long l = calcSum(2, 3, Long::sum);
+    System.out.println(l);
+
+    long ll = calcSum(2, 3, (l1, l2) -> l1 * l2);
+    System.out.println(ll);
+}
+
+/**
+ * 用于处理两个long数的计算
+ */
+private long calcSum(long l1, long l2, MyFunctional2<Long,Long> func){
+    return func.calc(l1, l2);
+}
+```
+
+
+
+
+
+### Pedicate接口使用 🔥
 
 ```java
 Integer[] arr = {-12345, 9999, 520, 0, -38, -7758520, 941213};
@@ -704,7 +851,9 @@ System.out.println("绝对值大于100的偶数的个数:"+count3);
 System.out.println("负整数或偶数的数的个数:"+count4);
 ```
 
-Function接口使用
+
+
+### Function接口使用 🔥
 
 ```java
 /**

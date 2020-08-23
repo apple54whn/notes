@@ -1,10 +1,8 @@
-# 14 Stream API
-
-[[toc]]
+# Stream
 
 Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进行的操作，可以执行非常复杂的查找、过滤和映射数据等操作。 使用 Stream API **对集合数据进行操作**，就**类似于使用 SQL** 执行的数据库查询。 也可以使用 Stream API 来**并行执行操作**。简言之，Stream API 提供了一种高效且易于使用的处理数据的方式。
 
-## 14.1 为什么要使用 Stream API
+## 为什么要使用 Stream API
 
 *   实际开发中，项目中多数数据源都来自于Mysql，Oracle等。但现在数据源可以更多了，有MongDB，Radis等，而这些NoSQL的数据就需要 Java层面去处理。
 *   Stream 和 Collection 集合的区别：Collection 是一种**静态的内存数据结构**，而 Stream 是有关**计算**的。前者是主要面向内存，存储在内存中， 后者主要是面向 CPU，通过 CPU 实现计算。
@@ -31,7 +29,7 @@ list.stream()
 
 
 
-## 14.2 流式思想概述
+## 流式思想概述
 
 整体来看，流式思想类似于工厂车间的“**生产流水线**”。当需要**对多个元素进行操作（特别是多步操作）**的时候，考虑到性能及便利性，我们应该**首先拼好一个“模型”步骤方案**，然后再按照方案去**执行**它。
 
@@ -52,7 +50,7 @@ list.stream()
 
 
 
-## 14.3 Stream 的操作三个步骤
+## Stream 的操作三个步骤
 
 1.  创建 Stream：**从一个数据源（如集合、数组），获取一个流**
 2.  中间操作：一个中间操作链，对数据源的**数据进行处理**
@@ -60,46 +58,60 @@ list.stream()
 
 
 
-## 14.4 创建 Stream 的方法
+## 创建 Stream 的方法
 
-*   通过`Stream`类的**静态方法**`of()`，通过显示值创建一个流。它可以接收任意数量的参数。
+### Stream.of
 
-    *    `public static<T> Stream<T> of(T... values)`： 返回一个流
+通过`Stream`类的**静态方法**`of()`，通过显示值创建一个流。它可以接收任意数量的参数。
 
-    通过`Stream`类的**静态方法**创建**无限流**（了解）
-
-    *   迭代`public static<T> Stream<T> iterate(final T seed, final UnaryOperator<T> f)`
-
-        ```java
-        Stream<Integer> stream = Stream.iterate(0, x -> x + 2); 
-        stream.limit(10).forEach(System.out::println);// 遍历前10个
-        ```
-
-    *   生成`public static<T> Stream<T> generate(Supplier<T> s)`
-
-        ```java
-        Stream<Double> stream1 = Stream.generate(Math::random); 
-        stream1.limit(10).forEach(System.out::println);// 生成随机数10个
-        ```
-
-*   Java8 中的 `Arrays` 的**静态方法** `stream()` 可以获取数组流
-
-    *   `static <T> Stream<T> stream(T[] array)`：返回一个流
-
-        重载形式，能够处理对应基本类型的数组：
-
-        *   `public static IntStream stream(int[] array)`
-        *   `public static LongStream stream(long[] array)`
-        *   `public static DoubleStream stream(double[] array)`
-
-*   Java8 中的 `Collection` 接口被扩展，提供了两个获取流的**普通成员方法**
-
-    *   `default Stream<E> stream()`：返回一个顺序流
-    *   `default Stream<E> parallelStream()`：返回一个并行流；`stream.parallel()`也可以获取并行流
+*    `public static<T> Stream<T> of(T... values)`： 返回一个流
 
 
 
-## 14.5 Stream 的中间操作
+### Stream.iterate/generate
+
+通过`Stream`类的**静态方法**创建**无限流**（了解）
+
+*   迭代`public static<T> Stream<T> iterate(final T seed, final UnaryOperator<T> f)`
+
+    ```java
+    Stream<Integer> stream = Stream.iterate(0, x -> x + 2); 
+    stream.limit(10).forEach(System.out::println);// 遍历前10个
+    ```
+
+*   生成`public static<T> Stream<T> generate(Supplier<T> s)`
+
+    ```java
+    Stream<Double> stream1 = Stream.generate(Math::random); 
+    stream1.limit(10).forEach(System.out::println);// 生成随机数10个
+    ```
+
+
+
+### Arrays.stream 🔥
+
+Java8 中的 `Arrays` 的**静态方法** `stream()` 可以获取数组流
+
+*   `static <T> Stream<T> stream(T[] array)`：返回一个流
+
+    重载形式，能够处理对应基本类型的数组：
+
+    *   `public static IntStream stream(int[] array)`
+    *   `public static LongStream stream(long[] array)`
+    *   `public static DoubleStream stream(double[] array)`
+
+
+
+### collection.stream 🔥
+
+Java8 中的 `Collection` 接口被扩展，提供了两个获取流的**普通成员方法**
+
+*   `default Stream<E> stream()`：返回一个顺序流
+*   `default Stream<E> parallelStream()`：返回一个并行流；`stream.parallel()`也可以获取并行流
+
+
+
+## Stream 的中间操作
 
 **Stream 属于管道流**，**只能被使用一次**，数据从上一个 Stream 传到下一个 Stream 上，上一个 Stream 已经关闭。多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理，而在终止操作时一次性全部处理，称为“**惰性求值（延迟方法）**”。  
 
@@ -215,7 +227,7 @@ list.stream()
 
 
 
-## 14.6 Stream 的终止操作
+## Stream 的终止操作
 
 终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、Integer，甚至是 void 。流进行了终止操作后，不能再次使用。 
 
@@ -502,6 +514,268 @@ list.stream()
     ```
 
     
+
+
+
+## 习题
+
+### 返回一个由每个数的平方 🔥
+
+给定一个数字列表，如何返回一个由每个数的平方构成的列表呢？
+
+例如，给定【1，2，3，4，5】， 应该返回【1，4，9，16，25】。
+
+```java
+@Test
+void test1() {
+    // ArrayList<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+    List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+
+    // 长度不变，所以可以操作 Arrays.asList 生成的
+    List<Integer> list2 = list.stream().map(i -> i * i).collect(Collectors.toList());
+    System.out.println(list2);
+}
+```
+
+
+
+
+
+### reduce &  BinaryOperator🔥
+
+怎样用 map 和 reduce 方法数一数流中有多少个 Employee 呢？
+
+```java
+List<Employee> emps = Arrays.asList(
+    new Employee(102, "李四", 59, 6666.66, Status.BUSY),
+    new Employee(101, "张三", 18, 9999.99, Status.FREE),
+    new Employee(103, "王五", 28, 3333.33, Status.VOCATION),
+    new Employee(104, "赵六", 8, 7777.77, Status.BUSY),
+    new Employee(104, "赵六", 8, 7777.77, Status.FREE),
+    new Employee(104, "赵六", 8, 7777.77, Status.FREE),
+    new Employee(105, "田七", 38, 5555.55, Status.BUSY)
+);
+
+@Test
+void test2() {
+    long count = emps.stream().count();
+    System.out.println(count);
+
+    // BinaryOperator 函数式接口使用，T apply(T t1, T t2)
+    Integer count2 = emps.stream().map(i -> 1).reduce(Integer::sum).get();
+    System.out.println(count2);
+}
+```
+
+
+
+
+
+### 交易操作 🔥
+
+```java
+/**
+ * 交易员类
+ */
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Trader {
+    private String name;
+    private String city;
+}
+```
+
+```java
+/**
+ * 交易类
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Transaction {
+    private Trader trader;
+    private int year;
+    private int value;
+}
+```
+
+1.  找出 2011 年发生的所有交易， 并按交易额排序（从低到高）
+
+2.  交易员都在哪些不同的城市工作过
+
+3.  查找所有来自剑桥的交易员，并按姓名排序
+
+4.  返回所有交易员的姓名字符串，按字母顺序排序
+
+5.  有没有交易员是在米兰工作的
+
+6.  打印生活在剑桥的交易员的所有交易额
+
+7.  所有交易中，最高的交易额是多少
+
+8.  找到交易额最小的交易
+
+```java
+public class TransactionTest {
+
+    List<Transaction> transactions;
+
+    @BeforeEach
+    void setUp() {
+        Trader raoul = new Trader("Raoul", "Cambridge");
+        Trader mario = new Trader("Mario", "Milan");
+        Trader alan = new Trader("Alan", "Cambridge");
+        Trader brian = new Trader("Brian", "Cambridge");
+
+        transactions = Arrays.asList(
+                new Transaction(brian, 2011, 300),
+                new Transaction(raoul, 2012, 1000),
+                new Transaction(raoul, 2011, 400),
+                new Transaction(mario, 2012, 710),
+                new Transaction(mario, 2012, 700),
+                new Transaction(alan, 2012, 950)
+        );
+    }
+
+    /**
+     * 找出2011年发生的所有交易，并按交易额排序（从低到高）
+     */
+    @Test
+    void test1() {
+        transactions
+                .stream()
+                .filter(transaction -> transaction.getYear() == 2011)
+                .sorted(Comparator.comparingInt(Transaction::getValue))
+                .forEach(System.out::println);
+    }
+
+    /**
+     * 交易员都在哪些不同的城市工作过
+     */
+    @Test
+    void test2() {
+        transactions
+                .stream()
+                .map(transaction -> transaction.getTrader().getCity())
+                .distinct()
+                .forEach(System.out::println);
+    }
+
+    /**
+     * 查找所有来自剑桥的交易员，并按姓名排序
+     */
+    @Test
+    void test3() {
+        transactions
+                .stream()
+                .filter(transaction -> "Cambridge".equals(transaction.getTrader().getCity()))
+                .map(transaction -> transaction.getTrader().getName())
+                .distinct()
+                .sorted(String::compareTo)
+                .forEach(System.out::println);
+    }
+
+    /**
+     * 返回所有交易员的姓名字符串，按字母顺序排序
+     */
+    @Test
+    void test4() {
+        transactions
+                .stream()
+                .map(transaction -> transaction.getTrader().getName())
+                .distinct()
+                .sorted(String::compareTo)
+                .forEach(System.out::print);
+        // AlanBrianMarioRaoul
+        System.out.println();
+
+
+        String reduce = transactions
+                .stream()
+                .map(transaction -> transaction.getTrader().getName())
+                .distinct()
+                .sorted(String::compareTo)
+                .reduce("", String::concat);
+        System.out.println(reduce);
+        // AlanBrianMarioRaoul
+
+        // 这个只是练习了下 flatMap 转换为流
+        transactions.stream()
+                .map((t) -> t.getTrader().getName())
+                .flatMap(TransactionTest::filterCharacter)
+                // .sorted(String::compareToIgnoreCase)
+                .forEach(System.out::print);
+        // BrianRaoulRaoulMarioMarioAlan
+
+    }
+
+    private static Stream<String> filterCharacter(String str){
+        List<String> list = new ArrayList<>();
+
+        for (Character ch : str.toCharArray()) {
+            list.add(ch.toString());
+        }
+
+        return list.stream();
+    }
+
+    /**
+     * 有没有交易员是在米兰工作的
+     */
+    @Test
+    void test5() {
+        boolean b = transactions
+                .stream()
+                .anyMatch(transaction -> "Milan".equals(transaction.getTrader().getCity()));
+        System.out.println(b);
+    }
+
+
+    /**
+     * 打印生活在剑桥的交易员的所有交易额
+     */
+    @Test
+    void test6() {
+        Optional<Integer> reduce = transactions
+                .stream()
+                .filter(transaction -> "Cambridge".equals(transaction.getTrader().getCity()))
+                .map(Transaction::getValue)
+                .reduce(Integer::sum);
+
+        System.out.println(reduce.orElse(0));
+    }
+
+    /**
+     * 所有交易中，最高的交易额是多少
+     */
+    @Test
+    void test7() {
+        Optional<Integer> max = transactions
+                .stream()
+                .map(Transaction::getValue)
+                .max(Comparator.naturalOrder());// 自然排序
+                // .min(Comparator.reverseOrder());// 逆序
+                // .max(Integer::compare);
+                // .max(Integer::compareTo);
+                // .max(Comparator.comparingInt(o -> o));
+        System.out.println(max.orElse(0));
+    }
+
+    /**
+     * 找到交易额最小的交易
+     */
+    @Test
+    void test8() {
+        Optional<Transaction> min = transactions
+                .stream()
+                .min(Comparator.comparingInt(Transaction::getValue));
+        System.out.println(min.orElse(null));
+
+    }
+}
+```
 
 
 
