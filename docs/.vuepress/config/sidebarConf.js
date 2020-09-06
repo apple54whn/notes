@@ -272,7 +272,13 @@ module.exports = {
       title: 'Primer',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ['0 Primer', '1 基于Session的认证'],
+      children: [
+        '0 Primer',
+        '1 Session—1 Simple',
+        '1 Session—2 Security',
+        '2 Security—1 Boot',
+        '2 Security—2 原理',
+      ],
     },
   ],
   // -----------------Service OAuth2 Framwork end----------------------
