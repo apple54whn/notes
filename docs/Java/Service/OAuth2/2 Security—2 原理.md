@@ -64,7 +64,7 @@ Spring Security 功能的实现主要是由一系列过滤器链相互配合完�
 
 ### 流程图
 
-![image-20200907011917259](./images/image-20200907011917259.png)
+![image-20200907231428537](./images/image-20200907231428537.png)
 
 ![image-20200906184641374](./images/image-20200906184641374.png)
 
@@ -103,11 +103,11 @@ Spring Security 功能的实现主要是由一系列过滤器链相互配合完�
 
 
 
-### AuthenticationManager 接口
+### AuthenticationManager 接口 🔥
 
 
 
-### ProviderManager 类
+### ProviderManager 类 🔥
 
 
 
@@ -347,5 +347,101 @@ class SecurityApplicationTests {
 
 
 
-## 授权流程
+## 授权流程 🔥
+
+### 流程图
+
+通过之前的 Spring Security 安全配置可以看出，Spring Security 通过`http.authorizeRequests()`对 Web 请求进行授权保护。Spring Security使用标准 Filter 建立了对 Web 请求的拦截，最终实现对资源的授权访问。其授权流程如下：
+
+![image-20200907232519821](./images/image-20200907232519821.png)
+
+主要分为三步：
+
+1.  **拦截请求**，已认证用户访问受保护的 Web 资源将被 SecurityFilterChain 中的 FilterSecurityInterceptor 的子类拦截。 
+
+2.  **获取资源访问策略**，FilterSecurityInterceptor 会从 SecurityMetadataSource 的子类 DefaultFilterInvocationSecurityMetadataSource 获取要访问当前资源**所要求**的权限 `Collection<ConfigAttribute>` 。 
+
+    SecurityMetadataSource 其实就是读取访问策略的抽象，而读取的内容就是我们配置的访问规则，如：
+
+    ```java
+    http.authorizeRequests()
+        .antMatchers("/r/r1").hasAuthority("p1")
+        .antMatchers("/r/r2").hasAuthority("p2") 
+        // ...
+    ```
+
+3.  最后，FilterSecurityInterceptor 会调用 **AccessDecisionManager** 进行授权决策，若决策通过，则允许访问资源，否则将禁止访问。 
+
+
+
+### AccessDecisionManager 访问决策管理器接口
+
+```java
+public interface AccessDecisionManager {
+    
+    /**
+     * 用来鉴定当前用户是否有访问对应受保护资源的权限
+     * 
+     * authentication：要访问资源的访问者的身份
+     * object：要访问的受保护资源，web请求对应FilterInvocation
+     * configAttributes：是受保护资源的访问策略，通过SecurityMetadataSource获取
+     */
+    void decide(Authentication authentication, Object object,
+			Collection<ConfigAttribute> configAttributes) throws AccessDeniedException,
+			InsufficientAuthenticationException;
+    
+    boolean supports(ConfigAttribute attribute);
+    boolean supports(Class<?> clazz);
+
+}
+```
+
+AccessDecisionManager采用**投票**的方式来确定是否能够访问受保护资源。
+
+![image-20200907233136208](./images/image-20200907233136208.png)
+
+通过上图可以看出，AccessDecisionManager 中包含的一系列 AccessDecisionVoter 将会被用来对 Authentication 是否有权访问受保护对象进行投票，AccessDecisionManager 根据投票结果，做出最终决策。
+
+AccessDecisionVoter是一个接口，其中定义有三个方法，具体结构如下所示。 
+
+```java
+public interface AccessDecisionVoter<S> {
+
+	int ACCESS_GRANTED = 1; // 同意
+	int ACCESS_ABSTAIN = 0; // 弃权
+	int ACCESS_DENIED = -1; // 拒绝
+    
+    boolean supports(ConfigAttribute var1); 
+    
+    boolean supports(Class<?> var1); 
+    
+    int vote(Authentication var1, S var2, Collection<ConfigAttribute> var3);
+    
+}
+```
+
+`vote()`方法的返回结果会是 AccessDecisionVoter 中定义的三个常量之一。如果一个 AccessDecisionVoter 不能判定当前 Authentication 是否拥有访问对应受保护对象的权限，则其`vote()`方法的返回值应当为弃权 ACCESS_ABSTAIN。 
+
+Spring Security内置了三个基于投票的 AccessDecisionManager 实现类如下，它们分别是 **AffirmativeBased**、**ConsensusBased** 和 **UnanimousBased**。
+
+AffirmativeBased（Spring Security 默认使用）的逻辑：
+
+*   只要有 AccessDecisionVoter 的投票为 ACCESS_GRANTED 则同意用户进行访问
+*   如果全部弃权也表示通过
+*   如果没有一个人投赞成票，但是有人投反对票，则将抛出 AccessDeniedException
+
+ConsensusBased 的逻辑：
+
+*   如果赞成票多于反对票则表示通过
+*   反过来，如果反对票多于赞成票则将抛出 AccessDeniedException
+*   如果赞成票与反对票相同且不等于0，并且属性 allowIfEqualGrantedDeniedDecisions的值为 true，则表示通过，否则将抛出异常 AccessDeniedException。参数 allowIfEqualGrantedDeniedDecisions 的值默认为 true
+*   如果所有的 AccessDecisionVoter 都弃权了，则将视参数 allowIfAllAbstainDecisions 的值而定，如果该值为 true 则表示通过，否则将抛出异常 AccessDeniedException。参数 allowIfAllAbstainDecisions 的值默认为 false
+
+UnanimousBased 的逻辑与另外两种实现有点不一样，另外两种会一次性把受保护对象的配置属性全部传递给AccessDecisionVoter 进行投票，而 UnanimousBased 会一次只传递一个 ConfigAttribute 给 AccessDecisionVoter 进行投票。这也就意味着如果我们的 AccessDecisionVoter 的逻辑是只要传递进来的 ConfigAttribute 中有一个能够匹配则投赞成票，但是放到UnanimousBased 中其投票结果就不一定是赞成了。UnanimousBased 的逻辑具体来说是这样的：
+
+*   如果受保护对象配置的某一个 ConfigAttribute 被任意的 AccessDecisionVoter 反对了，则将抛出 AccessDeniedException
+*   如果没有反对票，但是有赞成票，则表示通过
+*   如果全部弃权了，则将视参数 allowIfAllAbstainDecisions 的值而定，true 则通过，false 则抛出 AccessDeniedException
+
+Spring Security也内置一些投票者实现类如**RoleVoter**、**AuthenticatedVoter**和**WebExpressionVoter**等，可以自行查阅资料进行学习。
 
