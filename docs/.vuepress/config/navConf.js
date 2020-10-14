@@ -47,7 +47,7 @@ module.exports = [
     items: [
       { text: 'Core', link: '/Java/Core/0 Basic' },
       { text: 'Jakarta EE', link: '/Java/Jakarta EE/0 Servlet' },
-      { text: 'Spring', link: '/Java/Spring/0 Primer' },
+      { text: 'Spring', link: '/Java/Spring/primer/0 Primer' },
       { text: 'Persistence', link: '/Java/Persistence/Mybatis/0 Primer' },
       { text: '认证&授权', link: '/Java/Authe&Autho/0 Primer' },
       // {

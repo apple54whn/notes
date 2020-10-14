@@ -210,7 +210,13 @@ module.exports = {
       title: 'Primer',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ['0 Primer', '1 Conf', '2 DB', '3 Log'],
+      children: [
+        './primer/0 Primer',
+        './primer/1 Spring Boot',
+        './primer/2 Conf',
+        './primer/3 DB',
+        './primer/4 Log',
+      ],
     },
     {
       title: 'Spring',

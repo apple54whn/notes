@@ -1,25 +1,21 @@
-# 2 DB
+# DB
 
 Spring Boot 可以自动配置嵌入式（embedded）数据库如：H2, HSQL, Derby 等。你不需要提供任何连接的 URL，你只需要包含对要使用的嵌入式数据库的构建依赖项
 
+## DataSource
 
-
-## 2.1 DataSource
-
-通过使用数据库连接池也可以**自动配置**生产数据库。Spring Boot使用以下算法（algorithm）来选择特定的实现：
+通过使用数据库连接池也可以**自动配置**生产数据库。Spring Boot 使用以下算法（algorithm）来选择特定的实现：
 
 1.  如果 HikariCP 存在，我们总是选择它，由于它的高性能和高并发。
 2.  另外，如果 Tomcat 数据库连接池存在，我们选择它
-3.  如果上述2个都不存在，若 Commons DBCP2 存在，我们选择它
-4.  如果你使用了`spring-boot-starter-jdbc` 或 `spring-boot-starter-data-jpa` starters，你将自动获得对HikariCP 的依赖
+3.  如果上述 2 个都不存在，若 Commons DBCP2 存在，我们选择它
+4.  如果你使用了`spring-boot-starter-jdbc` 或 `spring-boot-starter-data-jpa` starters，你将自动获得对 HikariCP 的依赖
 
-你也可以完全绕过（bypass）上述算法，通过设置  `spring.datasource.type` 属性来指定连接池。如果您在 Tomcat 容器中运行应用程序，这一点尤其重要，因为缺省情况下提供了`tomcat-jdbc`。若自定义数据源 Bean，则不会发生自动配置。
+你也可以完全绕过（bypass）上述算法，通过设置 `spring.datasource.type` 属性来指定连接池。如果您在 Tomcat 容器中运行应用程序，这一点尤其重要，因为缺省情况下提供了`tomcat-jdbc`。若自定义数据源 Bean，则不会发生自动配置。
 
+## HikariCP
 
-
-## 2.1 HikariCP
-
->   Hikari Connection Poor
+> Hikari Connection Poor
 
 ### 什么是 HikariCP❓
 
@@ -31,34 +27,34 @@ Spring Boot 可以自动配置嵌入式（embedded）数据库如：H2, HSQL, De
 
 #### 单线程
 
--   1,000,000 获取连接/释放连接请求
--   获取/释放连接之间没有延迟
--   连接池范围：20-50
--   增量：5
--   线程：1
--   分区：1
+- 1,000,000 获取连接/释放连接请求
+- 获取/释放连接之间没有延迟
+- 连接池范围：20-50
+- 增量：5
+- 线程：1
+- 分区：1
 
-![img](./images/ae19aac80c50404.jpg)
+![img](../images/ae19aac80c50404.jpg)
 
 #### 多线程
 
--   500 个线程分别获取释放 100 个连接
--   在获取连接和释放连接之间引入了 10ms 的延迟 `Thread.sleep()`，模拟连接完成工作
--   连接池范围：50-200
--   增量：5
--   线程：5
+- 500 个线程分别获取释放 100 个连接
+- 在获取连接和释放连接之间引入了 10ms 的延迟 `Thread.sleep()`，模拟连接完成工作
+- 连接池范围：50-200
+- 增量：5
+- 线程：5
 
-![img](./images/1db8b584e0e7a03.jpg)
+![img](../images/1db8b584e0e7a03.jpg)
 
 #### Prepared Statement
 
--   500 个线程分别获取释放 100 个连接
--   无延迟
--   连接池范围：50-200
--   增量：5
--   线程：5
+- 500 个线程分别获取释放 100 个连接
+- 无延迟
+- 连接池范围：50-200
+- 增量：5
+- 线程：5
 
-![img](./images/f976c3fb5ce1233.png)
+![img](../images/f976c3fb5ce1233.png)
 
 ### HikariCP 的 Power 💥
 
@@ -66,11 +62,11 @@ BoneCP 作者放弃维护，并在 Github 项目主页推荐大家使用 HikariC
 
 #### 优化
 
--   **字节码精简 ：** 优化代码，直到编译后的字节码最少，这样，CPU 缓存可以加载更多的程序代码
--   **优化代理和拦截器 ：** 减少代码，例如 HikariCP 的 Statement proxy 只有 100 行代码，只有 BoneCP 的十分之一
--   **自定义数组类型（FastStatementList）代替 ArrayList ：** 避免每次 `get()` 调用都要进行 range check，避免调用 `remove()` 时的从头到尾的扫描
--   **自定义集合类型（ConcurrentBag）：** 提高并发读写的效率
--   **其他针对 BoneCP 缺陷的优化：** 比如对于耗时超过一个 CPU 时间片的方法调用的研究（但没说具体怎么优化）
+- **字节码精简 ：** 优化代码，直到编译后的字节码最少，这样，CPU 缓存可以加载更多的程序代码
+- **优化代理和拦截器 ：** 减少代码，例如 HikariCP 的 Statement proxy 只有 100 行代码，只有 BoneCP 的十分之一
+- **自定义数组类型（FastStatementList）代替 ArrayList ：** 避免每次 `get()` 调用都要进行 range check，避免调用 `remove()` 时的从头到尾的扫描
+- **自定义集合类型（ConcurrentBag）：** 提高并发读写的效率
+- **其他针对 BoneCP 缺陷的优化：** 比如对于耗时超过一个 CPU 时间片的方法调用的研究（但没说具体怎么优化）
 
 #### 代码量
 
@@ -88,22 +84,20 @@ BoneCP 作者放弃维护，并在 Github 项目主页推荐大家使用 HikariC
 
 别人发推文测试 Hikari 速度
 
-![img](./images/daf29bd1cc47347.jpg)
+![img](../images/daf29bd1cc47347.jpg)
 
 #### 稳定性
 
-![img](./images/1396c369655fa4b.png)
+![img](../images/1396c369655fa4b.png)
 
 #### 可靠性
 
 另外，关于可靠性方面，也是有实验和数据支持的。对于数据库连接中断的情况，通过测试 `getConnection()`，各种 CP 的不相同处理方法如下（所有 CP 都配置了跟 `connectionTimeout` 类似的参数为 5 秒钟）
 
--   **HikariCP(A)：** 等待 5 秒钟后，如果连接还是没有恢复，则抛出一个 `SQLExceptions` 异常；后续的 `getConnection()` 也是一样处理
--   **C3P0(C-)：** 完全没有反应，没有提示，也不会在 `CheckoutTimeout` 配置的时长超时后有任何通知给调用者；然后等待 2 分钟后终于醒来了，返回一个 error
--   **Tomcat(F)：** 返回一个 connection，然后调用者如果利用这个无效的 connection 执行 SQL 语句 结果可想而知；大约 55 秒之后终于醒来了，这时候的 `getConnection()` 终于可以返回一个 error，但没有等待参数配置的 5 秒钟，而是立即返回 error
--   **BoneCP(C)：** 跟 Tomcat 的处理方法一样；也是大约 55 秒之后才醒来，有了正常的反应，并且终于会等待 5 秒钟之后返回 error 了
-
-
+- **HikariCP(A)：** 等待 5 秒钟后，如果连接还是没有恢复，则抛出一个 `SQLExceptions` 异常；后续的 `getConnection()` 也是一样处理
+- **C3P0(C-)：** 完全没有反应，没有提示，也不会在 `CheckoutTimeout` 配置的时长超时后有任何通知给调用者；然后等待 2 分钟后终于醒来了，返回一个 error
+- **Tomcat(F)：** 返回一个 connection，然后调用者如果利用这个无效的 connection 执行 SQL 语句 结果可想而知；大约 55 秒之后终于醒来了，这时候的 `getConnection()` 终于可以返回一个 error，但没有等待参数配置的 5 秒钟，而是立即返回 error
+- **BoneCP(C)：** 跟 Tomcat 的处理方法一样；也是大约 55 秒之后才醒来，有了正常的反应，并且终于会等待 5 秒钟之后返回 error 了
 
 ### 配置 HikariCP 🎩
 
@@ -113,9 +107,9 @@ BoneCP 作者放弃维护，并在 Github 项目主页推荐大家使用 HikariC
 
 `spring-boot-starter[-data]-jdbc` 或
 
- `spring-boot-starter-data-jpa`或
+`spring-boot-starter-data-jpa`或
 
-`mybatis-spring-boot-starter` starters，你将自动获得对HikariCP 的依赖。例如 Mybatis
+`mybatis-spring-boot-starter` starters，你将自动获得对 HikariCP 的依赖。例如 Mybatis
 
 ```xml
 <dependency>
@@ -146,23 +140,21 @@ spring:
       connection-test-query: SELECT 1
 ```
 
->    You should at least specify the URL by setting the `spring.datasource.url` property. Otherwise, Spring Boot tries to auto-configure an embedded database.
+> You should at least specify the URL by setting the `spring.datasource.url` property. Otherwise, Spring Boot tries to auto-configure an embedded database.
 >
->    You often do not need to specify the `driver-class-name`, since Spring Boot can deduce it for most databases from the `url`.
+> You often do not need to specify the `driver-class-name`, since Spring Boot can deduce it for most databases from the `url`.
 >
->   See [`DataSourceProperties`](https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/jdbc/DataSourceProperties.java) for more of the supported options. These are the standard options that work regardless of the actual implementation. It is also possible to fine-tune implementation-specific settings by using their respective prefix (`spring.datasource.hikari.*`, `spring.datasource.tomcat.*`, and `spring.datasource.dbcp2.*`). Refer to the documentation of the connection pool implementation you are using for more details.
+> See [`DataSourceProperties`](https://github.com/spring-projects/spring-boot/tree/v2.2.2.RELEASE/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/jdbc/DataSourceProperties.java) for more of the supported options. These are the standard options that work regardless of the actual implementation. It is also possible to fine-tune implementation-specific settings by using their respective prefix (`spring.datasource.hikari.*`, `spring.datasource.tomcat.*`, and `spring.datasource.dbcp2.*`). Refer to the documentation of the connection pool implementation you are using for more details.
 
-## 2.2 集成H2数据库
+## 集成 H2 数据库
 
-H2是一个内存数据库，方便测试。
+H2 是一个内存数据库，方便测试。
 
-
-
-## 2.3 集成Mybatis
+## 集成 Mybatis
 
 ### 起步依赖
 
-使用Spring Initializr添加 DevTools、Web、MySQL、**MyBatis**依赖
+使用 Spring Initializr 添加 DevTools、Web、MySQL、**MyBatis**依赖
 
 ```xml
 <!-- MySQL连接驱动 -->
@@ -180,9 +172,9 @@ H2是一个内存数据库，方便测试。
 
 ```
 
-### 数据库连接和MyBatis配置
+### 数据库连接和 MyBatis 配置
 
-在application.properties/yml中添加数据库的连接信息、Spring Boot 集成MyBatis的配置
+在 application.properties/yml 中添加数据库的连接信息、Spring Boot 集成 MyBatis 的配置
 
 ```properties
 #数据库连接信息
@@ -214,12 +206,11 @@ mybatis:
   type-aliases-package: com.example.domain
   #加载Mybatis映射文件
   mapper-locations: classpath:mapper/*Mapper.xml
-
 ```
 
-### 创建user表对应的实体类
+### 创建 user 表对应的实体类
 
-在test数据库中创建user表
+在 test 数据库中创建 user 表
 
 ```sql
 -- ----------------------------
@@ -254,14 +245,14 @@ public class User {
     private String password;
     // 姓名
     private String name;
-  
+
     //此处省略getter和setter方法 .. ..
-    
+
 }
 
 ```
 
-### 编写Mapper接口
+### 编写 Mapper 接口
 
 com.example.mapper.UserMapper
 
@@ -273,11 +264,11 @@ public interface UserMapper {
 
 ```
 
-注意：`@Mapper`标记该类是一个mybatis的mapper接口，**可以被spring boot自动扫描到spring上下文中**
+注意：`@Mapper`标记该类是一个 mybatis 的 mapper 接口，**可以被 spring boot 自动扫描到 spring 上下文中**
 
-### 配置Mapper映射文件
+### 配置 Mapper 映射文件
 
-在src\main\resources\mapper路径下加入UserMapper.xml配置文件
+在 src\main\resources\mapper 路径下加入 UserMapper.xml 配置文件
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -290,7 +281,7 @@ public interface UserMapper {
 
 ```
 
-### 编写测试Controller
+### 编写测试 Controller
 
 com.example.controller.UserController
 
@@ -312,13 +303,11 @@ public class UserController {
 
 测试略
 
+## 集成 JUnit
 
+### 添加 JUnit 的起步依赖
 
-## 2.4 集成JUnit
-
-### 添加JUnit的起步依赖
-
-一般使用Spring Initializr添加Web依赖后会自动导入**JUnit**起步依赖
+一般使用 Spring Initializr 添加 Web 依赖后会自动导入**JUnit**起步依赖
 
 ```xml
 <!--测试的起步依赖-->
@@ -352,25 +341,21 @@ public class MapperTest {
 
 其中，
 
-SpringRunner继承自SpringJUnit4ClassRunner，使用哪一个Spring提供的测试测试引擎都可以
+SpringRunner 继承自 SpringJUnit4ClassRunner，使用哪一个 Spring 提供的测试测试引擎都可以
 
 ```java
-public final class SpringRunner extends SpringJUnit4ClassRunner 
+public final class SpringRunner extends SpringJUnit4ClassRunner
 
 
 ```
 
-@SpringBootTest的属性指定的是引导类的字节码对象
+@SpringBootTest 的属性指定的是引导类的字节码对象
 
-
-
-
-
-## 2.5 集成Spring Data JPA
+## 集成 Spring Data JPA
 
 ### 起步依赖
 
-使用Spring Initializr添加 DevTools、Web、MySQL、**JPA**依赖
+使用 Spring Initializr 添加 DevTools、Web、MySQL、**JPA**依赖
 
 ```xml
 <!-- MySQL连接驱动 -->
@@ -387,9 +372,9 @@ public final class SpringRunner extends SpringJUnit4ClassRunner
 
 ```
 
-### 数据库连接和JPA配置
+### 数据库连接和 JPA 配置
 
-在application.properties/yml中添加数据库的连接信息、Spring Boot 集成Spring Data JPA的配置
+在 application.properties/yml 中添加数据库的连接信息、Spring Boot 集成 Spring Data JPA 的配置
 
 ```yaml
 spring:
@@ -412,8 +397,6 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
         #Hibernate 4 naming strategy fully qualified name. Not supported with Hibernate 5
         #strategy: org.hibernate.cfg.ImprovedNamingStrategy
-
-
 ```
 
 ```properties
@@ -458,13 +441,13 @@ public class User {
     private String password;
     // 姓名
     private String name;
- 
+
     //此处省略setter和getter方法... ...
 }
 
 ```
 
-### 编写UserRepository
+### 编写 UserRepository
 
 ```java
 public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificationExecutor<User> {
@@ -491,11 +474,11 @@ public class JpaTest {
 
 ```
 
-注意：如果是jdk9，执行报错如下：
+注意：如果是 jdk9，执行报错如下：
 
-原因：jdk缺少相应的jar
+原因：jdk 缺少相应的 jar
 
-解决方案：手动导入对应的maven坐标，如下：
+解决方案：手动导入对应的 maven 坐标，如下：
 
 ```xml
 <!--jdk9需要导入如下坐标-->
@@ -507,13 +490,11 @@ public class JpaTest {
 
 ```
 
-
-
-## 2.6 集成Spring Data Redis
+## 集成 Spring Data Redis
 
 ### 起步依赖
 
-使用Spring Initializr添加 DevTools、Web、MySQL、JPA、**Redis**依赖
+使用 Spring Initializr 添加 DevTools、Web、MySQL、JPA、**Redis**依赖
 
 ```xml
 <!-- 配置使用redis启动器 -->
@@ -525,18 +506,16 @@ public class JpaTest {
 
 ```
 
-### 配置redis的连接信息
+### 配置 redis 的连接信息
 
 ```yaml
-spring: 
+spring:
   redis:
     #url包括以下host，port，password
     url: redis://user:password@example.com:6379
     host: localhost
     port: 6379
     password: w111151
-
-
 ```
 
 ```properties
@@ -547,7 +526,7 @@ spring.redis.port=6379
 
 ```
 
-### 注入RedisTemplate测试redis操作
+### 注入 RedisTemplate 测试 redis 操作
 
 ```java
 @RunWith(SpringRunner.class)
@@ -581,4 +560,3 @@ public class RedisTest {
     }
 }
 ```
-
