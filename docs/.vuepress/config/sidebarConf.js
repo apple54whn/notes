@@ -204,8 +204,8 @@ module.exports = {
   ],
   // ---------------------Jakarta EE end------------------------
 
-  // -----------------Service Framwork start--------------------
-  '/Java/Service/Spring/': [
+  // -----------------Spring Framwork start--------------------
+  '/Java/Spring/': [
     {
       title: 'Primer',
       collapsable: true, // 控制 组 的 close
@@ -261,13 +261,37 @@ module.exports = {
       title: 'Shiro',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ['9 Shiro'],
+      children: ['9 Shiro', './test/000 Test'],
     },
   ],
-  // -----------------Service Framwork end----------------------
+  // -----------------Spring Framwork end----------------------
+
+  // -----------------Persistence Framwork start--------------------
+  '/Java/Persistence/': [
+    {
+      title: 'Mybatis',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: ['./Mybatis/0 Primer'],
+    },
+    {
+      title: 'Mybatis Plus 3.3.0',
+      collapsable: true, // 控制 组 的 close
+      sidebarDepth: 2,
+      children: [
+        './Mybatis Plus/0 Primer',
+        './Mybatis Plus/1 Conf',
+        './Mybatis Plus/2 CRUD',
+        './Mybatis Plus/3 Wrapper',
+        './Mybatis Plus/4 Plugins',
+        './Mybatis Plus/5 ActiveRecord',
+      ],
+    },
+  ],
+  // -----------------Persistence Framwork end----------------------
 
   // -----------------Service OAuth2 Framwork start--------------------
-  '/Java/Service/OAuth2/': [
+  '/Java/Authe&Autho/': [
     {
       title: 'Primer',
       collapsable: true, // 控制 组 的 close
@@ -282,32 +306,6 @@ module.exports = {
     },
   ],
   // -----------------Service OAuth2 Framwork end----------------------
-
-  // -----------------Persistence Framwork start--------------------
-  '/Java/Persistence/Mybatis/': [
-    {
-      title: 'Mybatis',
-      collapsable: false, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: ['0 Primer'],
-    },
-  ],
-  '/Java/Persistence/Mybatis Plus/': [
-    {
-      title: 'Mybatis Plus 3.3.0',
-      collapsable: false, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: [
-        '0 Primer',
-        '1 Conf',
-        '2 CRUD',
-        '3 Wrapper',
-        '4 Plugins',
-        '5 ActiveRecord',
-      ],
-    },
-  ],
-  // -----------------Persistence Framwork end----------------------
 
   // ---------------------Server start---------------------------
   '/Server/Tomcat/': [

@@ -46,29 +46,27 @@ module.exports = [
     ariaLabel: 'Java Study',
     items: [
       { text: 'Core', link: '/Java/Core/0 Basic' },
+      { text: 'Jakarta EE', link: '/Java/Jakarta EE/0 Servlet' },
+      { text: 'Spring', link: '/Java/Spring/0 Primer' },
+      { text: 'Persistence', link: '/Java/Persistence/Mybatis/0 Primer' },
+      { text: '认证&授权', link: '/Java/Authe&Autho/0 Primer' },
+      // {
+      //   text: 'Persistence',
+      //   items: [
+      //     { text: 'Mybatis', link: '/Java/Persistence/Mybatis/0 Primer' },
+      //     {
+      //       text: 'Mybatis Plus',
+      //       link: '/Java/Persistence/Mybatis Plus/0 Primer',
+      //     },
+      //     { text: 'JPA', link: '/language/japanese/' },
+      //   ],
+      // },
       {
-        text: 'Jakarta EE',
-        items: [{ text: 'Java Web', link: '/Java/Jakarta EE/0 Servlet' }],
-      },
-      {
-        text: 'Service',
+        text: '分布式&微服务',
         items: [
-          { text: 'Spring', link: '/Java/Service/Spring/0 Primer' },
           { text: 'Dubbo', link: '/language/chinese/' },
           { text: 'Spring Cloud Netflix', link: '/language/japanese/' },
           { text: 'Spring Cloud Alibaba', link: '/language/japanese/' },
-          { text: '认证&授权', link: '/Java/Service/OAuth2/0 Primer' },
-        ],
-      },
-      {
-        text: 'Persistence',
-        items: [
-          { text: 'Mybatis', link: '/Java/Persistence/Mybatis/0 Primer' },
-          {
-            text: 'Mybatis Plus',
-            link: '/Java/Persistence/Mybatis Plus/0 Primer',
-          },
-          { text: 'JPA', link: '/language/japanese/' },
         ],
       },
     ],
