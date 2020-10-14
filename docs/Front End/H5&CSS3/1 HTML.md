@@ -243,8 +243,6 @@ name 常用值有：
 
 
 
-
-
 ### 文本格式化元素
 
 `<b>`**粗体**`</b>` ；`<strong>`**强调文本**`</strong>` ，推荐使用带语义化的
@@ -309,26 +307,55 @@ name 常用值有：
 
 :::
 
+::: demo [vanilla]
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-      table {
+<html>
+
+    <table> 
+        <caption>表格测试</caption>
+        <thead>
+            <tr>
+                <th>班级</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th colspan="2">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="2">一 班</td>
+                <td>张三</td>
+                <td>男</td>
+                <td>修改</td>
+                <td>删除</td>
+            </tr>
+            <tr>
+                <td>李四</td>
+                <td>男</td>
+                <td>修改</td>
+                <td>删除</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">备注</td>
+            </tr>
+        </tfoot>
+    </table>
+
+</html>
+<style>
+    table {
         /* 合并细线边框 */
         border-collapse: collapse;
         /* 单元格之间水平、垂直距离，与 border-collapse 冲突，不常用 */
         /*border-spacing: 10px 20px;*/
         /* 表格居中 */
-        margin: 100px auto;
-      }
-      th,
-      td {
+        margin: 0 auto;
+    }
+    th,
+    td {
         /* 边框 */
         border: 1px solid skyblue;
         /* 内边距 */
@@ -337,50 +364,19 @@ name 常用值有：
         text-align: center;
         /* 默认情况下元素在th,td中是垂直居中的，也可以通过 vertical-align 来修改*/
         /* 由此可得，对一个父元素设置 display: table-cell，可以直接使用 vertical-align 来垂直居中*/
-      }
-      /* 标题 */
-      caption {
+    }
+    /* 标题 */
+    caption {
         font-weight: 700;
         font-size: 24px;
         margin-bottom: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <table> 
-      <caption>表格测试</caption>
-      <thead>
-        <tr>
-          <th>班级</th>
-          <th>姓名</th>
-          <th>性别</th>
-          <th colspan="2">操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td rowspan="2">一 班</td>
-          <td>张三</td>
-          <td>男</td>
-          <td>修改</td>
-          <td>删除</td>
-        </tr>
-        <tr>
-          <td>李四</td>
-          <td>男</td>
-          <td>修改</td>
-          <td>删除</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="5">备注</td>
-        </tr>
-      </tfoot>
-    </table>
-  </body>
-</html>
+    }
+</style>
 ```
+
+:::
+
+
 
 ![image-20200312204804546](./images/image-20200312204804546.png)
 

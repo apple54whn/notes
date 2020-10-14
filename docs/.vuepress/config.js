@@ -1,9 +1,9 @@
-const navConf = require('./config/navConf');// 可不加.js 后缀
-const sidebarConf = require('./config/sidebarConf');
-const markdownConf = require('./config/markdownConf');
+const navConf = require('./config/navConf') // 可不加.js 后缀
+const sidebarConf = require('./config/sidebarConf')
+const markdownConf = require('./config/markdownConf')
 
 // plugins
-const pluginConf = require('./config/pluginConf');
+const pluginConf = require('./config/pluginConf')
 
 module.exports = {
   // base:'/notes/',
@@ -19,8 +19,6 @@ module.exports = {
 
     nav: navConf,
     sidebar: sidebarConf,
-
-
 
     // 假定是 GitHub. 同时也可以是一个完整的 GitLab URL
     repo: 'apple54whn/notes',
@@ -40,8 +38,7 @@ module.exports = {
     editLinks: true,
     // 默认为 "Edit this page"
     editLinkText: '编辑文档！',
-    lastUpdated: "上次更新时间",
-
+    lastUpdated: '上次更新时间',
   },
 
   markdown: markdownConf,
@@ -52,5 +49,21 @@ module.exports = {
     ['link', { rel: 'manifest', href: '/manifest.json' }],
     ['meta', { name: 'theme-color', content: '#3eaf7c' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
-  ]
+    [
+      'script',
+      { src: 'https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js' },
+    ],
+    [
+      'script',
+      {
+        src:
+          'https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js',
+      },
+    ],
+    ['script', { src: 'https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js' }],
+    [
+      'script',
+      { src: 'https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js' },
+    ],
+  ],
 }

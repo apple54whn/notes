@@ -97,19 +97,27 @@
 用处：
 
 *   `hover`时卡片背面
-
 *   钟表🕙
 
-    ```html
-    <style>
-      * {
+::: demo [vanilla]
+
+```html
+<html>
+    <div class="clock">
+    <div class="hour"></div>
+    <div class="min"></div>
+    <div class="sec"></div>
+</div>
+</html>
+<style>
+    * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-      }
-    
-      /* 设置表的样式 */
-      .clock {
+    }
+
+    /* 设置表的样式 */
+    .clock {
         width: 500px;
         height: 500px;
         margin: 0 auto;
@@ -118,61 +126,57 @@
         position: relative;
         background-image: url(./img/13/bg3.jpg);
         background-size: cover;
-      }
-    
-      .clock > div {
+    }
+
+    .clock > div {
         position: absolute;
         top: 0;
         left: 0;
         bottom: 0;
         right: 0;
-      }
-    
-      .hour {
+    }
+
+    .hour {
         margin: 16% auto;
         height: 34%;
         width: 7px;
         background-color: skyblue;
         transform-origin: bottom center;
         animation: run 8640s steps(60) infinite; /*秒数除以10方便观察*/
-      }
-    
-      .min {
+    }
+
+    .min {
         margin: 13% auto;
         height: 37%;
         width: 5px;
         background-color: green;
         transform-origin: bottom center;
         animation: run 360s steps(60) infinite; /*秒数除以10方便观察*/
-      }
-    
-      .sec {
+    }
+
+    .sec {
         margin: 10% auto;
         height: 40%;
         width: 2px;
         background-color: red;
         transform-origin: bottom center;
         animation: run 6s steps(60) infinite; /*秒数除以10方便观察*/
-      }
-    
-      @keyframes run {
-        from {
-          transform: rotateZ(0);
-        }
-    
-        to {
-          transform: rotateZ(360deg);
-        }
-      }
-    </style>
-    <div class="clock">
-      <div class="hour"></div>
-      <div class="min"></div>
-      <div class="sec"></div>
-    </div>
-    ```
+    }
 
-    
+    @keyframes run {
+        from {
+            transform: rotateZ(0);
+        }
+
+        to {
+            transform: rotateZ(360deg);
+        }
+    }
+</style>
+
+```
+
+:::
 
 
 
@@ -299,6 +303,8 @@ transition: 要过渡的属性 持续时间 运动曲线 何时开始, 要过渡
 
 ### 案例1—移动的方块
 
+::: demo [vanilla]
+
 ```html
 <style>
   @keyframes box-frame-1 {
@@ -329,90 +335,102 @@ transition: 要过渡的属性 持续时间 运动曲线 何时开始, 要过渡
     animation: box-frame-1 4s;
   }
 </style>
-<div class="box"></div>
+<html>
+    <div class="box"></div>
+</html>
+
 ```
+
+:::
 
 
 
 ### 案例2—9个小球
 
+::: demo [vanilla]
+
 ```html
 <style>
-  .outer {
-    height: 500px;
-    border-bottom: 10px black solid;
-    margin: 50px auto;
-    /* 解决margin重叠问题 */
-    overflow: hidden;
-  }
-  .outer div {
-    float: left;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #bfa;
-    animation: ball 0.5s forwards ease-in-out infinite alternate;
-  }
-
-  div.box2 {
-    background-color: orange;
-    animation-delay: 0.1s;
-  }
-
-  div.box3 {
-    background-color: yellow;
-    animation-delay: 0.2s;
-  }
-
-  div.box4 {
-    background-color: yellowgreen;
-    animation-delay: 0.3s;
-  }
-
-  div.box5 {
-    background-color: blue;
-    animation-delay: 0.4s;
-  }
-  div.box6 {
-    background-color: pink;
-    animation-delay: 0.5s;
-  }
-  div.box7 {
-    background-color: tomato;
-    animation-delay: 0.6s;
-  }
-  div.box8 {
-    background-color: skyblue;
-    animation-delay: 0.7s;
-  }
-  div.box9 {
-    background-color: chocolate;
-    animation-delay: 0.8s;
-  }
-
-  /* 创建小球下落的动画 */
-  @keyframes ball {
-    from {
-      margin-top: 0;
+    .outer {
+        height: 500px;
+        border-bottom: 10px black solid;
+        margin: 50px auto;
+        /* 解决margin重叠问题 */
+        overflow: hidden;
+    }
+    .outer div {
+        float: left;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #bfa;
+        animation: ball 0.5s forwards ease-in-out infinite alternate;
     }
 
-    to {
-      margin-top: 400px;
+    div.box2 {
+        background-color: orange;
+        animation-delay: 0.1s;
     }
-  }
+
+    div.box3 {
+        background-color: yellow;
+        animation-delay: 0.2s;
+    }
+
+    div.box4 {
+        background-color: yellowgreen;
+        animation-delay: 0.3s;
+    }
+
+    div.box5 {
+        background-color: blue;
+        animation-delay: 0.4s;
+    }
+    div.box6 {
+        background-color: pink;
+        animation-delay: 0.5s;
+    }
+    div.box7 {
+        background-color: tomato;
+        animation-delay: 0.6s;
+    }
+    div.box8 {
+        background-color: skyblue;
+        animation-delay: 0.7s;
+    }
+    div.box9 {
+        background-color: chocolate;
+        animation-delay: 0.8s;
+    }
+
+    /* 创建小球下落的动画 */
+    @keyframes ball {
+        from {
+            margin-top: 0;
+        }
+
+        to {
+            margin-top: 400px;
+        }
+    }
 </style>
-<div class="outer">
-  <div class="box1"></div>
-  <div class="box2"></div>
-  <div class="box3"></div>
-  <div class="box4"></div>
-  <div class="box5"></div>
-  <div class="box6"></div>
-  <div class="box7"></div>
-  <div class="box8"></div>
-  <div class="box9"></div>
-</div>
+<html>
+    <div class="outer">
+        <div class="box1"></div>
+        <div class="box2"></div>
+        <div class="box3"></div>
+        <div class="box4"></div>
+        <div class="box5"></div>
+        <div class="box6"></div>
+        <div class="box7"></div>
+        <div class="box8"></div>
+        <div class="box9"></div>
+    </div>
+</html>
+
 ```
+
+:::
 
 
 

@@ -11,7 +11,7 @@ module.exports = [
     'vuepress-plugin-container',
     {
       type: 'theorem',
-      before: info => `<div class="theorem"><p class="title">${info}</p>`,
+      before: (info) => `<div class="theorem"><p class="title">${info}</p>`,
       after: '</div>',
     },
   ],
@@ -55,18 +55,34 @@ module.exports = [
     },
   ],
   [
-    '@vuepress/pwa', {
+    '@vuepress/pwa',
+    {
       serviceWorker: true,
-      updatePopup: true
-    }
+      updatePopup: true,
+    },
   ],
   [
-    'vuepress-plugin-code-copy', {
-      align: 'bottom'
-    }
+    'vuepress-plugin-code-copy',
+    {
+      align: 'bottom',
+    },
   ],
   [
     // "vuepress-plugin-auto-sidebar", {}
-  ]
+  ],
+  // 'demo-code',
+  'demo-block',
+  // 'demo-container',
 
+  // [
+  //   'vuepress-plugin-right-anchor',
+  //   {
+  //     showLevel: 2,
+  //     ignore: [
+  //       '/',
+  //       '/api/',
+  //       // 更多...
+  //     ],
+  //   },
+  // ],
 ]
