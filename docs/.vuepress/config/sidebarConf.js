@@ -212,10 +212,11 @@ module.exports = {
       sidebarDepth: 2,
       children: [
         './primer/0 Primer',
-        './primer/1 Spring Boot',
-        './primer/2 Conf',
-        './primer/3 DB',
-        './primer/4 Log',
+        './primer/1 SSM',
+        './primer/2 Spring Boot',
+        './primer/3 Conf',
+        './primer/4 DB',
+        './primer/5 Log',
       ],
     },
     {
@@ -223,16 +224,14 @@ module.exports = {
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        '4 Spring-1 概述',
-        '4 Spring-2 IoC',
-        '4 Spring-3 容器&注册组件&注入组件',
-        '4 Spring-4 Bean的生命周期',
-        '4 Spring-5 属性赋值',
-        '4 Spring-6 SSM 整合',
-        '4 Spring-6 Spring Boot 原理',
-        '4 Spring-3 AOP',
-        '4 Spring-4 声明式事务',
-        '4 Spring-5 工具类',
+        './spring/1 概述',
+        './spring/2 IoC',
+        './spring/3 容器&注册组件&注入组件',
+        './spring/4 Bean的生命周期',
+        './spring/5 属性赋值',
+        './spring/6 AOP',
+        './spring/7 声明式事务',
+        './spring/99 工具类',
       ],
     },
     {
@@ -240,28 +239,20 @@ module.exports = {
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
       children: [
-        '5 SpringMVC-1 概述',
-        '5 SpringMVC-2 RESTful',
-        '5 SpringMVC-3 Controller&Mapping',
-        '5 SpringMVC-4 请求参数的绑定',
-        '5 SpringMVC-5 响应结果',
-        '5 SpringMVC-6 Multipart',
-        '5 SpringMVC-7 ExceptionHandler',
-        '5 SpringMVC-8 Interceptor',
-        '5 SpringMVC-9 CORS',
+        './springmvc/1 概述',
+        './springmvc/2 路由&请求参数绑定',
+        './springmvc/3 响应结果',
+        './springmvc/4 Interceptor',
+        './springmvc/5 ExceptionHandler',
+        './springmvc/6 CORS',
+        './springmvc/11 Jackson',
       ],
-    },
-    {
-      title: '框架机制',
-      collapsable: true, // 控制 组 的 close
-      sidebarDepth: 2,
-      children: ['6 框架机制—1 全局异常处理'],
     },
     {
       title: 'Other',
       collapsable: true, // 控制 组 的 close
       sidebarDepth: 2,
-      children: ['6 Jackson', '7 Test', 'Thymeleaf', 'Servlet 3.0'],
+      children: ['7 Test', 'Thymeleaf', 'Servlet 3.0'],
     },
     {
       title: 'Shiro',

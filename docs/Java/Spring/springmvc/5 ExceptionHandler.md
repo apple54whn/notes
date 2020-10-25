@@ -1,4 +1,4 @@
-# ExceptionHandler
+# ExceptionHandler & 全局异常处理
 
 ## 异常处理问题分析
 
@@ -44,7 +44,7 @@ public CmsPageResult add(CmsPage cmsPage){
 * 可预知的异常及不可预知的运行时异常**最终会采用统一的信息格式**（错误代码+错误信息）来表示，最终也会随
     请求响应为JSON给客户端。
 
-![](./images/1550681223850.png)
+![](../images/1550681223850.png)
 
 1. 在**Controller、Service、Dao中程序员抛出自定义异常**；SpringMVC框架抛出框架异常类型
 2. 统一由**异常捕获类捕获异常**，并进行处理
@@ -238,3 +238,23 @@ public class ExceptionCatch {
 
 
 
+
+
+## UnifyResponse 统一响应
+
+如：
+
+```json
+{
+    "code": 10000,
+    "message": "hello",
+    "body": null,
+    "request": url
+}
+```
+
+其中 code 和 message 可以使用配置文件集中管理，也方便 i18n
+
+
+
+## 全局异常处理
