@@ -1,0 +1,13 @@
+{
+    "name": "Conanan",
+    "short_name": "Conanan",
+    "description": "Conanan的笔记",
+    "icons": [{
+        "src": "/index.jpg",
+        "type": "image/jpg",
+        "size": "144x144"
+    }],
+    "background_color":"#2196f3",
+    "display":"standalone",
+    "start_url":"index.html"
+}
